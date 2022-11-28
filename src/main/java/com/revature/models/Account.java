@@ -21,7 +21,7 @@ public class Account {
     String name;
     Double balance;
 
-    @Lob
+//    @Lob
     String description;
     Date creationDate;
 
