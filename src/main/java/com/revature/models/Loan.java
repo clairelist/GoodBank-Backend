@@ -6,34 +6,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.util.Date;
 
 @Entity
-@Table(name = "accounts")
+@Table(name = "loans")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Account {
+public class Loan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String name;
-    private Double balance;
-
-//    @Lob
-    private String description;
+    private double amount;
+    private String reason;
     private Date creationDate;
-
-    @OneToOne
+    @ManyToOne
     @JoinColumn(referencedColumnName = "id")
     @JsonIgnore
-    private User user;
+    private Account account;
 
-    public Account(String name, String description, Date creationDate, User user) {
-        this.name = name;
-        this.description = description;
-        this.creationDate = creationDate;
-        this.user = user;
-    }
 }

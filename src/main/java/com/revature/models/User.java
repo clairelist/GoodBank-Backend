@@ -18,4 +18,10 @@ public class User {
     private Integer id;
     private String email;
     private String password;
+    private String first;
+    private String last;
+    private String address;
+    private String state;
+    private String city;
+    private int zip;
 }
