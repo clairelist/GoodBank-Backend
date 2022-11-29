@@ -21,19 +21,19 @@ public class Account {
     private String name;
     private Double balance;
 
-//    @Lob
-    private String description;
     private Date creationDate;
+    @Enumerated(EnumType.STRING)
+    private AccountType accountType;
 
     @OneToOne
     @JoinColumn(referencedColumnName = "id")
     @JsonIgnore
     private User user;
 
-    public Account(String name, String description, Date creationDate, User user) {
+    public Account(String name, Date creationDate, AccountType accountType, User user) {
         this.name = name;
-        this.description = description;
         this.creationDate = creationDate;
+        this.accountType = accountType;
         this.user = user;
     }
 }

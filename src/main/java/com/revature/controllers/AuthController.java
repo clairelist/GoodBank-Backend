@@ -53,7 +53,8 @@ public class AuthController {
                 registerRequest.getState(),
                 registerRequest.getCity(),
                 registerRequest.getZip(),
-                registerRequest.getUserType()
+                registerRequest.getUserType(),
+                registerRequest.getCreationDate()
                 );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(created));
