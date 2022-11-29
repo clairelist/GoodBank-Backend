@@ -23,8 +23,14 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private TransactionType type;
     private Date creationDate;
+
     @ManyToOne
     @JoinColumn(referencedColumnName = "id")
     @JsonIgnore
-    private Account account;
+    private Account senderAccount;
+
+    @ManyToOne
+    @JoinColumn(referencedColumnName = "id")
+    @JsonIgnore
+    private Account receiverAccount;
 }

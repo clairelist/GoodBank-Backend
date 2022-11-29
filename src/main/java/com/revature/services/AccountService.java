@@ -39,7 +39,6 @@ public class AccountService {
         if(accountRepository.existsById(accountToUpsert.getId())) {
             Account account = accountRepository.getById(accountToUpsert.getId());
             account.setBalance(accountToUpsert.getBalance());
-            account.setDescription(accountToUpsert.getDescription());
             account.setName(accountToUpsert.getName());
             return accountRepository.saveAndFlush(account);
         } else {
@@ -51,11 +50,10 @@ public class AccountService {
 
     public List<Transaction> getAllTransactions(int accountId) {
         Account account = accountRepository.getById(accountId);
-        return transactionRepository.findByAccount(account);
+        return transactionRepository.findBySenderAccount(account);
     }
 
     public Transaction upsertTransaction(int accountId, Transaction transactionToUpsert) {
-
             Account account = accountRepository.getById(accountId);
 
             if(transactionToUpsert.getType() == TransactionType.Expense) {
@@ -64,7 +62,7 @@ public class AccountService {
                 account.setBalance(account.getBalance() + transactionToUpsert.getAmount());
             }
             accountRepository.saveAndFlush(account);
-            transactionToUpsert.setAccount(account);
+            transactionToUpsert.setSenderAccount(account);
             return transactionRepository.save(transactionToUpsert);
     }
 }
