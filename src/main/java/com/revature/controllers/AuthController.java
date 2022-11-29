@@ -46,7 +46,15 @@ public class AuthController {
     public ResponseEntity<User> register(@RequestBody RegisterRequest registerRequest) {
         User created = new User(0,
                 registerRequest.getEmail(),
-                registerRequest.getPassword());
+                registerRequest.getPassword(),
+                registerRequest.getFirstName(),
+                registerRequest.getLastName(),
+                registerRequest.getAddress(),
+                registerRequest.getState(),
+                registerRequest.getCity(),
+                registerRequest.getZip(),
+                registerRequest.getUserType()
+                );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(created));
     }

@@ -1,5 +1,6 @@
 package com.revature.dtos;
 
+import com.revature.models.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,4 +13,9 @@ public class RegisterRequest {
     private String password;
     private String firstName;
     private String lastName;
+    private String address;
+    private String state;
+    private String city;
+    private int zip;
+    private UserType userType;
 }

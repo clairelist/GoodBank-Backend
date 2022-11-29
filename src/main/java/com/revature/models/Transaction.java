@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "transactions")
@@ -15,13 +16,13 @@ import javax.persistence.*;
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private double amount;
     private String description;
 
     @Enumerated(EnumType.STRING)
     private TransactionType type;
-
+    private Date creationDate;
     @ManyToOne
     @JoinColumn(referencedColumnName = "id")
     @JsonIgnore
