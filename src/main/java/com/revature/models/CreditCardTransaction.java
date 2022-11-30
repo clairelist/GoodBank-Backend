@@ -9,26 +9,22 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "transactions")
+@Table(name = "cctransactions")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Transaction {
+public class CreditCardTransaction {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private double amount;
     private String description;
-
-    @Enumerated(EnumType.STRING)
-    private TransactionType type;
     private Date creationDate;
 
     @ManyToOne
     @JoinColumn(referencedColumnName = "id")
     @JsonIgnore
-    private Account account;
+    private CreditCard creditCard;
 
-    @Column(nullable = true)
-    private Integer toAccountId; // utilized when doing transfers, not showing in the other button field for general transaction
 }

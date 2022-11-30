@@ -50,7 +50,7 @@ public class AccountService {
 
     public List<Transaction> getAllTransactions(int accountId) {
         Account account = accountRepository.getById(accountId);
-        return transactionRepository.findBySenderAccount(account);
+        return transactionRepository.findByAccount(account);
     }
 
     public Transaction upsertTransaction(int accountId, Transaction transactionToUpsert) {
@@ -62,7 +62,7 @@ public class AccountService {
                 account.setBalance(account.getBalance() + transactionToUpsert.getAmount());
             }
             accountRepository.saveAndFlush(account);
-            transactionToUpsert.setSenderAccount(account);
+            transactionToUpsert.setAccount(account);
             return transactionRepository.save(transactionToUpsert);
     }
 }
