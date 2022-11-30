@@ -13,3 +13,7 @@ INSERT INTO creditcards (id, user_id, card_number, ccv, expiration_date, total_l
 INSERT INTO creditcards (id, user_id, card_number, ccv, expiration_date, total_limit, available_balance) VALUES (2, 3, 4567456745674567, 783, '2022-08-25T20:32:26.568Z', 10000.00, 10000.00);
 
 INSERT INTO cctransactions (id, amount, description, creation_date, credit_card_id) VALUES (1, 500.00, 'shopping', '2022-08-25T20:32:26.568Z', 1);
+
+INSERT INTO notifications (id, user_id, type, body, dismissed) VALUES (1, 1, 'WARNING', 'testing...', false);
+INSERT INTO notifications (id, user_id, type, body, dismissed) VALUES (2, 1, 'WARNING', 'testing again...', false);
+INSERT INTO notifications (id, user_id, type, body, dismissed) VALUES (3, 1, 'WARNING', 'this should not be seen...', true);
