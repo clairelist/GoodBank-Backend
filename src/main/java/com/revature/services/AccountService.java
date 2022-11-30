@@ -29,9 +29,10 @@ public class AccountService {
     @Autowired
     private UserService userService;
 
-    public Optional<Account> findByUserId(int id) {
+    public Optional<List<Account>> findByUserId(int id) {
         User user = userService.findById(id);
         return accountRepository.findByUser(user);
+
     }
 
     public Account upsertAccount(Account accountToUpsert, String userId) {
