@@ -23,16 +23,15 @@ public class UserController {
     }
 
     @PatchMapping("/{id}/reset-password")
-    public ResponseEntity<String> resetPass(@PathVariable("id") int id, @RequestBody String update){
-        //TODO: MAY HAVE TO CHANGE WHAT WE RETURN
-        //us.update(id, update) or some shit
-        String res = null;
+    public ResponseEntity<User> resetPass(@PathVariable("id") int id, @RequestBody String update){
+        //TODO: MAY HAVE TO CHANGE WHAT WE SEND THRU
+        User res = null;
         ResponseEntity response = null;
         try {
             if(us.updatePassword(id, update) == null){
                 response = ResponseEntity.badRequest().build();
             } else {
-                res = us.updatePassword(id, update).getPassword();
+                res = us.updatePassword(id, update);
                 response = ResponseEntity.ok(res);
             }
 
