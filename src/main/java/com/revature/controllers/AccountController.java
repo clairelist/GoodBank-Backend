@@ -51,4 +51,10 @@ public class AccountController {
         return new ResponseEntity<>(accountService.upsertTransaction(accountId, transaction), HttpStatus.CREATED);
     }
 
+    @Authorized
+    @PostMapping(value = "/{id}/transfer", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Transaction>> addTransfer(@PathVariable("id") int accountId, @RequestBody Transaction transaction) {
+        return new ResponseEntity<>(accountService.transferTransaction(accountId, transaction), HttpStatus.CREATED);
+    }
+
 }
