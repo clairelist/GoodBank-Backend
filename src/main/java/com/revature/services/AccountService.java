@@ -32,6 +32,7 @@ public class AccountService {
     public Optional<List<Account>> findByUserId(int id) {
         User user = userService.findById(id);
         return accountRepository.findByUser(user);
+        //cory pls
 
     }
 
