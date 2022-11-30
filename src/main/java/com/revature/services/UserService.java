@@ -24,26 +24,39 @@ public class UserService {
         return userRepository.findByEmailAndPassword(email, password);
     }
 
-    public Optional<User> findByEmail(String email){
+    public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
-    public User save(User user) {
-        return userRepository.save(user);
-    }
+    public User save(User user) { return userRepository.save(user); }
 
-    public User updatePassword (int userid, String update) throws EntityNotFoundException {
+
+    public User updatePassword(int userid, String update) throws EntityNotFoundException {
 
         User userById;
-        //will have to see how they handle erroring; for now, lets assume that it returns nULL if no user
-        //exists with that id
+        //Used to check if a user exists
 
-        try{
-            userById = findById(userid);
-            userById.setPassword(update); //TODO SAVE THE ACTUAL THING IN THE DATABASE!
-        } catch (EntityNotFoundException e){
-            throw new EntityNotFoundException();
+        User updatedPass;
+        //used to actually save the user and spit back out.
+        userById = findById(userid);
+
+        if (userById == null) {
+            updatedPass = null;
+        } else {
+
+
+            try {
+
+                userById.setPassword(update); //TODO SAVE THE ACTUAL THING IN THE DATABASE!
+                updatedPass = userRepository.save(userById);
+
+
+            } catch (EntityNotFoundException e) {
+                return null;
+              //  throw new EntityNotFoundException();
+            }
+
         }
-        return userById;
+        return updatedPass;
     }
 }
