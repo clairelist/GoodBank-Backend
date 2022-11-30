@@ -26,6 +26,20 @@ public class UserController {
     public ResponseEntity<String> resetPass(@PathVariable("id") int id, @RequestBody String update){
         //TODO: MAY HAVE TO CHANGE WHAT WE RETURN
         //us.update(id, update) or some shit
-        return ResponseEntity.ok(update);
+        String res = null;
+        ResponseEntity response = null;
+        try {
+            if(us.updatePassword(id, update) == null){
+                response = ResponseEntity.badRequest().build();
+            } else {
+                res = us.updatePassword(id, update).getPassword();
+                response = ResponseEntity.ok(res);
+            }
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    return response;
+
     }
 }
