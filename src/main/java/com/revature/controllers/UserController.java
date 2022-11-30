@@ -24,7 +24,8 @@ public class UserController {
 
     @PatchMapping("/{id}/reset-password")
     public ResponseEntity<User> resetPass(@PathVariable("id") int id, @RequestBody String update){
-        //TODO: MAY HAVE TO CHANGE WHAT WE SEND THRU
+        //TODO: I NEED TO ACCEPT A TOKEN, and an EMAIL instead of ID
+        //then, check if user exists with that email instead of checking by ID.
         User res = null;
         ResponseEntity response = null;
         try {
@@ -40,5 +41,13 @@ public class UserController {
         }
     return response;
 
+    }
+
+    @PostMapping("/forgot-password")
+    public void forgotPass(@RequestBody String email){
+        //we recieve the email of the user,
+        //check if that email is valid ie belongs to an account
+        //if yes, send password reset email using SpringMailService
+        //if no, do nothing basically.
     }
 }
