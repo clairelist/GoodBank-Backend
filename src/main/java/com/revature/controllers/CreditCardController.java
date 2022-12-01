@@ -20,7 +20,7 @@ public class CreditCardController {
 
     @Authorized
     @GetMapping("/{id}")
-    public ResponseEntity<List<CreditCard>> getCreditAccounts(@PathVariable("id") int userId) {
+    public ResponseEntity<List<CreditCard>> getCreditCards(@PathVariable("id") int userId) {
         Optional<List<CreditCard>> optional = creditCardService.findByUserId(userId);
         if(!optional.isPresent()) {
             return ResponseEntity.notFound().build();
