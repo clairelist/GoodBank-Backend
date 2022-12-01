@@ -26,5 +26,12 @@ public class UserServiceTest {
     @Test
     public void updatePasswordPerformsUpdate(){
         //TODO: I SHOULD FOLLOW THE SAME LOGIC AS UPDATING A RECIPE FROM BEFORE.
+        User beforeUser = new User();
+        beforeUser.setPassword("old password");
+
+        String newPassword = "NEW password!";
+
+        //MOCK the call to the respotiyurieor.
+        //expect(beforeUser.password).toEqual(us.update(beforeUser.id, newPassword))
     }
 }
