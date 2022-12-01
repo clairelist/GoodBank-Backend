@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,8 +32,6 @@ public class AccountService {
     public Optional<List<Account>> findByUserId(int id) {
         User user = userService.findById(id);
         return accountRepository.findByUser(user);
-        //cory pls
-
     }
 
     public Account upsertAccount(Account accountToUpsert, String userId) {
