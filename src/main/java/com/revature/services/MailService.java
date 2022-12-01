@@ -2,7 +2,7 @@ package com.revature.services;
 
 import java.util.Properties;
 
-public class MailService {
+public class MailService<JavaMailSender> { //NOTE: I SHOULD _NOT_ BE A GENERIC, I NEED TO BE SOMETHING ELSE.
     @Bean
     public JavaMailSender getJavaMailSender() { //TODO:: FIX ME UP!
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
