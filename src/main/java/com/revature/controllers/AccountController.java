@@ -1,11 +1,9 @@
 package com.revature.controllers;
 
 import com.revature.annotations.Authorized;
-import com.revature.dtos.LoanDTO;
 import com.revature.dtos.TransactionDTO;
 import com.revature.dtos.TransferDTO;
 import com.revature.models.Account;
-import com.revature.models.Loan;
 import com.revature.models.Transaction;
 import com.revature.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +27,8 @@ public class AccountController {
     @GetMapping("/{id}")
     public ResponseEntity<List<Account>> getAccounts(@PathVariable("id") int accountId) {
         Optional<List<Account>> optional = accountService.findByUserId(accountId);
+        //Could use single like this?
+        //return optional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
         if(!optional.isPresent()) {
             return ResponseEntity.notFound().build();
         }

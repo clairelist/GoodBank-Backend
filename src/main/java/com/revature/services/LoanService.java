@@ -14,12 +14,20 @@ import java.util.List;
 
 @Service
 public class LoanService {
+
+    private final UserRepository ur;
+
+    private final UserService us;
+
+    private final LoanRepository lr;
+
     @Autowired
-    private UserRepository ur;
-    @Autowired
-    private UserService us;
-    @Autowired
-    private LoanRepository lr;
+    public LoanService(UserRepository ur, UserService us, LoanRepository lr) {
+        this.ur = ur;
+        this.us = us;
+        this.lr = lr;
+    }
+
     public Loan createLoan(LoanDTO appliedLoan, int userId) {
         Loan newLoan = new Loan();
         User user = ur.getById(userId);
