@@ -27,11 +27,20 @@ public class UserServiceTest {
     public void updatePasswordPerformsUpdate(){
         //TODO: I SHOULD FOLLOW THE SAME LOGIC AS UPDATING A RECIPE FROM BEFORE.
         User beforeUser = new User();
+        beforeUser.setId(1);
         beforeUser.setPassword("old password");
 
+
         String newPassword = "NEW password!";
+        User updatedUser = new User();
+        updatedUser.setPassword(newPassword);
+
+
 
         //MOCK the call to the respotiyurieor.
-        //expect(beforeUser.password).toEqual(us.update(beforeUser.id, newPassword))
+        //expect(beforeUser.password).toEqual(us.update(1, newPassword))
+        Mockito.when(us.updatePassword(1, newPassword)).thenReturn(updatedUser);
+
+        assertEquals(updatedUser.getPassword(), newPassword);
     }
 }
