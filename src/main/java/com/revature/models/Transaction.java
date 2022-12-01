@@ -2,6 +2,7 @@ package com.revature.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.revature.dtos.TransactionDTO;
+import com.revature.dtos.TransferDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,5 +42,12 @@ public class Transaction {
         this.creationDate = transaction.getCreationDate();
         this.account = transaction.getAccount();
         this.toAccountId = transaction.getToAccountId();
+    }
+
+    public Transaction(TransferDTO transfer) {
+        this.amount = transfer.getAmount();
+        this.account = transfer.getAccount();
+        this.type = transfer.getType();
+        this.toAccountId = transfer.getToAccountId();
     }
 }

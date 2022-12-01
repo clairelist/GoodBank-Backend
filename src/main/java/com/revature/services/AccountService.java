@@ -1,6 +1,7 @@
 package com.revature.services;
 
 import com.revature.dtos.TransactionDTO;
+import com.revature.dtos.TransferDTO;
 import com.revature.models.Account;
 import com.revature.models.Transaction;
 import com.revature.models.TransactionType;
@@ -72,7 +73,7 @@ public class AccountService {
     }
 
     @Transactional
-    public List<Transaction> transferTransaction(int accountId, TransactionDTO transactionToTransferDTO) {
+    public List<Transaction> transferTransaction(int accountId, TransferDTO transactionToTransferDTO) {
         Transaction transactionToTransfer = new Transaction(transactionToTransferDTO);
         //grab both user accounts from initial request
         Account account = accountRepository.getById(accountId);
