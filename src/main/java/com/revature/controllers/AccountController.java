@@ -1,9 +1,11 @@
 package com.revature.controllers;
 
 import com.revature.annotations.Authorized;
+import com.revature.dtos.LoanDTO;
 import com.revature.dtos.TransactionDTO;
 import com.revature.dtos.TransferDTO;
 import com.revature.models.Account;
+import com.revature.models.Loan;
 import com.revature.models.Transaction;
 import com.revature.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
