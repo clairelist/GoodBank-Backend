@@ -1,6 +1,7 @@
 package com.revature.controllers;
 
 import com.revature.annotations.Authorized;
+import com.revature.dtos.TransactionDTO;
 import com.revature.models.Account;
 import com.revature.models.Transaction;
 import com.revature.services.AccountService;
@@ -46,13 +47,13 @@ public class AccountController {
 
     @Authorized
     @PostMapping(value = "/{id}/transaction", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Transaction> addTransaction(@PathVariable("id") int accountId, @RequestBody Transaction transaction) {
+    public ResponseEntity<Transaction> addTransaction(@PathVariable("id") int accountId, @RequestBody TransactionDTO transaction) {
         return new ResponseEntity<>(accountService.upsertTransaction(accountId, transaction), HttpStatus.CREATED);
     }
 
     @Authorized
     @PostMapping(value = "/{id}/transfer", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Transaction>> addTransfer(@PathVariable("id") int accountId, @RequestBody Transaction transaction) {
+    public ResponseEntity<List<Transaction>> addTransfer(@PathVariable("id") int accountId, @RequestBody TransactionDTO transaction) {
         return new ResponseEntity<>(accountService.transferTransaction(accountId, transaction), HttpStatus.CREATED);
     }
 

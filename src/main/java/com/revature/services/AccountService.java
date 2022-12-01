@@ -1,5 +1,6 @@
 package com.revature.services;
 
+import com.revature.dtos.TransactionDTO;
 import com.revature.models.Account;
 import com.revature.models.Transaction;
 import com.revature.models.TransactionType;
@@ -58,22 +59,24 @@ public class AccountService {
         return transactionRepository.findByAccount(account);
     }
 
-    public Transaction upsertTransaction(int accountId, Transaction transactionToUpsert) {
-            Account account = accountRepository.getById(accountId);
+    public Transaction upsertTransaction(int accountId, TransactionDTO transactionToUpsertDTO) {
+        Transaction transactionToUpsert = new Transaction(transactionToUpsertDTO);
+        Account account = accountRepository.getById(accountId);
 
-            if(transactionToUpsert.getType() == TransactionType.Expense) {
-                account.setBalance(account.getBalance() - transactionToUpsert.getAmount());
-            } else if (transactionToUpsert.getType() == TransactionType.Income) {
-                account.setBalance(account.getBalance() + transactionToUpsert.getAmount());
-            }
-            accountRepository.saveAndFlush(account);
-            transactionToUpsert.setAccount(account);
-            transactionToUpsert.setCreationDate(Date.from(Instant.now()));
-            return transactionRepository.save(transactionToUpsert);
+        if(transactionToUpsert.getType() == TransactionType.Expense) {
+            account.setBalance(account.getBalance() - transactionToUpsert.getAmount());
+        } else if (transactionToUpsert.getType() == TransactionType.Income) {
+            account.setBalance(account.getBalance() + transactionToUpsert.getAmount());
+        }
+        accountRepository.saveAndFlush(account);
+        transactionToUpsert.setAccount(account);
+        transactionToUpsert.setCreationDate(Date.from(Instant.now()));
+        return transactionRepository.save(transactionToUpsert);
     }
 
     @Transactional
-    public List<Transaction> transferTransaction(int accountId, Transaction transactionToTransfer) {
+    public List<Transaction> transferTransaction(int accountId, TransactionDTO transactionToTransferDTO) {
+        Transaction transactionToTransfer = new Transaction(transactionToTransferDTO);
         //grab both user accounts from initial request
         Account account = accountRepository.getById(accountId);
         Account toAccount = accountRepository.getById(transactionToTransfer.getToAccountId());
