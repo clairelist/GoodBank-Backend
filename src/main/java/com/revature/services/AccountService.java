@@ -1,12 +1,12 @@
 package com.revature.services;
 
+import com.revature.dtos.LoanDTO;
 import com.revature.dtos.TransactionDTO;
-import com.revature.models.Account;
-import com.revature.models.Transaction;
-import com.revature.models.TransactionType;
-import com.revature.models.User;
+import com.revature.models.*;
 import com.revature.repositories.AccountRepository;
+import com.revature.repositories.LoanRepository;
 import com.revature.repositories.TransactionRepository;
+import com.revature.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import static com.revature.models.Status.PENDING;
 
 @Service
 public class AccountService {
@@ -28,6 +30,8 @@ public class AccountService {
 
     @Autowired
     private UserService userService;
+
+
 
     public Optional<List<Account>> findByUserId(int id) {
         User user = userService.findById(id);
@@ -116,4 +120,5 @@ public class AccountService {
 
         return transfers;
     }
+
 }
