@@ -19,6 +19,4 @@ public class RegisterRequest {
     private String state;
     private String city;
     private int zip;
-    private UserType userType;
-    private Date creationDate;
 }
