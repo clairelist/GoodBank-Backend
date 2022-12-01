@@ -24,6 +24,5 @@ public class Loan {
     @ManyToOne
     @JoinColumn(referencedColumnName = "id")
     @JsonIgnore
-    private Account account;
-
+    private User user;
 }
