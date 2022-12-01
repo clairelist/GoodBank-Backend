@@ -50,7 +50,7 @@ public class AccountService {
 
     public List<Transaction> getAllTransactions(int accountId) {
         Account account = accountRepository.getById(accountId);
-        return transactionRepository.findByAccount(account);
+        return transactionRepository.findAllByAccountOrderByCreationDateDesc(account);
     }
 
     public Transaction upsertTransaction(int accountId, Transaction transactionToUpsert) {
