@@ -1,39 +1,27 @@
-package com.revature.models;
+package com.revature.dtos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.revature.dtos.TransactionDTO;
+import com.revature.models.Account;
+import com.revature.models.Transaction;
+import com.revature.models.TransactionType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.util.Date;
 
-@Entity
-@Table(name = "transactions")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Transaction {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class TransactionDTO {
     private Integer id;
     private double amount;
     private String description;
-
-    @Enumerated(EnumType.STRING)
     private TransactionType type;
     private Date creationDate;
-
-    @ManyToOne
-    @JoinColumn(referencedColumnName = "id")
-    @JsonIgnore
     private Account account;
+    private Integer toAccountId;
 
-    @Column(nullable = true)
-    private Integer toAccountId; // utilized when doing transfers, not showing in the other button field for general transaction
-
-    public Transaction(TransactionDTO transaction) {
+    public TransactionDTO(Transaction transaction) {
         this.id = transaction.getId();
         this.amount = transaction.getAmount();
         this.description = transaction.getDescription();
