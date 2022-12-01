@@ -11,4 +11,4 @@ management:
           - "*"
 server:
   error:
-    include-stacktrace: never
+#    include-stacktrace: never
