@@ -24,7 +24,7 @@ public class AccountController {
 
     @Authorized
     @GetMapping("/{id}")
-    public ResponseEntity<List<Account>> getAccount(@PathVariable("id") int accountId) {
+    public ResponseEntity<List<Account>> getAccounts(@PathVariable("id") int accountId) {
         Optional<List<Account>> optional = accountService.findByUserId(accountId);
         if(!optional.isPresent()) {
             return ResponseEntity.notFound().build();
