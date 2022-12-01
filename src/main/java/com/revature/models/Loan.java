@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Table(name = "loans")
@@ -25,4 +26,5 @@ public class Loan {
     @JoinColumn(referencedColumnName = "id")
     @JsonIgnore
     private User user;
+
 }
