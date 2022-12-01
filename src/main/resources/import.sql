@@ -7,7 +7,6 @@ INSERT INTO accounts (id, name, balance, creation_date, user_id, account_type) V
 INSERT INTO accounts (id, name, balance, creation_date, user_id, account_type) VALUES (3,'Primary Savings',5000.00,'2022-08-25T20:32:26.568Z',3,'SAVINGS');
 
 INSERT INTO transactions (id, amount, creation_date, description, type, account_id) VALUES (1,2500.00,'2022-08-25T20:32:26.568Z','Payroll Direct Deposit','Income',1),(2,2500.00,'2022-08-25T20:32:26.568Z','Payroll Direct Deposit','Income',1),(3,2500.00,'2022-08-25T20:32:26.568Z','Payroll Direct Deposit','Income',1),(4,2500.00,'2022-08-25T20:32:26.568Z','Payroll Direct Deposit','Income',1);
-INSERT INTO transactions (id, amount, creation_date, description, type, account_id, to_account_id) VALUES (5,50.00,'2022-08-25T20:32:26.568Z','Payroll Direct Deposit','Transfer',1, 2),(6,10.00,'2022-08-25T20:32:26.568Z','Money Received from variable/sender','Transfer',2,3);
 
 INSERT INTO creditcards (id, user_id, card_number, ccv, expiration_date, total_limit, available_balance) VALUES (1, 1, 1234123412341234, 765, '2022-08-25T20:32:26.568Z', 15000.00, 15000.00);
 INSERT INTO creditcards (id, user_id, card_number, ccv, expiration_date, total_limit, available_balance) VALUES (2, 3, 4567456745674567, 783, '2022-08-25T20:32:26.568Z', 10000.00, 10000.00);
