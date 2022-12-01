@@ -32,6 +32,9 @@ public class Notification {
     @Column(nullable=false)
     private Boolean dismissed;
 
+    @Column(nullable=false)
+    private Boolean seen;
+
     @Column
     private Timestamp time;
 
@@ -39,6 +42,7 @@ public class Notification {
         this.id = String.valueOf(UUID.randomUUID());
         this.time = new Timestamp(System.currentTimeMillis());
         this.dismissed = false;
+        this.seen = false;
     }
 
     public Notification(User user, NotificationType type, Integer referencesId, String body) {
@@ -49,5 +53,6 @@ public class Notification {
         this.body = body;
         this.time = new Timestamp(System.currentTimeMillis());
         this.dismissed = false;
+        this.seen = false;
     }
 }
