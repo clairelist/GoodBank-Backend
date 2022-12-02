@@ -1,6 +1,7 @@
 package com.revature.aspects;
 
 import com.revature.exceptions.DuplicateEmailFoundException;
+import com.revature.exceptions.InsufficientFundsException;
 import com.revature.exceptions.NotLoggedInException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,14 @@ public class RestExceptionHandler {
     public ResponseEntity<Object> handleDuplicateEmailFoundException(HttpServletRequest request, DuplicateEmailFoundException DuplicateEmailFoundException) {
 
         String errorMessage = "Email already taken";
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+    @ExceptionHandler(InsufficientFundsException.class)
+    public ResponseEntity<Object> handleInsufficientFundsException(HttpServletRequest request, InsufficientFundsException message) {
+
+        String errorMessage = "Insufficient funds for this transaction";
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }
