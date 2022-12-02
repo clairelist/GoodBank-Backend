@@ -37,4 +37,13 @@ public class UserServiceTest {
         Mockito.when(us.updatePassword(1, newPassword)).thenReturn(updatedUser);
         assertEquals(updatedUser.getPassword(), newPassword);
     }
+
+    @Test
+    public void getUserByIdExists(){
+        User user = new User();
+        user.setId(1);
+
+        Mockito.when(us.findById(1)).thenReturn(user);
+        assertEquals(user, us.findById(1));
+    }
 }

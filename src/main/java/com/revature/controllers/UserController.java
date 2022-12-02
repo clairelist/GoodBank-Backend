@@ -48,6 +48,10 @@ public class UserController {
         //we recieve the email of the user,
         //check if that email is valid ie belongs to an account
         //if yes, send password reset email using SpringMailService
-        //if no, do nothing basically.
+        //if no, do nothing basically
+        Optional<User> found = us.findByEmail(email);
+        if(found.isPresent()){
+            us.sendEmail(email);
+        }
     }
 }

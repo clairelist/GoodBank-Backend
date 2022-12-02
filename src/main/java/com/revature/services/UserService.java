@@ -43,20 +43,39 @@ public class UserService {
         if (userById == null) {
             updatedPass = null;
         } else {
-
-
             try {
 
-                userById.setPassword(update); //TODO SAVE THE ACTUAL THING IN THE DATABASE!
+                userById.setPassword(update);
                 updatedPass = userRepository.save(userById);
-
-
             } catch (EntityNotFoundException e) {
                 return null;
-              //  throw new EntityNotFoundException();
             }
 
         }
         return updatedPass;
+    }
+
+    public void sendEmail(String email){
+        //call mail service, send email with the email as recipient
+        String recipient = email;
+        int id = 0;
+        String message = "You requested a password reset, bla blah http://react-app.com/reset-password/" + id;
+        String sender = "donotreply@goodbank.com";
+
+
+
+        try {
+            Optional<User> foundUser = findByEmail(email);
+            if(foundUser.isPresent()){
+                //call mail service here, suppling message, sender, recipeitn, id etc
+                id = foundUser.get().getId();
+                //MailService ms;
+                //ms.send?(recipient, sender, message);
+            }
+
+
+        } catch (EntityNotFoundException e){
+            e.printStackTrace(); //deprecate me?
+        }
     }
 }
