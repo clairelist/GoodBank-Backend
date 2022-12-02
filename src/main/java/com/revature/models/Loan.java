@@ -25,4 +25,5 @@ public class Loan {
     @JoinColumn(referencedColumnName = "id")
     @JsonIgnore
     private User user;
+
 }
