@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000"}, allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000", "http://good-bank-ui.s3-website-us-west-2.amazonaws.com"}, allowCredentials = "true")
 public class AuthController {
 
     private final AuthService authService;
@@ -44,10 +44,6 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody RegisterRequest registerRequest) {
-        User created = new User(0,
-                registerRequest.getEmail(),
-                registerRequest.getPassword());
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(created));
+        return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(registerRequest));
     }
 }
