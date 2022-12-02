@@ -1,12 +1,12 @@
 package com.revature.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.revature.dtos.AccountDTO;
+import com.revature.dtos.TransferDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
-import java.time.Instant;
 import java.util.Date;
 
 @Entity
@@ -28,12 +28,21 @@ public class Account {
     @OneToOne
     @JoinColumn(referencedColumnName = "id")
     @JsonIgnore
-    private User user;
+    private User user; //emulates a customerId
 
     public Account(String name, Date creationDate, AccountType accountType, User user) {
         this.name = name;
         this.creationDate = creationDate;
         this.accountType = accountType;
         this.user = user;
+    }
+
+    public Account(AccountDTO newaccount) {
+        this.id = newaccount.getId();
+        this.name = newaccount.getName();
+        this.balance = newaccount.getBalance();
+        this.creationDate = newaccount.getCreationDate();
+        this.accountType = newaccount.getAccountType();
+        this.user = newaccount.getUser();
     }
 }

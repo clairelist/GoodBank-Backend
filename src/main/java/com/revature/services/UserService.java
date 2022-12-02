@@ -3,6 +3,7 @@ package com.revature.services;
 import com.revature.dtos.ResetRequest;
 import com.revature.models.User;
 import com.revature.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -13,6 +14,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }

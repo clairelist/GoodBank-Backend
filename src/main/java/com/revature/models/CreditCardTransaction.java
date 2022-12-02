@@ -9,21 +9,22 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "loans")
+@Table(name = "cctransactions")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Loan {
+public class CreditCardTransaction {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private double initialAmount;
-    private double balance;
-    private String reason;
+    private double amount;
+    private String description;
     private Date creationDate;
+
     @ManyToOne
     @JoinColumn(referencedColumnName = "id")
     @JsonIgnore
-    private User user;
+    private CreditCard creditCard;
 
 }

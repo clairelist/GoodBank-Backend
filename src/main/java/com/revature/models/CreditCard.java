@@ -7,23 +7,28 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
-
+//comment
 @Entity
-@Table(name = "loans")
+@Table(name = "creditcards")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Loan {
+public class CreditCard {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private double initialAmount;
-    private double balance;
-    private String reason;
-    private Date creationDate;
-    @ManyToOne
+
+    @OneToOne
     @JoinColumn(referencedColumnName = "id")
     @JsonIgnore
-    private User user;
+    private User user; //emulates a customerId
+
+    private Long cardNumber;
+    private Integer ccv;
+    private Date expirationDate;
+
+    private double totalLimit;
+    private double availableBalance;
 
 }

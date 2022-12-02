@@ -1,6 +1,8 @@
 package com.revature.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.revature.dtos.TransactionDTO;
+import com.revature.dtos.TransferDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,10 +29,25 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(referencedColumnName = "id")
     @JsonIgnore
-    private Account senderAccount;
+    private Account account;
 
-    @ManyToOne
-    @JoinColumn(referencedColumnName = "id")
-    @JsonIgnore
-    private Account receiverAccount;
+    @Column(nullable = true)
+    private Integer toAccountId; // utilized when doing transfers, not showing in the other button field for general transaction
+
+    public Transaction(TransactionDTO transaction) {
+        this.id = transaction.getId();
+        this.amount = transaction.getAmount();
+        this.description = transaction.getDescription();
+        this.type = transaction.getType();
+        this.creationDate = transaction.getCreationDate();
+        this.account = transaction.getAccount();
+        this.toAccountId = transaction.getToAccountId();
+    }
+
+    public Transaction(TransferDTO transfer) {
+        this.amount = transfer.getAmount();
+        this.account = transfer.getAccount();
+        this.type = transfer.getType();
+        this.toAccountId = transfer.getToAccountId();
+    }
 }
