@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(classes= BankingApplication.class)
-public class AuthServiceTest {
+  class AuthServiceTest {
     @MockBean
     private UserRepository mockRepository;
 
@@ -33,7 +33,7 @@ public class AuthServiceTest {
     private AuthService sut;
 
     @Test
-    public void findByCredsCorrect(){
+     void findByCredsCorrect(){
         //Arrange
         LoginRequest creds = new LoginRequest();
         creds.setEmail("test@gmail.com");
@@ -48,7 +48,7 @@ public class AuthServiceTest {
     }
 
     @Test
-    public void registerUserThrowsError(){
+    void registerUserThrowsError(){
         RegisterRequest register = new RegisterRequest();
         register.setEmail("test@gmail.com");
         register.setPassword("test");
@@ -68,7 +68,7 @@ public class AuthServiceTest {
     }
 
     @Test
-    public void registerUserCreates(){
+     void registerUserCreates(){
         RegisterRequest registerreq = new RegisterRequest();
         registerreq.setEmail("test@gmail.com");
         registerreq.setPassword("test");

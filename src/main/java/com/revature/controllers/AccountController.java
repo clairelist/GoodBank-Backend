@@ -27,8 +27,6 @@ public class AccountController {
     @GetMapping("/{id}")
     public ResponseEntity<List<Account>> getAccounts(@PathVariable("id") int accountId) {
         Optional<List<Account>> optional = accountService.findByUserId(accountId);
-        //Could use single like this?
-        //return optional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
         if(!optional.isPresent()) {
             return ResponseEntity.notFound().build();
         }

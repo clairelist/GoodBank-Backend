@@ -26,15 +26,14 @@ public class NotificationService {
     }
 
     public Notification markAsDismissed(Notification n) {
-        Optional<Notification> record = nr.findById(n.getId());
-        if (record.isPresent()) {
-            Notification foundNotification = record.get();
+        Optional<Notification> tableRecord = nr.findById(n.getId());
+        if (tableRecord.isPresent()) {
+            Notification foundNotification = tableRecord.get();
             foundNotification.setDismissed(true);
 
             return nr.save(foundNotification);
         }
 
-        // todo: some kind of exception if notification isn't found
         return null;
     }
 

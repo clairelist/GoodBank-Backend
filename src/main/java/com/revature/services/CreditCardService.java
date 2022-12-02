@@ -1,6 +1,5 @@
 package com.revature.services;
 
-import com.revature.models.Account;
 import com.revature.models.CreditCard;
 import com.revature.models.User;
 import com.revature.repositories.CreditCardRepository;

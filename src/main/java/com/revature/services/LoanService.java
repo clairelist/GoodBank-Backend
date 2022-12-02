@@ -37,7 +37,6 @@ public class LoanService {
         newLoan.setCreationDate(Date.from(Instant.now()));
         newLoan.setBalance(appliedLoan.getInitialAmount());
         newLoan.setUser(user);
-//        newLoan.setStatus(PENDING);
         lr.save(newLoan);
 
         // TODO make sure to create corresponding transaction on account?
@@ -49,7 +48,6 @@ public class LoanService {
     public List<Loan> getUserLoans(int userId) {
         User user = us.findById(userId);
 
-        List<Loan> loans = lr.findByUser(user);
-        return loans;
+        return lr.findByUser(user);
     }
 }
