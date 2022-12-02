@@ -5,7 +5,6 @@ import com.revature.models.Notification;
 import com.revature.models.User;
 import com.revature.repositories.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

@@ -1,6 +1,7 @@
 package com.revature.controllers;
 
 import com.revature.annotations.Authorized;
+import com.revature.dtos.AccountDTO;
 import com.revature.dtos.TransactionDTO;
 import com.revature.dtos.TransferDTO;
 import com.revature.models.Account;
@@ -27,8 +28,6 @@ public class AccountController {
     @GetMapping("/{id}")
     public ResponseEntity<List<Account>> getAccounts(@PathVariable("id") int accountId) {
         Optional<List<Account>> optional = accountService.findByUserId(accountId);
-        //Could use single like this?
-        //return optional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
         if(!optional.isPresent()) {
             return ResponseEntity.notFound().build();
         }
@@ -37,7 +36,7 @@ public class AccountController {
 
     @Authorized
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Account> createAccount(@RequestBody Account account, @RequestHeader("Current-User") String userId) {
+    public ResponseEntity<Account> createAccount(@RequestBody AccountDTO account, @RequestHeader("Current-User") String userId) {
         return ResponseEntity.ok(accountService.upsertAccount(account, userId));
     }
 

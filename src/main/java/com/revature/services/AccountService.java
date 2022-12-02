@@ -1,13 +1,16 @@
 package com.revature.services;
 
+import com.revature.dtos.AccountDTO;
 import com.revature.dtos.TransactionDTO;
 import com.revature.dtos.TransferDTO;
+import com.revature.exceptions.InsufficientFundsException;
 import com.revature.models.Account;
 import com.revature.models.Transaction;
 import com.revature.models.TransactionType;
 import com.revature.models.User;
 import com.revature.repositories.AccountRepository;
 import com.revature.repositories.TransactionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -26,6 +29,7 @@ public class AccountService {
 
     private final UserService userService;
 
+    @Autowired
     public AccountService(AccountRepository accountRepository, TransactionRepository transactionRepository, UserService userService) {
         this.accountRepository = accountRepository;
         this.transactionRepository = transactionRepository;
@@ -37,8 +41,8 @@ public class AccountService {
         return accountRepository.findByUser(user);
     }
 
-    public Account upsertAccount(Account accountToUpsert, String userId) {
-
+    public Account upsertAccount(AccountDTO accountToUpsertDTO, String userId) {
+        Account accountToUpsert = new Account(accountToUpsertDTO);
         int id = Integer.parseInt(userId);
         User user = userService.findById(id);
 
@@ -63,9 +67,9 @@ public class AccountService {
         Transaction transactionToUpsert = new Transaction(transactionToUpsertDTO);
         Account account = accountRepository.getById(accountId);
 
-        if(transactionToUpsert.getType() == TransactionType.Expense) {
+        if(transactionToUpsert.getType() == TransactionType.EXPENSE) {
             account.setBalance(account.getBalance() - transactionToUpsert.getAmount());
-        } else if (transactionToUpsert.getType() == TransactionType.Income) {
+        } else if (transactionToUpsert.getType() == TransactionType.INCOME) {
             account.setBalance(account.getBalance() + transactionToUpsert.getAmount());
         }
         accountRepository.saveAndFlush(account);
@@ -84,18 +88,16 @@ public class AccountService {
         Transaction secondTransaction = new Transaction();
         //handle first transaction from initial sender
         if (transactionToTransfer.getAmount() > account.getBalance()) {
-            System.out.println("TRANSFER AMOUNT: " + transactionToTransfer.getAmount());
-            System.out.println("ACCOUNT BALANCE: " + account.getBalance());
-            throw new RuntimeException();
+            throw new InsufficientFundsException();
         }
 
-        if(transactionToTransfer.getType() == TransactionType.Transfer) {
+        if(transactionToTransfer.getType() == TransactionType.TRANSFER) {
             //set balance to amount minus the amount your sending and change to expense type.
             account.setBalance(account.getBalance() - transactionToTransfer.getAmount());
-            transactionToTransfer.setType(TransactionType.Expense);
+            transactionToTransfer.setType(TransactionType.EXPENSE);
             //set balance of receiver account to add amount you are sending and change to income type.
             toAccount.setBalance(toAccount.getBalance() + transactionToTransfer.getAmount());
-            secondTransaction.setType(TransactionType.Income);
+            secondTransaction.setType(TransactionType.INCOME);
         }
         ////////////////////accountRepository.saveAndFlush(account); //What does this do???
         //set remaining fields so that they are abstracted away from user

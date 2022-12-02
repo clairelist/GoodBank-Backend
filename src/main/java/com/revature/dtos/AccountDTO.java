@@ -1,34 +1,30 @@
-package com.revature.models;
+package com.revature.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.revature.models.AccountType;
+import com.revature.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import java.util.Date;
-//comment
-@Entity
-@Table(name = "creditcards")
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreditCard {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class AccountDTO {
     private Integer id;
+    private String name;
+    private Double balance;
+
+    private AccountType accountType;
+    private Date creationDate;
 
     @OneToOne
     @JoinColumn(referencedColumnName = "id")
     @JsonIgnore
     private User user; //emulates a customerId
-
-    private Long cardNumber;
-    private Integer ccv;
-    private Date expirationDate;
-
-    private double totalLimit;
-    private double availableBalance;
-
 }
