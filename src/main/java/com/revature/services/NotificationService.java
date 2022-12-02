@@ -38,6 +38,18 @@ public class NotificationService {
         return null;
     }
 
+    public Notification markAsSeen(String notificationId) {
+        Optional<Notification> tableRecord = nr.findById(notificationId);
+        if (tableRecord.isPresent()) {
+            Notification foundNotification = tableRecord.get();
+            foundNotification.setSeen(true);
+
+            return nr.save(foundNotification);
+        }
+
+        return null;
+    }
+
     public List<Notification> getUserNotifications(int userId) {
         User user = us.findById(userId);
         return nr.findByUserAndDismissedFalse(user);

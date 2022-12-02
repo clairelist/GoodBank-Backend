@@ -47,4 +47,9 @@ public class NotificationController {
 
         return ResponseEntity.notFound().build();
     }
+
+    public ResponseEntity<List<Notification>> setNotificationsSeen(@RequestBody String[] ids){
+        //
+        return ResponseEntity.notFound().build();
+    }
 }
