@@ -71,14 +71,14 @@ public class LoanService {
 //        return loan;
 //    }
 
-    public Loan updateLoanStatus(String userType, LoanDetails updateLoan) {
+    public LoanDetails updateLoanStatus(String userType, LoanDetails updateLoan) {
         Loan loan = lr.getById(updateLoan.getLoanID());
         if (!Objects.equals(userType, ADMIN.toString())){
             return null;
         } else {
             loan.setStatus(Status.valueOf(updateLoan.getStatus()));
             lr.save(loan);
-            return loan;
+            return updateLoan;
         }
     }
 }

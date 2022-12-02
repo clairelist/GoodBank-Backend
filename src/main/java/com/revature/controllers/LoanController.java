@@ -38,9 +38,9 @@ public class LoanController {
     }
 
     @PutMapping("/pending-loans")
-    public ResponseEntity<Loan> updateStatus(@RequestHeader("Current-User") String userType, @RequestBody LoanDetails loan){
-        Loan updateLoan = ls.updateLoanStatus(userType, loan);
-        return new ResponseEntity<>(loan, HttpStatus.OK);
+    public ResponseEntity<LoanDetails> updateStatus(@RequestHeader("Current-User") String userType, @RequestBody LoanDetails loan){
+        LoanDetails updateLoan = ls.updateLoanStatus(userType, loan);
+        return new ResponseEntity<>(updateLoan, HttpStatus.OK);
     }
 
 }
