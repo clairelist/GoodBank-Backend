@@ -1,13 +1,13 @@
 package com.revature.services;
 
-import com.revature.dtos.LoanDTO;
 import com.revature.dtos.TransactionDTO;
-import com.revature.models.*;
+import com.revature.dtos.TransferDTO;
+import com.revature.models.Account;
+import com.revature.models.Transaction;
+import com.revature.models.TransactionType;
+import com.revature.models.User;
 import com.revature.repositories.AccountRepository;
-import com.revature.repositories.LoanRepository;
 import com.revature.repositories.TransactionRepository;
-import com.revature.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -17,21 +17,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static com.revature.models.Status.PENDING;
-
 @Service
 public class AccountService {
 
-    @Autowired
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
 
-    @Autowired
-    private TransactionRepository transactionRepository;
+    private final TransactionRepository transactionRepository;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-
+    public AccountService(AccountRepository accountRepository, TransactionRepository transactionRepository, UserService userService) {
+        this.accountRepository = accountRepository;
+        this.transactionRepository = transactionRepository;
+        this.userService = userService;
+    }
 
     public Optional<List<Account>> findByUserId(int id) {
         User user = userService.findById(id);
@@ -76,7 +75,7 @@ public class AccountService {
     }
 
     @Transactional
-    public List<Transaction> transferTransaction(int accountId, TransactionDTO transactionToTransferDTO) {
+    public List<Transaction> transferTransaction(int accountId, TransferDTO transactionToTransferDTO) {
         Transaction transactionToTransfer = new Transaction(transactionToTransferDTO);
         //grab both user accounts from initial request
         Account account = accountRepository.getById(accountId);
