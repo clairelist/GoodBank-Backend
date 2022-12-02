@@ -19,14 +19,14 @@ public class UserController {
 
     @PatchMapping("/reset-password")
     public ResponseEntity<User> resetPass(@RequestBody ResetRequest update){
-        User res;
+       // User res; USED FOR TESTING ONLY!
         ResponseEntity response = null;
         try {
             if(us.updatePassword(update) == null){
                 response = ResponseEntity.badRequest().build();
             } else {
                 res = us.updatePassword(update);
-                response = ResponseEntity.ok(res);
+                response = ResponseEntity.ok().build();
             }
 
         } catch(Exception e) {
