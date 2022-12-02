@@ -62,13 +62,11 @@ public class UserService {
         String message = "You requested a password reset, bla blah http://react-app.com/reset-password/" + id;
         String sender = "donotreply@goodbank.com";
 
-
-
         try {
             Optional<User> foundUser = findByEmail(email);
             if(foundUser.isPresent()){
                 //call mail service here, suppling message, sender, recipeitn, id etc
-                id = foundUser.get().getId();
+                id = foundUser.get().getId(); //TODO: I NEED TO BE ENCRYPTED, THEN DECRYPTED WHEN USER SENDS PATCH REQUEST
                 //MailService ms;
                 //ms.send?(recipient, sender, message);
             }
