@@ -12,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/loans")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000", "http://good-bank-ui.s3-website-us-west-2.amazonaws.com"}, allowCredentials = "true")
 public class LoanController {
 
     @Autowired
