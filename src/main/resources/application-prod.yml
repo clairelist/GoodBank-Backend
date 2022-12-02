@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${DB_URL} # Environment variables to not hardcode values
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+#    url: ${DB_URL} # Environment variables to not hardcode values
+#    username: ${DB_USERNAME}
+#    password: ${DB_PASSWORD}
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
