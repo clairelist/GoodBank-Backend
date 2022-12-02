@@ -2,6 +2,7 @@ package com.revature.services;
 
 import com.revature.dtos.TransactionDTO;
 import com.revature.dtos.TransferDTO;
+import com.revature.exceptions.InsufficientFundsException;
 import com.revature.models.Account;
 import com.revature.models.Transaction;
 import com.revature.models.TransactionType;
@@ -84,9 +85,9 @@ public class AccountService {
         Transaction secondTransaction = new Transaction();
         //handle first transaction from initial sender
         if (transactionToTransfer.getAmount() > account.getBalance()) {
-            System.out.println("TRANSFER AMOUNT: " + transactionToTransfer.getAmount());
-            System.out.println("ACCOUNT BALANCE: " + account.getBalance());
-            throw new RuntimeException();
+//            System.out.println("TRANSFER AMOUNT: " + transactionToTransfer.getAmount());
+//            System.out.println("ACCOUNT BALANCE: " + account.getBalance());
+            throw new InsufficientFundsException();
         }
 
         if(transactionToTransfer.getType() == TransactionType.Transfer) {
