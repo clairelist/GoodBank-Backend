@@ -6,6 +6,7 @@ import com.revature.repositories.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +27,7 @@ public class NotificationService {
     }
 
     public Notification markAsDismissed(String notificationId) {
+        //marks a single notification as dismissed, then returns that notification
         Optional<Notification> tableRecord = nr.findById(notificationId);
         if (tableRecord.isPresent()) {
             Notification foundNotification = tableRecord.get();
@@ -38,16 +40,22 @@ public class NotificationService {
         return null;
     }
 
-    public Notification markAsSeen(String notificationId) {
-        Optional<Notification> tableRecord = nr.findById(notificationId);
-        if (tableRecord.isPresent()) {
-            Notification foundNotification = tableRecord.get();
-            foundNotification.setSeen(true);
+    public List<Notification> markListAsSeen(String[] notificationIds) {
+        // takes in a list of notification ids, and sets their seen value to true,
+        // then returns a new list of the updated notifications
+        List<Notification> updated = new ArrayList<>();
 
-            return nr.save(foundNotification);
+        for (String id : notificationIds){
+            Optional<Notification> tableRecord = nr.findById(id);
+            if (tableRecord.isPresent()) {
+                Notification foundNotification = tableRecord.get();
+                foundNotification.setSeen(true);
+
+                updated.add(nr.save(foundNotification));
+            }
         }
 
-        return null;
+        return updated;
     }
 
     public List<Notification> getUserNotifications(int userId) {

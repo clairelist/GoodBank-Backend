@@ -48,8 +48,10 @@ public class NotificationController {
         return ResponseEntity.notFound().build();
     }
 
+    @PatchMapping("/seen")
     public ResponseEntity<List<Notification>> setNotificationsSeen(@RequestBody String[] ids){
-        //
-        return ResponseEntity.notFound().build();
+        List<Notification> updated = ns.markListAsSeen(ids);
+
+        return ResponseEntity.ok(updated);
     }
 }
