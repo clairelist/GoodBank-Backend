@@ -28,4 +28,6 @@ public class Loan {
     private User user;
     @Enumerated(EnumType.STRING)
     private Status status;
+
+
 }

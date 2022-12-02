@@ -15,6 +15,9 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+
+import static com.revature.models.UserType.ADMIN;
 
 @Service
 public class LoanService {
@@ -24,12 +27,11 @@ public class LoanService {
     private UserService us;
     @Autowired
     private LoanRepository lr;
-    public Loan createLoan(LoanDTO appliedLoan, int userId) {
+    public LoanDetails createLoan(LoanDTO appliedLoan, int userId) {
         Loan newLoan = new Loan();
         User user = ur.getById(userId);
         newLoan.setInitialAmount(appliedLoan.getInitialAmount());
         newLoan.setReason(appliedLoan.getReason());
-        newLoan.setUser(appliedLoan.getUserId());
         newLoan.setCreationDate(Date.from(Instant.now()));
         newLoan.setBalance(appliedLoan.getInitialAmount());
         newLoan.setUser(user);
@@ -38,7 +40,7 @@ public class LoanService {
 
         // TODO make sure to create corresponding transaction on account?
 
-        return newLoan;
+        return new LoanDetails(newLoan);
 
     }
 
@@ -49,9 +51,9 @@ public class LoanService {
         return loans;
     }
 
-    public List<Loan> getPendingLoans(String userType){
-        if(Objects.equals(userType, UserType.ADMIN.toString())){
-            List<Loan> loans = lr.findByStatus(Status.PENDING);
+    public List<LoanDetails> getPendingLoans(String userType){
+        if(Objects.equals(userType, ADMIN.toString())){
+            List<LoanDetails> loans = lr.findByStatus(Status.PENDING).stream().map(x -> new LoanDetails(x)).collect(Collectors.toList());
             return loans;
         }
         return null;
@@ -69,18 +71,14 @@ public class LoanService {
 //        return loan;
 //    }
 
-    public Loan updateLoanStatus(String userType, int loanID, Loan updateLoan) {
-        Loan loan = lr.getById(loanID);
-        if(Objects.equals(updateLoan.getStatus(), "APPROVED")){
-            loan.setStatus(Status.APPROVED);
-        } else if(Objects.equals(updateLoan.getStatus(), "DENIED")){
-            loan.setStatus(Status.DENIED);
+    public Loan updateLoanStatus(String userType, LoanDetails updateLoan) {
+        Loan loan = lr.getById(updateLoan.getLoanID());
+        if (!Objects.equals(userType, ADMIN.toString())){
+            return null;
+        } else {
+            loan.setStatus(Status.valueOf(updateLoan.getStatus()));
+            lr.save(loan);
+            return loan;
         }
-        loan.setReason(loan.getReason());
-        loan.setBalance(loan.getBalance());
-        loan.setCreationDate(loan.getCreationDate());
-        loan.setInitialAmount(loan.getInitialAmount());
-        lr.save(loan);
-        return loan;
     }
 }

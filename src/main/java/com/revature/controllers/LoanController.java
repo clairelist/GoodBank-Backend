@@ -20,8 +20,8 @@ public class LoanController {
     @Autowired
     private LoanService ls;
     @PostMapping("/{id}")
-    public ResponseEntity<Loan> appliedLoan(@PathVariable("id") int userId, @RequestBody LoanDTO loan){
-        Loan newLoan = ls.createLoan(loan, userId);
+    public ResponseEntity<LoanDetails> appliedLoan(@PathVariable("id") int userId, @RequestBody LoanDTO loan){
+        LoanDetails newLoan = ls.createLoan(loan, userId);
         return new ResponseEntity<>(newLoan, HttpStatus.CREATED);
     }
 
@@ -32,14 +32,14 @@ public class LoanController {
     }
 
     @GetMapping("/pending-loans")
-    public ResponseEntity<List<Loan>> getPendingLoans(@RequestHeader("Current-User") String userType){
-        List<Loan> loans = ls.getPendingLoans(userType);
+    public ResponseEntity<List<LoanDetails>> getPendingLoans(@RequestHeader("Current-User") String userType){
+        List<LoanDetails> loans = ls.getPendingLoans(userType);
         return new ResponseEntity<>(loans, HttpStatus.OK);
     }
 
-    @PutMapping("/pending-loans/{id}")
-    public ResponseEntity<Loan> updateStatus(@RequestHeader("Current-User") String userType, @PathVariable("id") int loanID, @RequestBody Loan loan){
-        Loan updateLoan = ls.updateLoanStatus(userType, loanID, loan);
+    @PutMapping("/pending-loans")
+    public ResponseEntity<Loan> updateStatus(@RequestHeader("Current-User") String userType, @RequestBody LoanDetails loan){
+        Loan updateLoan = ls.updateLoanStatus(userType, loan);
         return new ResponseEntity<>(loan, HttpStatus.OK);
     }
 
