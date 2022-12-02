@@ -16,16 +16,16 @@ public class UserController {
         this.us = us;
     }
 
-    @PatchMapping("/{id}/reset-password")
-    public ResponseEntity<User> resetPass(@PathVariable("id") int id, @RequestBody String update){
-        //User res = null;
+    @PatchMapping("/reset-password")
+    public ResponseEntity<User> resetPass(@RequestBody User update){
+        User res;
         ResponseEntity response = null;
         try {
-            if(us.updatePassword(id, update) == null){
+            if(us.updatePassword(update) == null){
                 response = ResponseEntity.badRequest().build();
             } else {
-              //  res = us.updatePassword(id, update);
-                response = ResponseEntity.ok().build();
+                res = us.updatePassword(update);
+                response = ResponseEntity.ok(res);
             }
 
         } catch(Exception e) {
