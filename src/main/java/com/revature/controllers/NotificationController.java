@@ -1,7 +1,10 @@
 package com.revature.controllers;
 
+import com.revature.dtos.NotificationCreationRequest;
 import com.revature.models.Notification;
+import com.revature.models.User;
 import com.revature.services.NotificationService;
+import com.revature.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +30,11 @@ public class NotificationController {
         this.ns = ns;
     }
 
+    @PostMapping
+    public ResponseEntity<Notification> createNotification(@RequestBody NotificationCreationRequest request){
+        Notification savedNotification = ns.save(request);
+        return ResponseEntity.ok(savedNotification);
+    }
     @GetMapping("/{user_id}")
     public ResponseEntity<List<Notification>> getUserNotifications(@PathVariable("user_id") String userId){
         List<Notification> notifs = ns.getUserNotifications(Integer.parseInt(userId));

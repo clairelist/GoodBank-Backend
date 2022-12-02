@@ -1,9 +1,11 @@
 package com.revature.services;
 
+import com.revature.dtos.NotificationCreationRequest;
 import com.revature.models.Notification;
 import com.revature.models.User;
 import com.revature.repositories.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,8 +24,15 @@ public class NotificationService {
         this.us = us;
     }
 
-    public Notification save(Notification n) {
-        return nr.save(n);
+    public Notification save(NotificationCreationRequest request) {
+        // utilize request based constructor to create notification
+        Notification newNotification = new Notification(request);
+
+        // use UserService to retrieve user based on supplied userId
+        User foundUser = us.findById(request.getUserId());
+        newNotification.setUser(foundUser);
+
+        return nr.save(newNotification);
     }
 
     public Notification markAsDismissed(String notificationId) {
@@ -36,7 +45,6 @@ public class NotificationService {
             return nr.save(foundNotification);
         }
 
-        // add some kind of exception if notification isn't found
         return null;
     }
 
