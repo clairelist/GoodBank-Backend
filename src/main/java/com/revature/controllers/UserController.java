@@ -29,7 +29,7 @@ public class UserController {
             }
 
         } catch(Exception e) {
-            e.printStackTrace();
+            response = ResponseEntity.badRequest().build();
         }
     return response;
 
