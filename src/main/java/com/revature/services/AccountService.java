@@ -66,9 +66,9 @@ public class AccountService {
         Transaction transactionToUpsert = new Transaction(transactionToUpsertDTO);
         Account account = accountRepository.getById(accountId);
 
-        if(transactionToUpsert.getType() == TransactionType.Expense) {
+        if(transactionToUpsert.getType() == TransactionType.EXPENSE) {
             account.setBalance(account.getBalance() - transactionToUpsert.getAmount());
-        } else if (transactionToUpsert.getType() == TransactionType.Income) {
+        } else if (transactionToUpsert.getType() == TransactionType.INCOME) {
             account.setBalance(account.getBalance() + transactionToUpsert.getAmount());
         }
         accountRepository.saveAndFlush(account);
@@ -90,13 +90,13 @@ public class AccountService {
             throw new InsufficientFundsException();
         }
 
-        if(transactionToTransfer.getType() == TransactionType.Transfer) {
+        if(transactionToTransfer.getType() == TransactionType.TRANSFER) {
             //set balance to amount minus the amount your sending and change to expense type.
             account.setBalance(account.getBalance() - transactionToTransfer.getAmount());
-            transactionToTransfer.setType(TransactionType.Expense);
+            transactionToTransfer.setType(TransactionType.EXPENSE);
             //set balance of receiver account to add amount you are sending and change to income type.
             toAccount.setBalance(toAccount.getBalance() + transactionToTransfer.getAmount());
-            secondTransaction.setType(TransactionType.Income);
+            secondTransaction.setType(TransactionType.INCOME);
         }
         ////////////////////accountRepository.saveAndFlush(account); //What does this do???
         //set remaining fields so that they are abstracted away from user

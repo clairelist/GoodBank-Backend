@@ -30,7 +30,7 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(InsufficientFundsException.class)
-    public ResponseEntity<Object> handleInsufficientFundsException(HttpServletRequest request, InsufficientFundsException InsufficientFundsException) {
+    public ResponseEntity<Object> handleInsufficientFundsException(HttpServletRequest request, InsufficientFundsException message) {
 
         String errorMessage = "Insufficient funds for this transaction";
 
