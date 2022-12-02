@@ -59,7 +59,7 @@ public class UserService {
         //call mail service, send email with the email as recipient
         String recipient = email;
         int id = 0;
-        String message = "You requested a password reset, bla blah http://react-app.com/reset-password/" + id;
+        String message = "You requested a password reset, click here (or copy and paste into your browser) http://react-app.com/reset-password/" + id + " to reset your password."; //ID SHOULD BE ENCRYPTED!
         String sender = "donotreply@goodbank.com";
 
         try {
@@ -70,8 +70,6 @@ public class UserService {
                 //MailService ms;
                 //ms.send?(recipient, sender, message);
             }
-
-
         } catch (EntityNotFoundException e){
             e.printStackTrace(); //deprecate me?
         }
