@@ -1,5 +1,6 @@
 package com.revature.services;
 
+import com.revature.dtos.AccountDTO;
 import com.revature.dtos.TransactionDTO;
 import com.revature.dtos.TransferDTO;
 import com.revature.exceptions.InsufficientFundsException;
@@ -40,8 +41,8 @@ public class AccountService {
         return accountRepository.findByUser(user);
     }
 
-    public Account upsertAccount(Account accountToUpsert, String userId) {
-
+    public Account upsertAccount(AccountDTO accountToUpsertDTO, String userId) {
+        Account accountToUpsert = new Account(accountToUpsertDTO);
         int id = Integer.parseInt(userId);
         User user = userService.findById(id);
 
