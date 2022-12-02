@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 public class RestExceptionHandler {
 
     @ExceptionHandler(NotLoggedInException.class)
-    public ResponseEntity<Object> handleNotLoggedInException(HttpServletRequest request, NotLoggedInException notLoggedInException) {
+    public ResponseEntity<Object> handleNotLoggedInException(HttpServletRequest request, NotLoggedInException message) {
 
         String errorMessage = "Must be logged in to perform this action";
 
@@ -22,7 +22,7 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(DuplicateEmailFoundException.class)
-    public ResponseEntity<Object> handleDuplicateEmailFoundException(HttpServletRequest request, DuplicateEmailFoundException DuplicateEmailFoundException) {
+    public ResponseEntity<Object> handleDuplicateEmailFoundException(HttpServletRequest request, DuplicateEmailFoundException message) {
 
         String errorMessage = "Email already taken";
 
