@@ -36,13 +36,9 @@ public class UserService {
 
         Optional<User> userByEmail;
         //Used to check if a user exists
-
-
-
         User updatedPass;
         //used to actually save the user and spit back out.
         userByEmail = findByEmail(update.getEmail());
-
         if (!userByEmail.isPresent()) {
             updatedPass = null;
         } else {
