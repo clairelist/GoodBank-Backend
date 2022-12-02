@@ -25,7 +25,7 @@ public class UserController {
             if(us.updatePassword(update) == null){
                 response = ResponseEntity.badRequest().build();
             } else {
-                res = us.updatePassword(update);
+               
                 response = ResponseEntity.ok().build();
             }
 
