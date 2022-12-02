@@ -1,9 +1,6 @@
 package com.revature.repositories;
 
-import com.revature.models.Account;
-import com.revature.models.Loan;
-import com.revature.models.Transaction;
-import com.revature.models.User;
+import com.revature.models.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +11,6 @@ public interface LoanRepository extends JpaRepository<Loan, Integer> {
 
 
     List<Loan> findByUser(User user);
+
+    List<Loan> findByStatus(Status status);
 }
