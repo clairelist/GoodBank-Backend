@@ -9,6 +9,7 @@ import com.revature.models.TransactionType;
 import com.revature.models.User;
 import com.revature.repositories.AccountRepository;
 import com.revature.repositories.TransactionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -27,6 +28,7 @@ public class AccountService {
 
     private final UserService userService;
 
+    @Autowired
     public AccountService(AccountRepository accountRepository, TransactionRepository transactionRepository, UserService userService) {
         this.accountRepository = accountRepository;
         this.transactionRepository = transactionRepository;
