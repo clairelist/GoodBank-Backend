@@ -44,19 +44,6 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody RegisterRequest registerRequest) {
-        User created = new User(0,
-                registerRequest.getEmail(),
-                registerRequest.getPassword(),
-                registerRequest.getFirstName(),
-                registerRequest.getLastName(),
-                registerRequest.getAddress(),
-                registerRequest.getState(),
-                registerRequest.getCity(),
-                registerRequest.getZip(),
-                registerRequest.getUserType(),
-                registerRequest.getCreationDate()
-                );
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(created));
+        return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(registerRequest));
     }
 }

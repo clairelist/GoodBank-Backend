@@ -1,11 +1,8 @@
 package com.revature.dtos;
 
-import com.revature.models.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -19,6 +16,4 @@ public class RegisterRequest {
     private String state;
     private String city;
     private int zip;
-    private UserType userType;
-    private Date creationDate;
 }
