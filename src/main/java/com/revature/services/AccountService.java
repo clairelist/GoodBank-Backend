@@ -87,8 +87,6 @@ public class AccountService {
         Transaction secondTransaction = new Transaction();
         //handle first transaction from initial sender
         if (transactionToTransfer.getAmount() > account.getBalance()) {
-//            System.out.println("TRANSFER AMOUNT: " + transactionToTransfer.getAmount());
-//            System.out.println("ACCOUNT BALANCE: " + account.getBalance());
             throw new InsufficientFundsException();
         }
 
