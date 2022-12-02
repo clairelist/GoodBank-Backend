@@ -16,7 +16,8 @@ import java.util.List;
         "http://localhost:3000",
         "http://good-bank-ui.s3-website-us-west-2.amazonaws.com"
         },
-        allowCredentials = "true"
+        allowCredentials = "true",
+        allowedHeaders = "*"
 )
 public class NotificationController {
 

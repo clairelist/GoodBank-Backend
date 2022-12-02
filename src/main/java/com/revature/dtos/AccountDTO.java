@@ -26,5 +26,5 @@ public class AccountDTO {
     @OneToOne
     @JoinColumn(referencedColumnName = "id")
     @JsonIgnore
-    private User user; //emulates a customerId
+    private User user;
 }
