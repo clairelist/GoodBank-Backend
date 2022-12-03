@@ -3,7 +3,6 @@ package com.revature.controllers;
 import com.revature.dtos.LoanDTO;
 import com.revature.dtos.LoanDetails;
 import com.revature.models.Loan;
-import com.revature.models.Status;
 import com.revature.services.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

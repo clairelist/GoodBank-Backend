@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -60,11 +61,11 @@ public class LoanService {
     }
 
     public List<LoanDetails> getPendingLoans(String userType){
+        List<LoanDetails> results = new ArrayList<>();
         if(Objects.equals(userType, ADMIN.toString())){
-            List<LoanDetails> loans = lr.findByStatus(Status.PENDING).stream().map(x -> new LoanDetails(x)).collect(Collectors.toList());
-            return loans;
+            return lr.findByStatus(Status.PENDING).stream().map(x -> new LoanDetails(x)).collect(Collectors.toList());
         }
-        return null;
+        return results;
     }
 
     public LoanDetails updateLoanStatus(String userType, LoanDetails updateLoan) {
