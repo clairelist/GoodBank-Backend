@@ -18,6 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/account")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000", "http://good-bank-ui.s3-website-us-west-2.amazonaws.com"}, allowCredentials = "true")
 public class AccountController {
 
     @Autowired
@@ -35,7 +36,6 @@ public class AccountController {
 
     @Authorized
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    @CrossOrigin(allowedHeaders = "*")
     public ResponseEntity<Account> createAccount(@RequestBody AccountDTO account, @RequestHeader("Current-User") String userId) {
         return ResponseEntity.ok(accountService.upsertAccount(account, userId));
     }
