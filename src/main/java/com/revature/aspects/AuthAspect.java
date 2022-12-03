@@ -1,7 +1,9 @@
 package com.revature.aspects;
 
 import com.revature.annotations.Authorized;
+import com.revature.dtos.UserDTO;
 import com.revature.exceptions.NotLoggedInException;
+import com.revature.services.TokenService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -15,20 +17,28 @@ import javax.servlet.http.HttpSession;
 public class AuthAspect {
 
     private final HttpServletRequest req;
+    private TokenService ts;
 
-    public AuthAspect(HttpServletRequest req) {
+    public AuthAspect(HttpServletRequest req, TokenService ts) {
         this.req = req;
+        this.ts = ts;
     }
 
     @Around("@annotation(authorized)")
     public Object authenticate(ProceedingJoinPoint pjp, Authorized authorized) throws Throwable {
 
-        HttpSession session = req.getSession();
+        String token = req.getHeader("Authorization");
+        UserDTO userDetails = ts.extractTokenDetails(token);
 
-        if(session.getAttribute("user") == null) {
-            throw new NotLoggedInException("Must be logged in to perform this action");
+        Object[] args = pjp.getArgs();
+
+        if(args == null || args.length == 1) {
+            //CREATE AN AUTH EXCEPTION RICHARD >:(
+            throw new NotLoggedInException();
         }
 
-        return pjp.proceed(pjp.getArgs());
+        String id = (String) args[0];
+
+        return pjp.proceed();
     }
 }
