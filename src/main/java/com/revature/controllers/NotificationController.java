@@ -2,9 +2,7 @@ package com.revature.controllers;
 
 import com.revature.dtos.NotificationCreationRequest;
 import com.revature.models.Notification;
-import com.revature.models.User;
 import com.revature.services.NotificationService;
-import com.revature.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

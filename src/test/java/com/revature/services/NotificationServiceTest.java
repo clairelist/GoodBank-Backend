@@ -8,7 +8,6 @@ import com.revature.models.User;
 import com.revature.models.UserType;
 import com.revature.repositories.NotificationRepository;
 import com.revature.repositories.UserRepository;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -16,8 +15,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
-import org.springframework.test.context.event.annotation.BeforeTestMethod;
 
 import java.util.Date;
 
@@ -38,7 +35,7 @@ public class NotificationServiceTest {
     private User stubUser;
 
     @BeforeAll
-    public void setupTests(){
+    void setupTests(){
         stubUser = new User();
         stubUser.setId(1);
         stubUser.setUserType(UserType.CLIENT);
@@ -54,7 +51,7 @@ public class NotificationServiceTest {
     }
 
     @Test
-    public void notificationCreationSuccessful(){
+    void notificationCreationSuccessful(){
         //arrange
         NotificationCreationRequest request = new NotificationCreationRequest();
         request.setUserId(stubUser.getId());
