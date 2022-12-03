@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(classes= BankingApplication.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class NotificationServiceTest {
+class NotificationServiceTest {
     @MockBean
     private NotificationRepository mockNr;
 
