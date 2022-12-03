@@ -21,12 +21,21 @@ import static com.revature.models.UserType.ADMIN;
 
 @Service
 public class LoanService {
-    @Autowired
+
+
+
     private UserRepository ur;
-    @Autowired
+
     private UserService us;
-    @Autowired
+
     private LoanRepository lr;
+    @Autowired
+    public LoanService(UserRepository ur, UserService us, LoanRepository lr) {
+        this.ur = ur;
+        this.us = us;
+        this.lr = lr;
+    }
+
     public LoanDetails createLoan(LoanDTO appliedLoan, int userId) {
         Loan newLoan = new Loan();
         User user = ur.getById(userId);
@@ -47,8 +56,7 @@ public class LoanService {
     public List<Loan> getUserLoans(int userId) {
         User user = us.findById(userId);
 
-        List<Loan> loans = lr.findByUser(user);
-        return loans;
+        return lr.findByUser(user);
     }
 
     public List<LoanDetails> getPendingLoans(String userType){
@@ -58,18 +66,6 @@ public class LoanService {
         }
         return null;
     }
-
-
-//    public Loan updateLoanStatus(String userType, int loanID, LoanDetails loanDetails) {
-//        Loan loan = lr.getById(loanID);
-//        if(Objects.equals(loanDetails.getStatus(), "APPROVED")){
-//            loan.setStatus(Status.APPROVED);
-//        } else if(Objects.equals(loanDetails.getStatus(), "DENIED")){
-//            loan.setStatus(Status.DENIED);
-//        }
-//        lr.save(loan);
-//        return loan;
-//    }
 
     public LoanDetails updateLoanStatus(String userType, LoanDetails updateLoan) {
         Loan loan = lr.getById(updateLoan.getLoanID());

@@ -1,10 +1,10 @@
 package com.revature.controllers;
 
 import com.revature.annotations.Authorized;
-import com.revature.dtos.LoanDTO;
+import com.revature.dtos.AccountDTO;
 import com.revature.dtos.TransactionDTO;
+import com.revature.dtos.TransferDTO;
 import com.revature.models.Account;
-import com.revature.models.Loan;
 import com.revature.models.Transaction;
 import com.revature.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +36,7 @@ public class AccountController {
 
     @Authorized
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Account> createAccount(@RequestBody Account account, @RequestHeader("Current-User") String userId) {
+    public ResponseEntity<Account> createAccount(@RequestBody AccountDTO account, @RequestHeader("Current-User") String userId) {
         return ResponseEntity.ok(accountService.upsertAccount(account, userId));
     }
 
@@ -55,7 +54,7 @@ public class AccountController {
 
     @Authorized
     @PostMapping(value = "/{id}/transfer", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Transaction>> addTransfer(@PathVariable("id") int accountId, @RequestBody TransactionDTO transaction) {
+    public ResponseEntity<List<Transaction>> addTransfer(@PathVariable("id") int accountId, @RequestBody TransferDTO transaction) {
         return new ResponseEntity<>(accountService.transferTransaction(accountId, transaction), HttpStatus.CREATED);
     }
 
