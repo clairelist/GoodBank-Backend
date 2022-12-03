@@ -1,5 +1,6 @@
 package com.revature.controllers;
 
+import com.revature.dtos.NotificationCreationRequest;
 import com.revature.models.Notification;
 import com.revature.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,36 @@ public class NotificationController {
         this.ns = ns;
     }
 
+    @PostMapping
+    public ResponseEntity<Notification> createNotification(@RequestBody NotificationCreationRequest request){
+        Notification savedNotification = ns.save(request);
+        return ResponseEntity.ok(savedNotification);
+    }
     @GetMapping("/{user_id}")
     public ResponseEntity<List<Notification>> getUserNotifications(@PathVariable("user_id") String userId){
         List<Notification> notifs = ns.getUserNotifications(Integer.parseInt(userId));
 
         return ResponseEntity.ok(notifs);
+    }
+
+    @PatchMapping("/dismiss/{user_id}/{notification_id}")
+    public ResponseEntity<List<Notification>> dismissUserNotification(
+        @PathVariable("user_id") String userId,
+        @PathVariable("notification_id") String notificationId
+    ){
+        if (ns.markAsDismissed(notificationId) != null){
+            List<Notification> notifs = ns.getUserNotifications(Integer.parseInt(userId));
+
+            return ResponseEntity.ok(notifs);
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping("/seen")
+    public ResponseEntity<List<Notification>> setNotificationsSeen(@RequestBody String[] ids){
+        List<Notification> updated = ns.markListAsSeen(ids);
+
+        return ResponseEntity.ok(updated);
     }
 }
