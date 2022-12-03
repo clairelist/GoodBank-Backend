@@ -1,6 +1,7 @@
 package com.revature.controllers;
 
 import com.revature.dtos.LoanDTO;
+import com.revature.dtos.LoanDetails;
 import com.revature.models.Loan;
 import com.revature.services.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,8 @@ public class LoanController {
     @Autowired
     private LoanService ls;
     @PostMapping("/{id}")
-    public ResponseEntity<Loan> appliedLoan(@PathVariable("id") int userId, @RequestBody LoanDTO loan){
-        Loan newLoan = ls.createLoan(loan, userId);
+    public ResponseEntity<LoanDetails> appliedLoan(@PathVariable("id") int userId, @RequestBody LoanDTO loan){
+        LoanDetails newLoan = ls.createLoan(loan, userId);
         return new ResponseEntity<>(newLoan, HttpStatus.CREATED);
     }
 
@@ -29,5 +30,16 @@ public class LoanController {
         return new ResponseEntity<>(loans, HttpStatus.OK);
     }
 
+    @GetMapping("/pending-loans")
+    public ResponseEntity<List<LoanDetails>> getPendingLoans(@RequestHeader("Current-User") String userType){
+        List<LoanDetails> loans = ls.getPendingLoans(userType);
+        return new ResponseEntity<>(loans, HttpStatus.OK);
+    }
+
+    @PutMapping("/pending-loans")
+    public ResponseEntity<LoanDetails> updateStatus(@RequestHeader("Current-User") String userType, @RequestBody LoanDetails loan){
+        LoanDetails updateLoan = ls.updateLoanStatus(userType, loan);
+        return new ResponseEntity<>(updateLoan, HttpStatus.OK);
+    }
 
 }
