@@ -47,6 +47,18 @@ public class AccountController {
     }
 
     @Authorized
+    @GetMapping("/{id}/transaction/{page}")
+    public ResponseEntity<List<Transaction>> getFiveTransactions(@PathVariable("id") int accountId, @PathVariable("page") int page) {
+        return ResponseEntity.ok(accountService.getFiveTransactionsByPage(accountId, page));
+    }
+
+    @Authorized
+    @GetMapping("/{id}/transactions")
+    public ResponseEntity<Object> getTransactionCount(@PathVariable("id") int accountId) {
+        return ResponseEntity.ok(accountService.getTransactionCount(accountId));
+    }
+
+    @Authorized
     @PostMapping(value = "/{id}/transaction", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Transaction> addTransaction(@PathVariable("id") int accountId, @RequestBody TransactionDTO transaction) {
         return new ResponseEntity<>(accountService.upsertTransaction(accountId, transaction), HttpStatus.CREATED);
