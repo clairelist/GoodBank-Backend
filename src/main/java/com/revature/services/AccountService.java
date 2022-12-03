@@ -80,7 +80,11 @@ public class AccountService {
 
     @Transactional
     public List<Transaction> transferTransaction(int accountId, TransferDTO transactionToTransferDTO) {
-        Transaction transactionToTransfer = new Transaction(transactionToTransferDTO);
+        Transaction transactionToTransfer = new Transaction();
+        transactionToTransfer.setAmount(transactionToTransferDTO.getAmount());
+        transactionToTransfer.setAccount(transactionToTransferDTO.getAccount());
+        transactionToTransfer.setType(transactionToTransferDTO.getType());
+        transactionToTransfer.setToAccountId(transactionToTransferDTO.getToAccountId());
         //grab both user accounts from initial request
         Account account = accountRepository.getById(accountId);
         Account toAccount = accountRepository.getById(transactionToTransfer.getToAccountId());
