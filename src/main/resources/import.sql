@@ -10,6 +10,7 @@ INSERT INTO transactions (id, amount, creation_date, description, type, account_
 
 INSERT INTO creditcards (id, user_id, card_number, ccv, expiration_date, total_limit, available_balance) VALUES (1, 1, 1234123412341234, 765, '2022-08-25T20:32:26.568Z', 15000.00, 15000.00);
 INSERT INTO creditcards (id, user_id, card_number, ccv, expiration_date, total_limit, available_balance) VALUES (2, 3, 4567456745674567, 783, '2022-08-25T20:32:26.568Z', 10000.00, 10000.00);
+INSERT INTO creditcards (id, user_id, card_number, ccv, expiration_date, total_limit, available_balance) VALUES (3, 1, 4567456745674568, 783, '2022-08-25T20:32:26.568Z', 10000.00, 5000.00);
 
 INSERT INTO cctransactions (id, amount, description, creation_date, credit_card_id) VALUES (1, 500.00, 'shopping', '2022-08-25T20:32:26.568Z', 1);
 
