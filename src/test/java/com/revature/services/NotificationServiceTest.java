@@ -9,14 +9,20 @@ import com.revature.models.UserType;
 import com.revature.repositories.NotificationRepository;
 import com.revature.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -25,48 +31,105 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class NotificationServiceTest {
     @MockBean
     private NotificationRepository mockNr;
-
     @MockBean
     private UserRepository mockUr;
-
     @Autowired
     private NotificationService ns;
-
     private User stubUser;
+    private NotificationCreationRequest stubRequest;
 
     @BeforeAll
-    void setupTests(){
-        stubUser = new User();
-        stubUser.setId(1);
-        stubUser.setUserType(UserType.CLIENT);
-        stubUser.setFirstName("Lesly");
-        stubUser.setLastName("Gonzalez");
-        stubUser.setEmail("lilmissgogetta@revature.com");
-        stubUser.setPassword("pass");
-        stubUser.setAddress("1234 Revature Lane");
-        stubUser.setCity("Cleveland");
-        stubUser.setState("Ohio");
-        stubUser.setZip(44102);
-        stubUser.setCreationDate(new Date(System.currentTimeMillis()));
+    void setupTestSuite() {
+        // create stub user
+        stubUser = new User(
+                1,
+                "lilmissgogetta@revature.com",
+                "pass",
+                "Lesly",
+                "Gonzalez",
+                "1234 Revature Lane",
+                "Cleveland",
+                "Ohio",
+                44102,
+                UserType.CLIENT,
+                new Date(System.currentTimeMillis())
+        );
+
+        // create stub request to base notification creation off of
+        stubRequest = new NotificationCreationRequest(
+                stubUser.getId(),
+                NotificationType.WARNING,
+                null,
+                "Testing..."
+        );
     }
 
     @Test
     void notificationCreationSuccessful(){
-        //arrange
-        NotificationCreationRequest request = new NotificationCreationRequest();
-        request.setUserId(stubUser.getId());
-        request.setType(NotificationType.WARNING);
-        request.setBody("Testing...");
-
-        Notification expected = new Notification(request);
+        // create expected result notification
+        Notification expected = new Notification(stubRequest);
         expected.setUser(stubUser);
-        //act
 
+        // when mockNr saves the request, give us back the expected result notification
         Mockito.when(mockNr.save(Mockito.any(Notification.class))).thenReturn(expected);
 
-        Notification actual = ns.save(request);
-        //assert
+        // see if NotificationService generates the same based off of the request
+        Notification actual = ns.save(stubRequest);
+
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void markAsDismissedSuccessful(){
+        // create expected result notification
+        Notification expected = new Notification(stubRequest);
+        expected.setUser(stubUser);
+        expected.setDismissed(true);
+
+        // create subject notification
+        Notification subject = new Notification(stubRequest);
+        subject.setUser(stubUser);
+        subject.setDismissed(false); // this is default, but written here for clarity
+
+        // mocking NotificationRepository calls
+        Mockito.when(mockNr.findById(subject.getId())).thenReturn(Optional.of(subject));
+        Mockito.when(mockNr.save(subject)).thenReturn(expected);
+
+        Notification actual = ns.markAsDismissed(subject.getId());
+        assertEquals(expected.getDismissed(), actual.getDismissed());
+    }
+
+    @Test
+    void markListAsSeenSuccessful(){
+
+        //arrange
+        List<Notification> expectedNotifs = new ArrayList<>();
+        expectedNotifs.add(new Notification(stubRequest));
+        expectedNotifs.add(new Notification(stubRequest));
+        expectedNotifs.add(new Notification(stubRequest));
+
+        // we have to extract the ids, and also mark the expected as seen
+        String[] ids = new String[3];
+        for (int i = 0; i < expectedNotifs.size(); i++){
+            ids[i] = expectedNotifs.get(i).getId();
+            expectedNotifs.get(i).setSeen(true);
+        }
+
+        Notification subjectNotification = new Notification(stubRequest);
+        Notification changedNotification = new Notification(stubRequest);
+        changedNotification.setSeen(true);
+
+        Mockito.when(mockNr.findById(Mockito.anyString())).thenReturn(Optional.of(subjectNotification));
+        Mockito.when(mockNr.save(subjectNotification)).thenReturn(changedNotification);
+
+        List<Notification> actualNotifs = ns.markListAsSeen(ids);
+
+        for (int i = 0; i < actualNotifs.size(); i++){
+            assertEquals(
+                    expectedNotifs.get(i).getSeen(),
+                    actualNotifs.get(i).getSeen()
+            );
+        }
     }
 }
 
