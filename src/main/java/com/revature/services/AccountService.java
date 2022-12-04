@@ -58,22 +58,6 @@ public class AccountService {
         }
     }
 
-    public List<Transaction> getAllTransactions(int accountId) {
-        Account account = accountRepository.getById(accountId);
-        return transactionRepository.findAllByAccountOrderByCreationDateDesc(account);
-    }
-
-    public List<Transaction> getFiveTransactionsByPage(int accountId, int page) {
-        Account account = accountRepository.getById(accountId);
-        List<Transaction> trans;
-        trans = transactionRepository.findAllByAccountOrderByCreationDateDesc(account);
-        int start = (page - 1) * 5;
-        int end = start + 5;
-        if (end > trans.size()) end = trans.size();
-
-        return trans.subList(start, end);
-    }
-
     public Transaction upsertTransaction(int accountId, TransactionDTO transactionToUpsertDTO) {
         Transaction transactionToUpsert = new Transaction(transactionToUpsertDTO);
         Account account = accountRepository.getById(accountId);
@@ -131,12 +115,5 @@ public class AccountService {
         transfers.add(secondTransaction);
 
         return transfers;
-    }
-
-    public Object getTransactionCount(int accountId) {
-        Account account = accountRepository.getById(accountId);
-        List<Transaction> trans;
-        trans = transactionRepository.findAllByAccountOrderByCreationDateDesc(account);
-        return trans.size();
     }
 }

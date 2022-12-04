@@ -7,6 +7,7 @@ import com.revature.dtos.TransferDTO;
 import com.revature.models.Account;
 import com.revature.models.Transaction;
 import com.revature.services.AccountService;
+import com.revature.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,6 +24,9 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private TransactionService transactionService;
 
     @Authorized
     @GetMapping("/{id}")
@@ -43,19 +47,19 @@ public class AccountController {
     @Authorized
     @GetMapping("/{id}/transaction")
     public ResponseEntity<List<Transaction>> getTransactions(@PathVariable("id") int accountId) {
-        return ResponseEntity.ok(accountService.getAllTransactions(accountId));
+        return ResponseEntity.ok(transactionService.getAllTransactions(accountId));
     }
 
     @Authorized
     @GetMapping("/{id}/transaction/{page}")
-    public ResponseEntity<List<Transaction>> getFiveTransactions(@PathVariable("id") int accountId, @PathVariable("page") int page) {
-        return ResponseEntity.ok(accountService.getFiveTransactionsByPage(accountId, page));
+    public ResponseEntity<List<Transaction>> findFiveByAccountId(@PathVariable("id") int accountId, @PathVariable("page") int page) {
+        return ResponseEntity.ok(transactionService.findFiveByAccountId(accountId, page));
     }
 
     @Authorized
     @GetMapping("/{id}/transactions")
     public ResponseEntity<Object> getTransactionCount(@PathVariable("id") int accountId) {
-        return ResponseEntity.ok(accountService.getTransactionCount(accountId));
+        return ResponseEntity.ok(transactionService.getTransactionCount(accountId));
     }
 
     @Authorized

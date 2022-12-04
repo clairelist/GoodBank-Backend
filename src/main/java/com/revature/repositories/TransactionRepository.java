@@ -3,6 +3,7 @@ package com.revature.repositories;
 import com.revature.models.Account;
 import com.revature.models.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,4 +14,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     List<Transaction> findByAccount(Account account);
 
     List<Transaction> findAllByAccountOrderByCreationDateDesc(Account account);
+
+    List<Transaction> findAllByAccountOrderByCreationDateDesc(int account);
+
+
 }
