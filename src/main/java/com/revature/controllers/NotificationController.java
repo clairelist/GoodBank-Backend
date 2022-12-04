@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/notification")
-@CrossOrigin(origins = "*", allowedHeaders = "*", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000", "http://good-bank-ui.s3-website-us-west-2.amazonaws.com"}, allowedHeaders = "*", allowCredentials = "true")
 public class NotificationController {
 
     private NotificationService ns;
