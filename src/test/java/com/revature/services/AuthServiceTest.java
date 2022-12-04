@@ -7,7 +7,6 @@ import com.revature.exceptions.DuplicateEmailFoundException;
 import com.revature.models.User;
 import com.revature.models.UserType;
 import com.revature.repositories.UserRepository;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

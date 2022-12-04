@@ -7,7 +7,6 @@ import com.revature.models.NotificationType;
 import com.revature.models.User;
 import com.revature.models.UserType;
 import com.revature.repositories.NotificationRepository;
-import com.revature.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -29,7 +28,7 @@ class NotificationServiceTest {
     @MockBean
     private NotificationRepository mockNr;
     @MockBean
-    private UserRepository mockUr;
+    private UserService mockUs;
     @Autowired
     private NotificationService ns;
     private User stubUser;
@@ -62,7 +61,7 @@ class NotificationServiceTest {
     }
 
     @Test
-    void notificationCreationSuccessful(){
+    void notificationCreationSuccessful() {
         // create expected result notification
         Notification expected = new Notification(stubRequest);
         expected.setUser(stubUser);
@@ -77,7 +76,7 @@ class NotificationServiceTest {
     }
 
     @Test
-    void markAsDismissedSuccessful(){
+    void markAsDismissedSuccessful() {
         // create expected result notification
         Notification expected = new Notification(stubRequest);
         expected.setUser(stubUser);
@@ -97,7 +96,7 @@ class NotificationServiceTest {
     }
 
     @Test
-    void markListAsSeenSuccessful(){
+    void markListAsSeenSuccessful() {
 
         //arrange
         List<Notification> expectedNotifs = new ArrayList<>();
@@ -127,6 +126,28 @@ class NotificationServiceTest {
                     actualNotifs.get(i).getSeen()
             );
         }
+    }
+
+    @Test
+    void getUserNotificationsSuccessful() {
+        // arrange
+        List<Notification> expectedNotifs = new ArrayList<>();
+        expectedNotifs.add(new Notification(stubRequest));
+        expectedNotifs.add(new Notification(stubRequest));
+        expectedNotifs.add(new Notification(stubRequest));
+
+        for (Notification n: expectedNotifs){
+            n.setUser(stubUser);
+        }
+
+        // act
+        Mockito.when(mockUs.findById(stubUser.getId())).thenReturn(stubUser);
+        Mockito.when(mockNr.findByUserAndDismissedFalse(stubUser)).thenReturn(expectedNotifs);
+
+        List<Notification> actualNotifs = ns.getUserNotifications(stubUser.getId());
+
+        // assert
+        assertEquals(expectedNotifs, actualNotifs);
     }
 }
 
