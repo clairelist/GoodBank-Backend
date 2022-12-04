@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/account")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000", "http://good-bank-ui.s3-website-us-west-2.amazonaws.com"}, allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000", "http://good-bank-ui.s3-website-us-west-2.amazonaws.com"}, allowedHeaders = "*", allowCredentials = "true")
 public class AccountController {
 
     @Autowired
@@ -31,11 +31,8 @@ public class AccountController {
     @Authorized
     @GetMapping("/{id}")
     public ResponseEntity<List<Account>> getAccounts(@PathVariable("id") int accountId) {
-        Optional<List<Account>> optional = accountService.findByUserId(accountId);
-        if(!optional.isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(optional.get());
+        List<Account> accounts = accountService.findByUserId(accountId);
+        return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
 
     @Authorized

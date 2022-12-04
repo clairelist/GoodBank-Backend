@@ -13,5 +13,10 @@ import java.util.Optional;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Integer> {
 
+<<<<<<< HEAD
     Optional<List<Account>> findByUser(User user);
+=======
+    List<Account> findByUser(User user);
+
+>>>>>>> 0975717c67471e8fc22055c58b69f072520cbc05
 }
