@@ -1,11 +1,11 @@
 package com.revature.services;
+
 import com.revature.dtos.CreditCardTransactionDTO;
 import com.revature.exceptions.NotLoggedInException;
 import com.revature.models.*;
 import com.revature.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
@@ -60,7 +60,7 @@ public class CreditCardService {
 
         //Generate a transaction for an account, expense, this will go after validation.
         Transaction transaction = new Transaction();
-        transaction.setType(TransactionType.Expense);
+        transaction.setType(TransactionType.EXPENSE);
         transaction.setCreationDate(Date.from(Instant.now()));
         transaction.setAmount(creditCardTransactionDTO.getAmount());
         transaction.setDescription("Credit Card " + creditCardTransactionDTO.getCreditCardId() + " Payment");
@@ -71,14 +71,13 @@ public class CreditCardService {
         //gerenerate payment to cctransaction and save/persist
         CreditCardTransaction creditCardTransaction = new CreditCardTransaction(creditCardTransactionDTO);
         creditCardTransaction.setDescription("Payment from Account " + account.getName());
-        creditCardTransaction.setType(CreditCardTransactionType.Payment);
+        creditCardTransaction.setType(CreditCardTransactionType.PAYMENT);
         creditCardTransaction.setCreationDate(Date.from(Instant.now()));
         creditCardTransaction.setCreditCard(creditCard);
         creditCardTransaction.setAccount(account);
         creditCardTransactionRepository.save(creditCardTransaction);
 
-        List<CreditCardTransaction> updatedCCTransactions = creditCardTransactionRepository.findAllByCreditCardOrderByCreationDateDesc(creditCard);
-        return updatedCCTransactions;
+        return creditCardTransactionRepository.findAllByCreditCardOrderByCreationDateDesc(creditCard);
 
     }
 }

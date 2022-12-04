@@ -1,32 +1,30 @@
-package com.revature.models;
+package com.revature.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.revature.models.AccountType;
+import com.revature.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import java.util.Date;
 
-@Entity
-@Table(name = "loans")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Loan {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class AccountDTO {
     private Integer id;
-    private double initialAmount;
-    private double balance;
-    private String reason;
+    private String name;
+    private Double balance;
+
+    private AccountType accountType;
     private Date creationDate;
-    @ManyToOne
+
+    @OneToOne
     @JoinColumn(referencedColumnName = "id")
     @JsonIgnore
     private User user;
-    @Enumerated(EnumType.STRING)
-    private Status status;
-
-
 }
