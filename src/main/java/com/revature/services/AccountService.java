@@ -36,7 +36,7 @@ public class AccountService {
         this.userService = userService;
     }
 
-    public Optional<List<Account>> findByUserId(int id) {
+    public List<Account> findByUserId(int id) {
         User user = userService.findById(id);
         return accountRepository.findByUser(user);
     }

@@ -1,7 +1,9 @@
 package com.revature.controllers;
 
 import com.revature.annotations.Authorized;
+import com.revature.dtos.CreditCardTransactionDTO;
 import com.revature.models.CreditCard;
+import com.revature.models.CreditCardTransaction;
 import com.revature.services.CreditCardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,16 @@ public class CreditCardController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(optional.get());
+    }
+
+    @Authorized
+    @PostMapping("/{id}/payment")
+    public ResponseEntity<List<CreditCardTransaction>> makeCreditCardPayment(@PathVariable("id") int userId, @RequestBody CreditCardTransactionDTO creditCardTransactionDTO) {
+        List<CreditCardTransaction> ccTransactions = creditCardService.makeCreditCardPayment(userId, creditCardTransactionDTO);
+        if(ccTransactions.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(ccTransactions);
     }
 
 }

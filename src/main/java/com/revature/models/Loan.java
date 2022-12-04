@@ -25,5 +25,8 @@ public class Loan {
     @JoinColumn(referencedColumnName = "id")
     @JsonIgnore
     private User user;
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
 
 }
