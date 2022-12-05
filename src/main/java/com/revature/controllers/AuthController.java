@@ -6,6 +6,7 @@ import com.revature.dtos.UserDTO;
 import com.revature.models.User;
 import com.revature.services.AuthService;
 import com.revature.services.TokenService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ public class AuthController {
     private final AuthService authService;
     private final TokenService tokenService;
 
+    @Autowired
     public AuthController(AuthService authService, TokenService tokenService) {
         this.authService = authService;
         this.tokenService = tokenService;

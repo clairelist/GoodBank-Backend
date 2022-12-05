@@ -1,10 +1,8 @@
 package com.revature.aspects;
 
-import com.revature.annotations.Authorized;
 import com.revature.annotations.Secured;
 import com.revature.dtos.UserDTO;
 import com.revature.exceptions.AuthorizationException;
-import com.revature.exceptions.NotLoggedInException;
 import com.revature.services.TokenService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -27,24 +25,6 @@ public class AuthAspect {
     public AuthAspect(HttpServletRequest req, TokenService ts) {
         this.req = req;
         this.ts = ts;
-    }
-
-    @Around("@annotation(authorized)")
-    public Object authenticate(ProceedingJoinPoint pjp, Authorized authorized) throws Throwable {
-
-        String token = req.getHeader("Authorization");
-        UserDTO userDetails = ts.extractTokenDetails(token);
-
-        Object[] args = pjp.getArgs();
-
-        if(args == null) {
-            //CREATE AN AUTH EXCEPTION RICHARD >:(
-            throw new AuthorizationException();
-        }
-
-        Integer id = (Integer) args[0];
-
-        return pjp.proceed();
     }
 
     @Around("@annotation(com.revature.annotations.Secured)")

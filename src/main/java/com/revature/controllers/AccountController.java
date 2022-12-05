@@ -1,11 +1,9 @@
 package com.revature.controllers;
 
-import com.revature.annotations.Authorized;
 import com.revature.annotations.Secured;
 import com.revature.dtos.AccountDTO;
 import com.revature.dtos.TransactionDTO;
 import com.revature.dtos.TransferDTO;
-import com.revature.dtos.UserDTO;
 import com.revature.models.Account;
 import com.revature.models.Transaction;
 import com.revature.services.AccountService;
@@ -23,16 +21,19 @@ import java.util.List;
 @CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000", "http://good-bank-ui.s3-website-us-west-2.amazonaws.com"}, allowCredentials = "true", exposedHeaders = "Authorization")
 public class AccountController {
 
-    @Autowired
     private AccountService accountService;
 
-    @Autowired
     private TransactionService transactionService;
 
-    @Autowired
     private TokenService tokenService;
 
-    @Authorized
+    @Autowired
+    public AccountController(AccountService accountService, TransactionService transactionService, TokenService tokenService) {
+        this.accountService = accountService;
+        this.tokenService = tokenService;
+        this.transactionService = transactionService;
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<List<Account>> getAccounts(@PathVariable("id") int accountId) {
         List<Account> accounts = accountService.findByUserId(accountId);
