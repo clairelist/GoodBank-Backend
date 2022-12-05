@@ -17,12 +17,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
 
 @SpringBootTest(classes= BankingApplication.class)
-public class TransactionServiceTest {
+class TransactionServiceTest {
     @MockBean
     private TransactionRepository mockRepository;
 
     @Test
-    public void getTransactionCountgetsCorrectNumber() {
+    void getTransactionCountgetsCorrectNumber() {
         Date date = Date.from(Instant.now());
         User user = new User(1, "testuser@gmail.com", "pass", "Bryan", "Serfozo", "1234 Tampa Ave", "Florida", "Tampa", 57624, UserType.CLIENT, date);
         Account account = new Account(1, "Primary Checking", 10000.00, date, AccountType.CHECKING, user);
