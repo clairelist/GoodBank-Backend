@@ -3,6 +3,7 @@ package com.revature.services;
 import com.revature.dtos.AccountDTO;
 import com.revature.dtos.TransactionDTO;
 import com.revature.dtos.TransferDTO;
+import com.revature.dtos.UserDTO;
 import com.revature.exceptions.InsufficientFundsException;
 import com.revature.models.Account;
 import com.revature.models.Transaction;
@@ -26,14 +27,15 @@ public class AccountService {
     private final AccountRepository accountRepository;
 
     private final TransactionRepository transactionRepository;
-
+    private final TokenService tokenService;
     private final UserService userService;
 
     @Autowired
-    public AccountService(AccountRepository accountRepository, TransactionRepository transactionRepository, UserService userService) {
+    public AccountService(AccountRepository accountRepository, TransactionRepository transactionRepository, UserService userService, TokenService tokenService) {
         this.accountRepository = accountRepository;
         this.transactionRepository = transactionRepository;
         this.userService = userService;
+        this.tokenService = tokenService;
     }
 
     public List<Account> findByUserId(int id) {
@@ -43,8 +45,8 @@ public class AccountService {
 
     public Account upsertAccount(AccountDTO accountToUpsertDTO, String userId) {
         Account accountToUpsert = new Account(accountToUpsertDTO);
-        int id = Integer.parseInt(userId);
-        User user = userService.findById(id);
+        UserDTO currentUser = tokenService.extractTokenDetails(userId);
+        User user = userService.findById(currentUser.getId());
 
         if(accountRepository.existsById(accountToUpsert.getId())) {
             Account account = accountRepository.getById(accountToUpsert.getId());

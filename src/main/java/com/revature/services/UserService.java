@@ -1,6 +1,7 @@
 package com.revature.services;
 
 import com.revature.dtos.ResetRequest;
+import com.revature.dtos.UserDTO;
 import com.revature.dtos.UpdateRequest;
 import com.revature.models.User;
 import com.revature.repositories.UserRepository;
@@ -24,7 +25,7 @@ public class UserService {
         return userRepository.getById(id);
     }
 
-    public Optional<User> findByCredentials(String email, String password) {
+    public UserDTO loginCreds(String email, String password) {
         return userRepository.findByEmailAndPassword(email, password);
     }
 

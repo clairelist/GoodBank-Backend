@@ -2,6 +2,7 @@ package com.revature.services;
 
 import com.revature.dtos.LoanDTO;
 import com.revature.dtos.LoanDetails;
+import com.revature.dtos.UserDTO;
 import com.revature.models.Loan;
 import com.revature.models.Status;
 import com.revature.models.User;
@@ -30,11 +31,13 @@ public class LoanService {
     private UserService us;
 
     private LoanRepository lr;
+    private TokenService ts;
     @Autowired
-    public LoanService(UserRepository ur, UserService us, LoanRepository lr) {
+    public LoanService(UserRepository ur, UserService us, LoanRepository lr, TokenService ts) {
         this.ur = ur;
         this.us = us;
         this.lr = lr;
+        this.ts = ts;
     }
 
     public LoanDetails createLoan(LoanDTO appliedLoan, int userId) {
@@ -61,16 +64,20 @@ public class LoanService {
     }
 
     public List<LoanDetails> getPendingLoans(String userType){
+        UserDTO currentUser = ts.extractTokenDetails(userType);
+        String realType = currentUser.getType().toString();
         List<LoanDetails> results = new ArrayList<>();
-        if(Objects.equals(userType, ADMIN.toString())){
+        if(Objects.equals(realType, ADMIN.toString())){
             return lr.findByStatus(Status.PENDING).stream().map(x -> new LoanDetails(x)).collect(Collectors.toList());
         }
         return results;
     }
 
     public LoanDetails updateLoanStatus(String userType, LoanDetails updateLoan) {
+        UserDTO currentUser = ts.extractTokenDetails(userType);
+        String realType = currentUser.getType().toString();
         Loan loan = lr.getById(updateLoan.getLoanID());
-        if (!Objects.equals(userType, ADMIN.toString())){
+        if (!Objects.equals(realType, ADMIN.toString())){
             return null;
         } else {
             loan.setStatus(Status.valueOf(updateLoan.getStatus()));
