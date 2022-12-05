@@ -1,22 +1,22 @@
 package com.revature.controllers;
 
 import com.revature.annotations.Authorized;
+import com.revature.annotations.Secured;
 import com.revature.dtos.AccountDTO;
 import com.revature.dtos.TransactionDTO;
 import com.revature.dtos.TransferDTO;
+import com.revature.dtos.UserDTO;
 import com.revature.models.Account;
 import com.revature.models.Transaction;
 import com.revature.services.AccountService;
+import com.revature.services.TokenService;
+import com.revature.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Optional;
-
-import static org.springframework.web.bind.annotation.RequestMethod.OPTIONS;
 
 @RestController
 @RequestMapping("/account")
@@ -26,6 +26,12 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
+    @Autowired
+    private TransactionService transactionService;
+
+    @Autowired
+    private TokenService tokenService;
+
     @Authorized
     @GetMapping("/{id}")
     public ResponseEntity<List<Account>> getAccounts(@PathVariable("id") int accountId) {
@@ -33,25 +39,37 @@ public class AccountController {
         return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
 
-    @Authorized
+    @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Account> createAccount(@RequestBody AccountDTO account, @RequestHeader("Authorization") String userId) {
         return ResponseEntity.ok(accountService.upsertAccount(account, userId));
     }
 
-    @Authorized
+    @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
     @GetMapping("/{id}/transaction")
     public ResponseEntity<List<Transaction>> getTransactions(@PathVariable("id") int accountId) {
-        return ResponseEntity.ok(accountService.getAllTransactions(accountId));
+        return ResponseEntity.ok(transactionService.getAllTransactions(accountId));
     }
 
-    @Authorized
+    @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
+    @GetMapping("/{id}/transaction/{page}")
+    public ResponseEntity<List<Transaction>> findFiveByAccountId(@PathVariable("id") int accountId, @PathVariable("page") int page) {
+        return ResponseEntity.ok(transactionService.findFiveByAccountId(accountId, page));
+    }
+
+    @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
+    @GetMapping("/{id}/transactions")
+    public ResponseEntity<Object> getTransactionCount(@PathVariable("id") int accountId) {
+        return ResponseEntity.ok(transactionService.getTransactionCount(accountId));
+    }
+
+    @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
     @PostMapping(value = "/{id}/transaction", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Transaction> addTransaction(@PathVariable("id") int accountId, @RequestBody TransactionDTO transaction) {
         return new ResponseEntity<>(accountService.upsertTransaction(accountId, transaction), HttpStatus.CREATED);
     }
 
-    @Authorized
+    @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
     @PostMapping(value = "/{id}/transfer", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Transaction>> addTransfer(@PathVariable("id") int accountId, @RequestBody TransferDTO transaction) {
         return new ResponseEntity<>(accountService.transferTransaction(accountId, transaction), HttpStatus.CREATED);
