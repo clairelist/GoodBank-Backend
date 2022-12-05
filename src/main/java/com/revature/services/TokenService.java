@@ -47,7 +47,7 @@ public class TokenService {
                 .parseClaimsJws(token)
                 .getBody();
 
-        ur.findById(Integer.valueOf(claims.getId())).orElseThrow(() -> new NotLoggedInException());
+        User currentUser = ur.findById(Integer.valueOf(claims.getId())).orElseThrow(() -> new NotLoggedInException());
 
         UserDTO returnUser = new UserDTO();
         returnUser.setId(Integer.valueOf(claims.getId()));
