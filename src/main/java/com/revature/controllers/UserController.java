@@ -38,7 +38,7 @@ public class UserController {
     }
 
 
-    @PutMapping("/profile")
+    @PatchMapping("/profile")
     public ResponseEntity<User> update(@RequestBody UpdateRequest updateRequest) {
         if (us.updateProfile(updateRequest) == null) {
             return ResponseEntity.badRequest().build();
