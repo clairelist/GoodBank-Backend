@@ -1,6 +1,7 @@
 package com.revature.services;
 
 import com.revature.dtos.ResetRequest;
+import com.revature.dtos.UpdateRequest;
 import com.revature.models.User;
 import com.revature.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,5 +55,31 @@ public class UserService {
 
         }
         return updatedPass;
+    }
+
+    public User updateProfile(UpdateRequest updateRequest) throws EntityNotFoundException {
+
+        Optional<User> userByEmail;
+        User updatedProfile;
+
+        userByEmail = findByEmail(updateRequest.getEmail());
+        if (!userByEmail.isPresent()) {
+            updatedProfile = null;
+        } else {
+            try {
+                User userById = findById(userByEmail.get().getId());
+                userByEmail.get().setFirstName(updateRequest.getFirstName());
+                userByEmail.get().setLastName(updateRequest.getLastName());
+                userByEmail.get().setEmail(updateRequest.getEmail());
+                userByEmail.get().setAddress(updateRequest.getAddress());
+                userByEmail.get().setCity(updateRequest.getCity());
+                userByEmail.get().setState(updateRequest.getState());
+                userByEmail.get().setZip(updateRequest.getZip());
+                updatedProfile = userRepository.save(userById);
+            } catch (EntityNotFoundException e) {
+                return null;
+            }
+        }
+        return updatedProfile;
     }
 }

@@ -1,6 +1,7 @@
 package com.revature.services;
 
 import com.revature.dtos.RegisterRequest;
+import com.revature.dtos.UpdateRequest;
 import com.revature.exceptions.DuplicateEmailFoundException;
 import com.revature.models.User;
 import com.revature.models.UserType;
@@ -36,5 +37,11 @@ public class AuthService {
             userService.save(user);
             return user;
         }
+    }
+
+    public User update(UpdateRequest update) {
+        User user = new User(update);
+        userService.save(user);
+        return user;
     }
 }
