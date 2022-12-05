@@ -1,5 +1,6 @@
 package com.revature.aspects;
 
+import com.revature.exceptions.AuthorizationException;
 import com.revature.exceptions.DuplicateEmailFoundException;
 import com.revature.exceptions.InsufficientFundsException;
 import com.revature.exceptions.NotLoggedInException;
@@ -33,6 +34,14 @@ public class RestExceptionHandler {
     public ResponseEntity<Object> handleInsufficientFundsException(HttpServletRequest request, InsufficientFundsException message) {
 
         String errorMessage = "Insufficient funds for this transaction";
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+    @ExceptionHandler(AuthorizationException.class)
+    public ResponseEntity<Object> handleAuthorizationException(HttpServletRequest request, InsufficientFundsException message) {
+
+        String errorMessage = "Invalid credentials to access this page.";
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }
