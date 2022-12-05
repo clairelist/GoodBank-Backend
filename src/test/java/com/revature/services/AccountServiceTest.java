@@ -1,32 +1,42 @@
 //package com.revature.services;
 //
 //import com.revature.BankingApplication;
+<<<<<<< HEAD
 //import com.revature.models.Account;
 //import com.revature.models.User;
 //import com.revature.models.UserType;
 //import com.revature.repositories.AccountRepository;
+//import org.aspectj.lang.annotation.After;
+//import org.aspectj.lang.annotation.Before;
+//import org.junit.jupiter.api.BeforeAll;
+=======
+//import com.revature.models.*;
+//import com.revature.repositories.TransactionRepository;
+>>>>>>> 47720832f7028749d92ce689713b75e37de0072f
 //import org.junit.jupiter.api.Test;
-//import org.mockito.Mockito;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.context.SpringBootTest;
 //import org.springframework.boot.test.mock.mockito.MockBean;
+//import org.springframework.test.context.event.annotation.BeforeTestMethod;
 //
-//import javax.swing.text.html.Option;
+//import java.time.Instant;
 //import java.util.ArrayList;
+//import java.util.Date;
 //import java.util.List;
-//import java.util.Optional;
 //
 //import static org.junit.jupiter.api.Assertions.assertEquals;
+//import static org.mockito.Mockito.doReturn;
 //
 //@SpringBootTest(classes= BankingApplication.class)
 //public class AccountServiceTest {
 //    @MockBean
-//    private AccountRepository mockRepository;
+//    private TransactionRepository mockRepository;
 //
 //    @Autowired
 //    private AccountService sut;
 //    private UserService us;
 //
+//}
 //    @Test
 //    public void findByIdSendsBackUser(){
 //        //Arrange
@@ -34,6 +44,7 @@
 //        newUser.setId(1);
 //        newUser.setEmail("test@gmail.com");
 //        newUser.setPassword("test");
+//
 //        List<Account> actual = new ArrayList<>();
 //        Account newAccount = new Account(null, null, null, newUser);
 //        actual.add(newAccount);
@@ -48,4 +59,3 @@
 //
 //        assertEquals(expected, actual);
 //    }
-//}
