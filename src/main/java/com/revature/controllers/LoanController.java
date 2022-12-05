@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/loans")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000", "http://good-bank-ui.s3-website-us-west-2.amazonaws.com"}, allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000", "http://good-bank-ui.s3-website-us-west-2.amazonaws.com"}, allowCredentials = "true", exposedHeaders = "Authorization")
 public class LoanController {
 
     @Autowired
@@ -31,13 +31,13 @@ public class LoanController {
     }
 
     @GetMapping("/pending-loans")
-    public ResponseEntity<List<LoanDetails>> getPendingLoans(@RequestHeader("Current-User") String userType){
+    public ResponseEntity<List<LoanDetails>> getPendingLoans(@RequestHeader("Authorization") String userType){
         List<LoanDetails> loans = ls.getPendingLoans(userType);
         return new ResponseEntity<>(loans, HttpStatus.OK);
     }
 
     @PutMapping("/pending-loans")
-    public ResponseEntity<LoanDetails> updateStatus(@RequestHeader("Current-User") String userType, @RequestBody LoanDetails loan){
+    public ResponseEntity<LoanDetails> updateStatus(@RequestHeader("Authorization") String userType, @RequestBody LoanDetails loan){
         LoanDetails updateLoan = ls.updateLoanStatus(userType, loan);
         return new ResponseEntity<>(updateLoan, HttpStatus.OK);
     }

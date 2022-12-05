@@ -32,12 +32,12 @@ public class AuthAspect {
 
         Object[] args = pjp.getArgs();
 
-        if(args == null || args.length == 1) {
+        if(args == null) {
             //CREATE AN AUTH EXCEPTION RICHARD >:(
             throw new NotLoggedInException();
         }
 
-        String id = (String) args[0];
+        Integer id = (Integer) args[0];
 
         return pjp.proceed();
     }
