@@ -58,11 +58,6 @@ public class AccountService {
         }
     }
 
-    public List<Transaction> getAllTransactions(int accountId) {
-        Account account = accountRepository.getById(accountId);
-        return transactionRepository.findAllByAccountOrderByCreationDateDesc(account);
-    }
-
     public Transaction upsertTransaction(int accountId, TransactionDTO transactionToUpsertDTO) {
         Transaction transactionToUpsert = new Transaction(transactionToUpsertDTO);
         Account account = accountRepository.getById(accountId);
@@ -121,5 +116,4 @@ public class AccountService {
 
         return transfers;
     }
-
 }
