@@ -33,10 +33,10 @@ INSERT INTO creditcards (id, user_id, card_number, ccv, expiration_date, total_l
 
 INSERT INTO cctransactions (id, amount, description, creation_date, credit_card_id) VALUES (1, 500.00, 'shopping', '2022-08-25T20:32:26.568Z', 1);
 
-INSERT INTO notifications (id, user_id, type, body, dismissed, seen) VALUES ('a', 1, 'WARNING', 'testing...',                           false, false);
-INSERT INTO notifications (id, user_id, type, body, dismissed, seen) VALUES ('b', 1, 'WARNING', 'testing again...',                     false, false);
-INSERT INTO notifications (id, user_id, type, body, dismissed, seen) VALUES ('c', 1, 'WARNING', 'dismiss me, i dare you',               false, false);
-INSERT INTO notifications (id, user_id, type, body, dismissed, seen) VALUES ('d', 1, 'WARNING', 'this should not be seen...',           true,  false);
-INSERT INTO notifications (id, user_id, type, body, dismissed, seen) VALUES ('e', 3, 'WARNING', 'hello',                                false, false);
-INSERT INTO notifications (id, user_id, type, body, dismissed, seen) VALUES ('f', 3, 'WARNING', 'important administrator notification', false, false);
-INSERT INTO notifications (id, user_id, type, body, dismissed, seen) VALUES ('g', 2, 'WARNING', 'hello cory',                           false, false);
+INSERT INTO notifications (id, user_id, type, body, dismissed, seen, time) VALUES ('a', 1, 'WARNING', 'testing...',                           false, false, '2022-08-25T20:32:26.568Z');
+INSERT INTO notifications (id, user_id, type, body, dismissed, seen, time) VALUES ('b', 1, 'WARNING', 'testing again...',                     false, false, '2022-08-25T20:32:26.568Z');
+INSERT INTO notifications (id, user_id, type, body, dismissed, seen, time) VALUES ('c', 1, 'WARNING', 'dismiss me, i dare you',               false, false, '2022-08-25T20:32:26.568Z');
+INSERT INTO notifications (id, user_id, type, body, dismissed, seen, time) VALUES ('d', 1, 'WARNING', 'this should not be seen...',           true,  false, '2022-08-25T20:32:26.568Z');
+INSERT INTO notifications (id, user_id, type, body, dismissed, seen, time) VALUES ('e', 3, 'WARNING', 'hello',                                false, false, '2022-08-25T20:32:26.568Z');
+INSERT INTO notifications (id, user_id, type, body, dismissed, seen, time) VALUES ('f', 3, 'WARNING', 'important administrator notification', false, false, '2022-08-25T20:32:26.568Z');
+INSERT INTO notifications (id, user_id, type, body, dismissed, seen, time) VALUES ('g', 2, 'WARNING', 'hello cory',                           false, false, '2022-08-25T20:32:26.568Z');
