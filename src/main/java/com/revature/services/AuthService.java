@@ -1,8 +1,10 @@
 package com.revature.services;
 
+import com.revature.dtos.NotificationCreationRequest;
 import com.revature.dtos.RegisterRequest;
 import com.revature.dtos.UserDTO;
 import com.revature.exceptions.DuplicateEmailFoundException;
+import com.revature.models.NotificationType;
 import com.revature.models.User;
 import com.revature.models.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +18,13 @@ import java.util.Optional;
 public class AuthService {
 
     private final UserService userService;
+    private final NotificationService notificationService;
 
     @Autowired
-    public AuthService(UserService userService) {
+    public AuthService(UserService userService, NotificationService notificationService) {
+
         this.userService = userService;
+        this.notificationService = notificationService;
     }
 
     public UserDTO loginCreds(String email, String password) {
@@ -35,6 +40,21 @@ public class AuthService {
             user.setUserType(UserType.CLIENT);
             user.setCreationDate(Date.from(Instant.now()));
             userService.save(user);
+
+            // demonstrating notification creation
+            // step 1, create a NotificationCreationRequest
+            NotificationCreationRequest notif = new NotificationCreationRequest();
+            // step 2, pass it the target user, the notification type, and message
+            notif.setUser(user);
+            notif.setType(NotificationType.INFORMATION);
+            notif.setBody("Welcome " + user.getFirstName() + "! You account has been successfully created. We hope you enjoy banking with us!");
+            // note: you can also use setReferencesId() to set a reference id to an
+            // account or transfer or loan ect. as applicable, but it is not required
+            // in this example
+
+            //step 3, pass the request into notificationService.create()
+            notificationService.create(notif);
+
             return user;
         }
     }
