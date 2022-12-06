@@ -14,18 +14,28 @@ import java.util.Optional;
 @Service
 public class CreditCardService {
 
-    @Autowired
     private UserService userService;
-    @Autowired
     private CreditCardRepository creditCardRepository;
-    @Autowired
     private AccountRepository accountRepository;
-    @Autowired
     private TransactionRepository transactionRepository;
-    @Autowired
     private CreditCardTransactionRepository creditCardTransactionRepository;
-    @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    public CreditCardService(
+            UserService userService,
+            CreditCardRepository creditCardRepository,
+            AccountRepository accountRepository,
+            TransactionRepository transactionRepository,
+            CreditCardTransactionRepository creditCardTransactionRepository,
+            UserRepository userRepository) {
+        this.userService = userService;
+        this.creditCardRepository = creditCardRepository;
+        this.accountRepository = accountRepository;
+        this.transactionRepository = transactionRepository;
+        this.creditCardTransactionRepository = creditCardTransactionRepository;
+        this.userRepository = userRepository;
+    }
 
     public Optional<List<CreditCard>> findByUserId(int id) {
         User user = userService.findById(id);
