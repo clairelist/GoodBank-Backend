@@ -50,7 +50,7 @@ public class Notification {
 
     public Notification(NotificationCreationRequest request){
         this.id = String.valueOf(UUID.randomUUID());
-        this.user = null;
+        this.user = request.getUser();
         this.type = request.getType();
         this.referencesId = request.getReferencesId();
         this.body = request.getBody();

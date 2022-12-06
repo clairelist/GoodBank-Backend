@@ -53,8 +53,8 @@ class NotificationServiceTest {
 
         // create stub request to base notification creation off of
         stubRequest = new NotificationCreationRequest(
-                stubUser.getId(),
-                NotificationType.WARNING,
+                stubUser,
+                NotificationType.INFORMATION,
                 null,
                 "Testing..."
         );
@@ -70,7 +70,7 @@ class NotificationServiceTest {
         Mockito.when(mockNr.save(Mockito.any(Notification.class))).thenReturn(expected);
 
         // see if NotificationService generates the same based off of the request
-        Notification actual = ns.save(stubRequest);
+        Notification actual = ns.create(stubRequest);
 
         assertEquals(expected, actual);
     }

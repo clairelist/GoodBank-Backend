@@ -1,7 +1,7 @@
 package com.revature.models;
 
 public enum NotificationType {
-    WARNING,
+    INFORMATION,
     ACTIVITY,
     REQUEST,
     TRANSFER,
