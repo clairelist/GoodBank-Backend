@@ -115,10 +115,6 @@ public class AccountService {
         secondTransaction.setCreationDate(Date.from(Instant.now()));
         transactionRepository.save(secondTransaction);
 
-        //create a list to return the transfers adding both initial request and second request.
-//        List<Transaction> transfers = transactionRepository.findAllByAccountOrderByCreationDateDesc(account);
-//        transfers.add(transactionToTransfer);
-//        transfers.add(secondTransaction);
 
         return transactionRepository.findAllByAccountOrderByCreationDateDesc(account);
     }
