@@ -77,7 +77,11 @@ public class AccountService {
 
     @Transactional
     public List<Transaction> transferTransaction(int accountId, TransferDTO transactionToTransferDTO) {
-        Transaction transactionToTransfer = new Transaction(transactionToTransferDTO);
+        Transaction transactionToTransfer = new Transaction();
+        transactionToTransfer.setAmount(transactionToTransferDTO.getAmount());
+        transactionToTransfer.setAccount(transactionToTransferDTO.getAccount());
+        transactionToTransfer.setType(transactionToTransferDTO.getType());
+        transactionToTransfer.setToAccountId(transactionToTransferDTO.getToAccountId());
         //grab both user accounts from initial request
         Account account = accountRepository.getById(accountId);
         Account toAccount = accountRepository.getById(transactionToTransfer.getToAccountId());
@@ -112,10 +116,10 @@ public class AccountService {
         transactionRepository.save(secondTransaction);
 
         //create a list to return the transfers adding both initial request and second request.
-        List<Transaction> transfers = new ArrayList<>();
-        transfers.add(transactionToTransfer);
-        transfers.add(secondTransaction);
+//        List<Transaction> transfers = transactionRepository.findAllByAccountOrderByCreationDateDesc(account);
+//        transfers.add(transactionToTransfer);
+//        transfers.add(secondTransaction);
 
-        return transfers;
+        return transactionRepository.findAllByAccountOrderByCreationDateDesc(account);
     }
 }
