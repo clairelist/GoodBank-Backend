@@ -25,18 +25,8 @@ The founders had a wish that their bank would be really Good™. The aim of the 
   - Elastic Beanstalk
   - S3
 
-## API Routes
-    /account POST
-        /id/transaction GET - returns a list of user tranactions
-        /id/transaction POST - adds a transaction
-    
-    /auth
-        /login POST
-        /logout POST
-        /register POST
 
-
-## MVP
+## Product Features (MVP)
 - ### Team 1
   - Send Money
   - Recent Tranactions
@@ -54,3 +44,17 @@ The founders had a wish that their bank would be really Good™. The aim of the 
   - Reset Password
   - Notifications
   - User Profile
+
+
+## Run:
+- Clone the repo
+- if using Intellij
+  - Load up the project and navigate to `src.main.java.com.revature`
+  - Run the `main()` method of `BankingApplication`
+
+## Build:
+- Clone the repo
+- run `mvn clean package -Pprod`
+### Run the build:
+- run `cd target`
+- run `java -jar minecraft-store-0.0.1-SNAPSHOT.jar`
