@@ -1,7 +1,7 @@
 package com.revature.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.revature.dtos.NotificationDTO;
+import com.revature.dtos.NotificationCreationRequest;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -46,15 +46,15 @@ public class Notification {
         this.seen = false;
     }
 
-    public Notification(NotificationDTO notification){
-        this.id = notification.getId();
-        this.user = notification.getUser();
-        this.type = notification.getType();
-        this.referencesId = notification.getReferencesId();
-        this.body = notification.getBody();
-        this.dismissed = notification.getDismissed();
-        this.seen = notification.getSeen();
-        this.time = notification.getTime();
+    public Notification(NotificationCreationRequest request){
+        this.id = String.valueOf(UUID.randomUUID());
+        this.user = null;
+        this.type = request.getType();
+        this.referencesId = request.getReferencesId();
+        this.body = request.getBody();
+        this.dismissed = false;
+        this.seen = false;
+        this.time = new Timestamp(System.currentTimeMillis());
     }
 
     public Notification(User user, NotificationType type, Integer referencesId, String body) {

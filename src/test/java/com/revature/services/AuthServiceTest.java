@@ -3,11 +3,11 @@ package com.revature.services;
 import com.revature.BankingApplication;
 import com.revature.dtos.LoginRequest;
 import com.revature.dtos.RegisterRequest;
+import com.revature.dtos.UserDTO;
 import com.revature.exceptions.DuplicateEmailFoundException;
 import com.revature.models.User;
 import com.revature.models.UserType;
 import com.revature.repositories.UserRepository;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,11 +38,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
         LoginRequest creds = new LoginRequest();
         creds.setEmail("test@gmail.com");
         creds.setPassword("pass");
-        Optional<User> expected = us.findByCredentials(creds.getEmail(), creds.getPassword());
+        UserDTO expected = us.loginCreds(creds.getEmail(), creds.getPassword());
 
         Mockito.when(mockRepository.findByEmailAndPassword(creds.getEmail(), creds.getPassword())).thenReturn(expected);
         //Act
-        Optional<User> actual = sut.findByCredentials(creds.getEmail(), creds.getPassword());
+        UserDTO actual = sut.loginCreds(creds.getEmail(), creds.getPassword());
         //Assert
         assertEquals(expected, actual);
     }
