@@ -45,4 +45,5 @@ public class Account {
         this.accountType = newaccount.getAccountType();
         this.user = newaccount.getUser();
     }
+
 }
