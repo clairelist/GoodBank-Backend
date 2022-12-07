@@ -60,22 +60,20 @@ public class UserService {
 
     public User updateProfile(UpdateRequest updateRequest) throws EntityNotFoundException {
 
-        Optional<User> userByEmail;
         User updatedProfile;
 
-        userByEmail = findByEmail(updateRequest.getEmail());
-        if (!userByEmail.isPresent()) {
+        User userById = findById(updateRequest.getId());
+        if (userById == null) {
             updatedProfile = null;
         } else {
             try {
-                User userById = findById(userByEmail.get().getId());
-                userByEmail.get().setFirstName(updateRequest.getFirstName());
-                userByEmail.get().setLastName(updateRequest.getLastName());
-                userByEmail.get().setEmail(updateRequest.getEmail());
-                userByEmail.get().setAddress(updateRequest.getAddress());
-                userByEmail.get().setCity(updateRequest.getCity());
-                userByEmail.get().setState(updateRequest.getState());
-                userByEmail.get().setZip(updateRequest.getZip());
+                userById.setFirstName(updateRequest.getFirstName());
+                userById.setLastName(updateRequest.getLastName());
+                userById.setEmail(updateRequest.getEmail());
+                userById.setAddress(updateRequest.getAddress());
+                userById.setCity(updateRequest.getCity());
+                userById.setState(updateRequest.getState());
+                userById.setZip(updateRequest.getZip());
                 updatedProfile = userRepository.save(userById);
             } catch (EntityNotFoundException e) {
                 return null;

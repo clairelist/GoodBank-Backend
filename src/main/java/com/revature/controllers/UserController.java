@@ -40,10 +40,12 @@ public class UserController {
 
     @PatchMapping("/profile")
     public ResponseEntity<User> update(@RequestBody UpdateRequest updateRequest) {
-        if (us.updateProfile(updateRequest) == null) {
+        User updatedProfile = us.updateProfile(updateRequest);
+
+        if (updatedProfile == null) {
             return ResponseEntity.badRequest().build();
         } else {
-            return ResponseEntity.accepted().build();
+            return ResponseEntity.ok(updatedProfile);
         }
     }
 }
