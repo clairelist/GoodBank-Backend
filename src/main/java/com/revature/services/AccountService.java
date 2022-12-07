@@ -60,7 +60,7 @@ public class AccountService {
         }
     }
 
-    public Transaction upsertTransaction(int accountId, TransactionDTO transactionToUpsertDTO) {
+    public List<Transaction> upsertTransaction(int accountId, TransactionDTO transactionToUpsertDTO) {
         Transaction transactionToUpsert = new Transaction(transactionToUpsertDTO);
         Account account = accountRepository.getById(accountId);
 
@@ -72,7 +72,8 @@ public class AccountService {
         accountRepository.saveAndFlush(account);
         transactionToUpsert.setAccount(account);
         transactionToUpsert.setCreationDate(Date.from(Instant.now()));
-        return transactionRepository.save(transactionToUpsert);
+        transactionRepository.save(transactionToUpsert);
+        return transactionRepository.findAllByAccountOrderByCreationDateDesc(account);
     }
 
     @Transactional
