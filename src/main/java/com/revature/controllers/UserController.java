@@ -4,7 +4,6 @@ import com.revature.dtos.ResetRequest;
 import com.revature.dtos.UpdateRequest;
 import com.revature.models.User;
 import com.revature.services.UserService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

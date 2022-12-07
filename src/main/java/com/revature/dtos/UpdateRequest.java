@@ -16,7 +16,6 @@ public class UpdateRequest {
     private String state;
     private String city;
     private int zip;
-
-};
+}
 
 
