@@ -31,6 +31,7 @@ public class UserService {
     }
 
     public UserDTO loginCreds(String email, String password) {
+        //email below will return all lowercase even if added as caps
         return userRepository.findByEmailAndPassword(email.toLowerCase(), password);
     }
 
