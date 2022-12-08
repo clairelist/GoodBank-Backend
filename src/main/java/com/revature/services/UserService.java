@@ -64,9 +64,10 @@ public class UserService {
         return updatedPass;
     }
 
-    public User updateProfile(UpdateRequest updateRequest) throws EntityNotFoundException {
+    public UserDTO updateProfile(UpdateRequest updateRequest) throws EntityNotFoundException {
 
         User updatedProfile;
+        UserDTO updatedDTO = null;
 
         User userById = findById(updateRequest.getId());
         if (userById == null) {
@@ -81,6 +82,7 @@ public class UserService {
                 userById.setState(updateRequest.getState());
                 userById.setZip(updateRequest.getZip());
                 updatedProfile = userRepository.save(userById);
+                updatedDTO = new UserDTO(updatedProfile);
 
                 NotificationCreationRequest request = new NotificationCreationRequest(
                         userById,
@@ -92,6 +94,6 @@ public class UserService {
                 return null;
             }
         }
-        return updatedProfile;
+        return updatedDTO;
     }
 }
