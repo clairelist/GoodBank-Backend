@@ -2,6 +2,7 @@ package com.revature.services;
 
 import com.revature.BankingApplication;
 import com.revature.dtos.LoginRequest;
+import com.revature.dtos.NotificationCreationRequest;
 import com.revature.dtos.RegisterRequest;
 import com.revature.dtos.UserDTO;
 import com.revature.exceptions.DuplicateEmailFoundException;
@@ -25,6 +26,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
   class AuthServiceTest {
     @MockBean
     private UserRepository mockRepository;
+
+    @MockBean
+    private NotificationService monkNs;
 
     @Autowired
     private UserService us;
@@ -81,6 +85,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
         Mockito.when(mockRepository.findByEmail(registerreq.getEmail())).thenReturn(Optional.empty());
+        Mockito.when(monkNs.create(Mockito.any(NotificationCreationRequest.class))).thenReturn(null);
 
         User actual = sut.register(registerreq);
         actual.setCreationDate(Date.from(Instant.now()));

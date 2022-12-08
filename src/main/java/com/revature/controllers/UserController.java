@@ -1,6 +1,7 @@
 package com.revature.controllers;
 
 import com.revature.dtos.ResetRequest;
+import com.revature.dtos.UpdateRequest;
 import com.revature.models.User;
 import com.revature.services.UserService;
 import org.springframework.http.ResponseEntity;
@@ -18,22 +19,32 @@ public class UserController {
     }
 
     @PatchMapping("/reset-password")
-    public ResponseEntity<User> resetPass(@RequestBody ResetRequest update){
-       // User res; USED FOR TESTING ONLY!
+    public ResponseEntity<User> resetPass(@RequestBody ResetRequest update) {
+        // User res; USED FOR TESTING ONLY!
         ResponseEntity<User> response = null;
         try {
-            if(us.updatePassword(update) == null){
+            if (us.updatePassword(update) == null) {
                 response = ResponseEntity.badRequest().build();
             } else {
                 response = ResponseEntity.ok().build();
             }
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             response = ResponseEntity.badRequest().build();
         }
-    return response;
+        return response;
 
     }
 
 
+    @PatchMapping("/profile")
+    public ResponseEntity<User> update(@RequestBody UpdateRequest updateRequest) {
+        User updatedProfile = us.updateProfile(updateRequest);
+
+        if (updatedProfile == null) {
+            return ResponseEntity.badRequest().build();
+        } else {
+            return ResponseEntity.ok(updatedProfile);
+        }
+    }
 }

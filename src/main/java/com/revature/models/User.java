@@ -1,6 +1,7 @@
 package com.revature.models;
 
 import com.revature.dtos.RegisterRequest;
+import com.revature.dtos.UpdateRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,7 +34,7 @@ public class User {
     private Date creationDate;
 
     public User(RegisterRequest register) {
-        this.email = register.getEmail();
+        this.email = register.getEmail().toLowerCase();
         this.password = register.getPassword();
         this.firstName = register.getFirstName();
         this.lastName = register.getLastName();
@@ -41,5 +42,15 @@ public class User {
         this.state = register.getState();
         this.city = register.getCity();
         this.zip = register.getZip();
+    }
+
+    public User(UpdateRequest update) {
+        this.email = update.getEmail();
+        this.firstName = update.getFirstName();
+        this.lastName = update.getLastName();
+        this.address = update.getAddress();
+        this.state = update.getState();
+        this.city = update.getCity();
+        this.zip = update.getZip();
     }
 }
