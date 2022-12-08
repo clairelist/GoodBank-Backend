@@ -32,8 +32,7 @@ public class AuthService {
     }
 
     public User register(RegisterRequest register) {
-
-        if(userService.findByEmail(register.getEmail()).isPresent()){
+        if(userService.findByEmail(register.getEmail().toLowerCase()).isPresent()){
             throw new DuplicateEmailFoundException("Email already taken");
         } else {
             User user = new User(register);

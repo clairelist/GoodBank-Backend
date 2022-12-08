@@ -25,7 +25,7 @@ public class UserService {
     }
 
     public UserDTO loginCreds(String email, String password) {
-        return userRepository.findByEmailAndPassword(email, password);
+        return userRepository.findByEmailAndPassword(email.toLowerCase(), password);
     }
 
     public Optional<User> findByEmail(String email) {
