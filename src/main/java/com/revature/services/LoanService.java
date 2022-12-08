@@ -3,6 +3,7 @@ package com.revature.services;
 import com.revature.dtos.LoanDTO;
 import com.revature.dtos.LoanDetails;
 import com.revature.dtos.UserDTO;
+import com.revature.exceptions.AppliedLoanException;
 import com.revature.models.Loan;
 import com.revature.models.Status;
 import com.revature.models.User;
@@ -43,13 +44,17 @@ public class LoanService {
     public LoanDetails createLoan(LoanDTO appliedLoan, int userId) {
         Loan newLoan = new Loan();
         User user = ur.getById(userId);
-        newLoan.setInitialAmount(appliedLoan.getInitialAmount());
-        newLoan.setReason(appliedLoan.getReason());
-        newLoan.setCreationDate(Date.from(Instant.now()));
-        newLoan.setBalance(appliedLoan.getInitialAmount());
-        newLoan.setUser(user);
-        newLoan.setStatus(Status.PENDING);
-        lr.save(newLoan);
+        if (appliedLoan.getInitialAmount() < 0 || appliedLoan.getReason().equals("")){
+            throw new AppliedLoanException("Please enter a valid input for all fields");
+        } else {
+            newLoan.setInitialAmount(appliedLoan.getInitialAmount());
+            newLoan.setReason(appliedLoan.getReason());
+            newLoan.setCreationDate(Date.from(Instant.now()));
+            newLoan.setBalance(appliedLoan.getInitialAmount());
+            newLoan.setUser(user);
+            newLoan.setStatus(Status.PENDING);
+            lr.save(newLoan);
+        }
 
         // TODO make sure to create corresponding transaction on account?
 
