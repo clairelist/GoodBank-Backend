@@ -86,7 +86,7 @@ public class AccountService {
         Transaction secondTransaction = new Transaction();
         // handle input made by the user
         if (transactionToTransfer.getAmount() < 0){
-            throw new InvalidInputException("Must input a valid number for transferring money.");
+            throw new InvalidInputException();
         }
         //handle first transaction from initial sender
         if (transactionToTransfer.getAmount() > account.getBalance()) {

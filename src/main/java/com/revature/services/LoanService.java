@@ -45,7 +45,7 @@ public class LoanService {
         Loan newLoan = new Loan();
         User user = ur.getById(userId);
         if (appliedLoan.getInitialAmount() < 0 || appliedLoan.getReason().equals("")){
-            throw new AppliedLoanException("Please enter a valid input for all fields");
+            throw new AppliedLoanException();
         } else {
             newLoan.setInitialAmount(appliedLoan.getInitialAmount());
             newLoan.setReason(appliedLoan.getReason());

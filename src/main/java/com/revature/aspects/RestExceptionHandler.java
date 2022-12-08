@@ -1,9 +1,6 @@
 package com.revature.aspects;
 
-import com.revature.exceptions.AuthorizationException;
-import com.revature.exceptions.DuplicateEmailFoundException;
-import com.revature.exceptions.InsufficientFundsException;
-import com.revature.exceptions.NotLoggedInException;
+import com.revature.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -44,5 +41,17 @@ public class RestExceptionHandler {
         String errorMessage = "Invalid credentials to access this page.";
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+    @ExceptionHandler(AppliedLoanException.class)
+    public ResponseEntity<Object> handleAppliedLoanException(HttpServletRequest request, AppliedLoanException message){
+        String errorMessage = "Please enter a valid input for all fields";
+        return ResponseEntity.badRequest().body(errorMessage);
+    }
+
+    @ExceptionHandler(InvalidInputException.class)
+    public ResponseEntity<Object> handleInvalidInputException(HttpServletRequest request, InvalidInputException message){
+        String errorMessage = "Must input a valid number for transferring money.";
+        return ResponseEntity.badRequest().body(errorMessage);
     }
 }
