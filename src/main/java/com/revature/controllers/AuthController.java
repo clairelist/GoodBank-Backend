@@ -32,6 +32,9 @@ public class AuthController {
     public ResponseEntity<UserDTO> login(@RequestBody LoginRequest loginRequest) {
         UserDTO userDetails = authService.loginCreds(loginRequest.getEmail(), loginRequest.getPassword());
 
+        if (userDetails == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         String token = tokenService.generateToken(userDetails);
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", token);
