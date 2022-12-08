@@ -1,8 +1,12 @@
 package com.revature.services;
 
+import com.revature.dtos.NotificationCreationRequest;
 import com.revature.dtos.ResetRequest;
 import com.revature.dtos.UserDTO;
+import com.revature.dtos.UpdateRequest;
+import com.revature.models.Notification;
 import com.revature.models.User;
+import com.revature.repositories.NotificationRepository;
 import com.revature.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +18,12 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final NotificationRepository notificationRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, NotificationRepository notificationRepository) {
         this.userRepository = userRepository;
+        this.notificationRepository = notificationRepository;
     }
 
     public User findById(int id) {
@@ -55,5 +61,36 @@ public class UserService {
 
         }
         return updatedPass;
+    }
+
+    public User updateProfile(UpdateRequest updateRequest) throws EntityNotFoundException {
+
+        User updatedProfile;
+
+        User userById = findById(updateRequest.getId());
+        if (userById == null) {
+            updatedProfile = null;
+        } else {
+            try {
+                userById.setFirstName(updateRequest.getFirstName());
+                userById.setLastName(updateRequest.getLastName());
+                userById.setEmail(updateRequest.getEmail());
+                userById.setAddress(updateRequest.getAddress());
+                userById.setCity(updateRequest.getCity());
+                userById.setState(updateRequest.getState());
+                userById.setZip(updateRequest.getZip());
+                updatedProfile = userRepository.save(userById);
+
+                NotificationCreationRequest request = new NotificationCreationRequest(
+                        userById,
+                        "Your user profile has successfully been updated!"
+                );
+                notificationRepository.save(new Notification(request));
+
+            } catch (EntityNotFoundException e) {
+                return null;
+            }
+        }
+        return updatedProfile;
     }
 }

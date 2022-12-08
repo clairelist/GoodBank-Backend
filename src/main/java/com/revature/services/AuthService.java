@@ -3,6 +3,7 @@ package com.revature.services;
 import com.revature.dtos.NotificationCreationRequest;
 import com.revature.dtos.RegisterRequest;
 import com.revature.dtos.UserDTO;
+import com.revature.dtos.UpdateRequest;
 import com.revature.exceptions.DuplicateEmailFoundException;
 import com.revature.models.NotificationType;
 import com.revature.models.User;
@@ -56,5 +57,11 @@ public class AuthService {
 
             return user;
         }
+    }
+
+    public User update(UpdateRequest update) {
+        User user = new User(update);
+        userService.save(user);
+        return user;
     }
 }
