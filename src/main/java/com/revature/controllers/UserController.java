@@ -34,11 +34,14 @@ public class UserController {
 
     }
 
-    @GetMapping("/reset-password")
-    public ResponseEntity<User> getSecurityQuestion(@RequestBody String user_email){
+    @PostMapping("/reset-password")
+    public ResponseEntity<User> getSecurityQuestion(@RequestBody ResetRequest user_email){
         //I FETCH THE SECURITY QUESTION FROM THE USER'S PASSED IN EMAIL,
         //IF I RETURN A 200, SEND BACK QUESTION
         //THEN THE CLIENT SENDS THE ANSWER TO THE ABOVE ^^^PATCH REQUEST^^^
+        //TODO: IN USER SERVICE, BE SURE TO SET PASSWORD IN THE RESETREQUEST OBJECT TO NULL
+        //BUT, BE SURE THE RESPONSE ENTITY HAS THE SECURITY QUESTION
+
         ResponseEntity<User> response = null;
         return response;
     }
