@@ -33,6 +33,7 @@ public class User {
     private Date creationDate;
 
     private String securityQuestion; //used for reset password flow, should default to ''. For the record I think camel casing our entitites is a dumb idea, because no database in the world uses that. Everyone knows to use an underscore.
+    private String securityAnswer;
 
     public User(RegisterRequest register) {
         this.email = register.getEmail();
@@ -43,5 +44,7 @@ public class User {
         this.state = register.getState();
         this.city = register.getCity();
         this.zip = register.getZip();
+        this.securityQuestion = register.getSecurityQuestion();
+        this.securityAnswer = register.getSecurityAnswer();
     }
 }
