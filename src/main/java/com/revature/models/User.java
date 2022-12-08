@@ -34,7 +34,7 @@ public class User {
     private Date creationDate;
 
     public User(RegisterRequest register) {
-        this.email = register.getEmail();
+        this.email = register.getEmail().toLowerCase();
         this.password = register.getPassword();
         this.firstName = register.getFirstName();
         this.lastName = register.getLastName();
