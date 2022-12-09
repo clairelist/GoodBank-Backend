@@ -108,30 +108,33 @@ public class AccountService {
             throw new InvalidAccountException();
         } else if (transactionToTransferDTO.getToAccountId().toString().trim().equals("")) {
             throw new InvalidAccountException();
+        } else if (transactionToTransferDTO.getAmount() <= 0) {
+            throw new InvalidAmountException();
         } else {
 
-            if (transactionToTransfer.getType() == TransactionType.TRANSFER) {
-                //set balance to amount minus the amount your sending and change to expense type.
-                account.setBalance(account.getBalance() - transactionToTransfer.getAmount());
-                transactionToTransfer.setType(TransactionType.EXPENSE);
-                //set balance of receiver account to add amount you are sending and change to income type.
-                toAccount.setBalance(toAccount.getBalance() + transactionToTransfer.getAmount());
-                secondTransaction.setType(TransactionType.INCOME);
-            }
-            ////////////////////accountRepository.saveAndFlush(account); //What does this do???
-            //set remaining fields so that they are abstracted away from user
-            transactionToTransfer.setAccount(account);
-            transactionToTransfer.setToAccountId(toAccount.getId());
-            transactionToTransfer.setDescription("Money sent to acct: " + toAccount.getId());
-            transactionToTransfer.setCreationDate(Date.from(Instant.now()));
-            transactionRepository.save(transactionToTransfer);
+                if (transactionToTransfer.getType() == TransactionType.TRANSFER) {
+                    //set balance to amount minus the amount your sending and change to expense type.
+                    account.setBalance(account.getBalance() - transactionToTransfer.getAmount());
+                    transactionToTransfer.setType(TransactionType.EXPENSE);
+                    //set balance of receiver account to add amount you are sending and change to income type.
+                    toAccount.setBalance(toAccount.getBalance() + transactionToTransfer.getAmount());
+                    secondTransaction.setType(TransactionType.INCOME);
+                }
+                ////////////////////accountRepository.saveAndFlush(account); //What does this do???
+                //set remaining fields so that they are abstracted away from user
+                transactionToTransfer.setAccount(account);
+                transactionToTransfer.setToAccountId(toAccount.getId());
+                transactionToTransfer.setDescription("Money sent to acct: " + toAccount.getId());
+                transactionToTransfer.setCreationDate(Date.from(Instant.now()));
+                transactionRepository.save(transactionToTransfer);
 
-            //set fields for second transaction based off of what user submitted as long as validation allows.
-            secondTransaction.setAmount(transactionToTransfer.getAmount());
-            secondTransaction.setDescription("Money received from acct: " + account.getId());
-            secondTransaction.setAccount(toAccount);
-            secondTransaction.setCreationDate(Date.from(Instant.now()));
-            transactionRepository.save(secondTransaction);
+                //set fields for second transaction based off of what user submitted as long as validation allows.
+                secondTransaction.setAmount(transactionToTransfer.getAmount());
+                secondTransaction.setDescription("Money received from acct: " + account.getId());
+                secondTransaction.setAccount(toAccount);
+                secondTransaction.setCreationDate(Date.from(Instant.now()));
+                transactionRepository.save(secondTransaction);
+            }
         }
 
 
