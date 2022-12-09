@@ -6,6 +6,8 @@ import com.revature.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/user")
@@ -35,14 +37,23 @@ public class UserController {
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<User> getSecurityQuestion(@RequestBody ResetRequest user_email){
+    public String getSecurityQuestion(@RequestBody ResetRequest user_email){ //TODO:: I NEED TO CHANGE THIS
         //I FETCH THE SECURITY QUESTION FROM THE USER'S PASSED IN EMAIL,
         //IF I RETURN A 200, SEND BACK QUESTION
+
+        //response = ResponseEntity.ok().build();
+        Optional<User> found = us.findByEmail(user_email.getEmail());
+        String response = null;
+
+        if (found.isPresent()){
+            response = found.get().getSecurityQuestion();
+        }
+
         //THEN THE CLIENT SENDS THE ANSWER TO THE ABOVE ^^^PATCH REQUEST^^^
         //TODO: IN USER SERVICE, BE SURE TO SET PASSWORD IN THE RESETREQUEST OBJECT TO NULL
         //BUT, BE SURE THE RESPONSE ENTITY HAS THE SECURITY QUESTION
 
-        ResponseEntity<User> response = null;
+
         //blah blah, try/catch?? why dont you TRY to CATCH some b******?
         return response;
     }
