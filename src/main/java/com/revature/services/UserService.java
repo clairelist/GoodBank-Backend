@@ -36,6 +36,7 @@ public class UserService {
 
 
     public User updatePassword(ResetRequest update) throws EntityNotFoundException {
+        //TODO: I CHECK THAT THE SECURITY ANSWER MATCHES THE ONE IN THE EXISTING USER!
 
         Optional<User> userByEmail;
         //Used to check if a user exists

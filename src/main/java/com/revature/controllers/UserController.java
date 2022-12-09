@@ -21,7 +21,6 @@ public class UserController {
 
     @PatchMapping("/reset-password")
     public ResponseEntity<User> resetPass(@RequestBody ResetRequest update){
-       // User res; USED FOR TESTING ONLY!
         ResponseEntity<User> response = null;
         try {
             if(us.updatePassword(update) == null){
@@ -37,25 +36,19 @@ public class UserController {
     }
 
     @PostMapping("/reset-password")
-    public String getSecurityQuestion(@RequestBody ResetRequest user_email){ //TODO:: I NEED TO CHANGE THIS
-        //I FETCH THE SECURITY QUESTION FROM THE USER'S PASSED IN EMAIL,
-        //IF I RETURN A 200, SEND BACK QUESTION
+    public ResponseEntity<String> getSecurityQuestion(@RequestBody ResetRequest user_email){
 
-        //response = ResponseEntity.ok().build();
         Optional<User> found = us.findByEmail(user_email.getEmail());
         String response = null;
+        ResponseEntity entity = null;
 
         if (found.isPresent()){
             response = found.get().getSecurityQuestion();
+            entity = ResponseEntity.ok(response); //test if I actually return the security question string!
+        } else {
+            entity = ResponseEntity.badRequest().build();
         }
-
-        //THEN THE CLIENT SENDS THE ANSWER TO THE ABOVE ^^^PATCH REQUEST^^^
-        //TODO: IN USER SERVICE, BE SURE TO SET PASSWORD IN THE RESETREQUEST OBJECT TO NULL
-        //BUT, BE SURE THE RESPONSE ENTITY HAS THE SECURITY QUESTION
-
-
-        //blah blah, try/catch?? why dont you TRY to CATCH some b******?
-        return response;
+        //TODO: THE CLIENT SENDS THE ANSWER TO THE ABOVE ^^^PATCH REQUEST^^^
+        return entity;
     }
-
 }
