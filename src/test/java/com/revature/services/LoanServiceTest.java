@@ -43,29 +43,7 @@ public class LoanServiceTest {
     private User mockUser;
 
     private LoanDTO stubLoan;
-
-//    @BeforeAll
-//    void setUpTestSuite() {
-//        mockUser = new User(
-//                1,
-//                "lilmissgogetta@revature.com",
-//                "pass",
-//                "Lesly",
-//                "Gonzalez",
-//                "1234 Revature Lane",
-//                "Cleveland",
-//                "Ohio",
-//                44102,
-//                UserType.CLIENT,
-//                new Date(System.currentTimeMillis())
-//        );
-//
-//        stubLoan = new LoanDTO(
-//                mockUser,
-//                "testing loans",
-//                250
-//        );
-//    }
+    
 
     @Test
     public void createLoan() {
@@ -73,7 +51,6 @@ public class LoanServiceTest {
         User stubUser = new User();
         stubUser.setId(1);
         LoanDTO loanDTO = new LoanDTO();
-//        loanDTO.setLoanID(1);
         loanDTO.setReason("testing create loan function");
         loanDTO.setInitialAmount(2500);
         loanDTO.setUserId(stubUser);
@@ -99,14 +76,8 @@ public class LoanServiceTest {
 
         Mockito.when(ur.getById(1)).thenReturn(stubUser);
 
-//        LoanDTO expected = new LoanDTO();
-//        expected.setUserId(stubUser);
-//        expected.setReason("testing create loan function");
-//        expected.setInitialAmount(25000);
-
 
         LoanDetails actual = sut.createLoan(loanDTO, 1);
-//        actual.setLoanID(1);
 
         assertEquals(loanDetails.getLoanID(), actual.getLoanID());
         System.out.println("EXPECTED: " + loanDTO);
@@ -159,7 +130,6 @@ public class LoanServiceTest {
 
         Mockito.when(us.findById(1)).thenReturn(stubUser);
 
-//        stubUser.setId(1);
         List<Loan> actual = sut.getUserLoans(stubUser.getId());
 
 

@@ -43,6 +43,9 @@ public class AccountService {
         Account accountToUpsert = new Account(accountToUpsertDTO);
         UserDTO currentUser = tokenService.extractTokenDetails(userId);
         User user = userService.findById(currentUser.getId());
+        if (accountToUpsertDTO.getBalance() <= 0 || accountToUpsertDTO.getName().equals("")) {
+            throw new InsufficientFundsException();
+        }
 
         if(accountRepository.existsById(accountToUpsert.getId())) {
             Account account = accountRepository.getById(accountToUpsert.getId());
@@ -50,16 +53,27 @@ public class AccountService {
             account.setName(accountToUpsert.getName());
             return accountRepository.saveAndFlush(account);
         } else {
-            accountToUpsert.setUser(user);
-            accountToUpsert.setCreationDate(Date.from(Instant.now()));
-            return accountRepository.save(accountToUpsert);
+            Account newAccount = new Account();
+            newAccount.setBalance(accountToUpsertDTO.getBalance());
+            newAccount.setAccountType(accountToUpsertDTO.getAccountType());
+            newAccount.setUser(user);
+            newAccount.setName(accountToUpsertDTO.getName());
+            newAccount.setCreationDate(Date.from(Instant.now()));
+            accountRepository.save(newAccount);
+            Transaction initialDeposit = new Transaction();
+            initialDeposit.setAmount(newAccount.getBalance());
+            initialDeposit.setDescription("Initial Deposit");
+            initialDeposit.setType(TransactionType.INCOME);
+            initialDeposit.setAccount(newAccount);
+            initialDeposit.setCreationDate(Date.from(Instant.now()));
+            transactionRepository.save(initialDeposit);
+            return newAccount;
         }
     }
 
     public List<Transaction> upsertTransaction(int accountId, TransactionDTO transactionToUpsertDTO) {
         Transaction transactionToUpsert = new Transaction(transactionToUpsertDTO);
         Account account = accountRepository.getById(accountId);
-
         if(transactionToUpsert.getType() == TransactionType.EXPENSE) {
             account.setBalance(account.getBalance() - transactionToUpsert.getAmount());
         } else if (transactionToUpsert.getType() == TransactionType.INCOME) {

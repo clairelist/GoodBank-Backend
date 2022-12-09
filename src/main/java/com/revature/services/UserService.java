@@ -4,6 +4,7 @@ import com.revature.dtos.NotificationCreationRequest;
 import com.revature.dtos.ResetRequest;
 import com.revature.dtos.UserDTO;
 import com.revature.dtos.UpdateRequest;
+import com.revature.exceptions.InvalidLoginException;
 import com.revature.models.Notification;
 import com.revature.models.User;
 import com.revature.repositories.NotificationRepository;
@@ -32,6 +33,9 @@ public class UserService {
 
     public UserDTO loginCreds(String email, String password) {
         //email below will return all lowercase even if added as caps
+        if(userRepository.findByEmailAndPassword(email.toLowerCase(), password) == null) {
+            throw new InvalidLoginException();
+        }
         return userRepository.findByEmailAndPassword(email.toLowerCase(), password);
     }
 
@@ -64,9 +68,10 @@ public class UserService {
         return updatedPass;
     }
 
-    public User updateProfile(UpdateRequest updateRequest) throws EntityNotFoundException {
+    public UserDTO updateProfile(UpdateRequest updateRequest) throws EntityNotFoundException {
 
         User updatedProfile;
+        UserDTO updatedDTO = null;
 
         User userById = findById(updateRequest.getId());
         if (userById == null) {
@@ -81,6 +86,7 @@ public class UserService {
                 userById.setState(updateRequest.getState());
                 userById.setZip(updateRequest.getZip());
                 updatedProfile = userRepository.save(userById);
+                updatedDTO = new UserDTO(updatedProfile);
 
                 NotificationCreationRequest request = new NotificationCreationRequest(
                         userById,
@@ -92,6 +98,6 @@ public class UserService {
                 return null;
             }
         }
-        return updatedProfile;
+        return updatedDTO;
     }
 }
