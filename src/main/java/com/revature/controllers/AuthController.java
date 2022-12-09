@@ -32,10 +32,6 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<UserDTO> login(@RequestBody LoginRequest loginRequest) {
         UserDTO userDetails = authService.loginCreds(loginRequest.getEmail(), loginRequest.getPassword());
-
-        if (userDetails == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
         String token = tokenService.generateToken(userDetails);
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", token);
@@ -53,10 +49,6 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody RegisterRequest registerRequest) {
-        if (registerRequest.getEmail().trim().equals("") || registerRequest.getPassword().trim().equals("") ||
-                registerRequest.getFirstName().trim().equals("") || registerRequest.getLastName().trim().equals("")) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(registerRequest));
     }
 }

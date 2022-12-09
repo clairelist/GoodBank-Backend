@@ -6,6 +6,7 @@ import com.revature.dtos.UserDTO;
 import com.revature.dtos.UpdateRequest;
 import com.revature.exceptions.CheckRegisterFieldsException;
 import com.revature.exceptions.DuplicateEmailFoundException;
+import com.revature.exceptions.InvalidLoginException;
 import com.revature.exceptions.PasswordUnderAmountException;
 import com.revature.models.NotificationType;
 import com.revature.models.User;
@@ -31,18 +32,20 @@ public class AuthService {
     }
 
     public UserDTO loginCreds(String email, String password) {
-
+        if (email.trim().equals("") || password.trim().equals("")) {
+            throw new InvalidLoginException();
+        }
         return userService.loginCreds(email, password);
     }
 
     public User register(RegisterRequest register) {
         if(userService.findByEmail(register.getEmail().toLowerCase()).isPresent()){
-            throw new DuplicateEmailFoundException("Email already taken");
-        } else if (Integer.parseInt(register.getPassword()) <= 3) {
-            throw new PasswordUnderAmountException("Password needs to be longer than 3 characters");
+            throw new DuplicateEmailFoundException();
+        } else if (register.getPassword().length() <= 3) {
+            throw new PasswordUnderAmountException();
         } else if ((register.getEmail().trim().equals("") || register.getPassword().trim().equals("") ||
                 register.getFirstName().trim().equals("") || register.getLastName().trim().equals(""))) {
-            throw new CheckRegisterFieldsException("Please fill in missing fields");
+            throw new CheckRegisterFieldsException();
         } else {
             User user = new User(register);
             user.setUserType(UserType.CLIENT);

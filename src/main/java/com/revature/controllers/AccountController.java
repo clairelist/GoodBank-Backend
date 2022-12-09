@@ -44,9 +44,6 @@ public class AccountController {
     @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Account> createAccount(@RequestBody AccountDTO account, @RequestHeader("Authorization") String userId) {
-        if (account.getBalance() <= 0 || account.getName().equals("")) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
         return ResponseEntity.ok(accountService.upsertAccount(account, userId));
     }
 
