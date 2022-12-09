@@ -68,6 +68,7 @@ public class CreditCardServiceTest {
         List<CreditCard> actual = new ArrayList<>();
         actual.add(stubCC);
 
+        Mockito.when(mockUs.findById(1)).thenReturn(stubUser);
         Mockito.when(mockRepository.findByUser(Mockito.any(User.class))).thenReturn(actual);
 
         List<CreditCard> expected = sut.findByUserId(1);
