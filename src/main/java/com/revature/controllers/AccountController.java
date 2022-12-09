@@ -34,6 +34,7 @@ public class AccountController {
         this.transactionService = transactionService;
     }
 
+    @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
     @GetMapping("/{id}")
     public ResponseEntity<List<Account>> getAccounts(@PathVariable("id") int accountId) {
         List<Account> accounts = accountService.findByUserId(accountId);
@@ -43,6 +44,9 @@ public class AccountController {
     @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Account> createAccount(@RequestBody AccountDTO account, @RequestHeader("Authorization") String userId) {
+        if (account.getBalance() <= 0 || account.getName().equals("")) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return ResponseEntity.ok(accountService.upsertAccount(account, userId));
     }
 
@@ -67,12 +71,18 @@ public class AccountController {
     @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
     @PostMapping(value = "/{id}/transaction", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Transaction>> addTransaction(@PathVariable("id") int accountId, @RequestBody TransactionDTO transaction) {
+        if (transaction == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>(accountService.upsertTransaction(accountId, transaction), HttpStatus.CREATED);
     }
 
     @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
     @PostMapping(value = "/{id}/transfer", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Transaction>> addTransfer(@PathVariable("id") int accountId, @RequestBody TransferDTO transaction) {
+        if (transaction == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>(accountService.transferTransaction(accountId, transaction), HttpStatus.CREATED);
     }
 

@@ -1,5 +1,6 @@
 package com.revature.controllers;
 
+import com.revature.annotations.Secured;
 import com.revature.dtos.LoginRequest;
 import com.revature.dtos.RegisterRequest;
 import com.revature.dtos.UserDTO;
@@ -42,6 +43,7 @@ public class AuthController {
         return new ResponseEntity<>(userDetails, headers, HttpStatus.OK);
     }
 
+    @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpSession session) {
         session.removeAttribute("user");
@@ -51,6 +53,10 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody RegisterRequest registerRequest) {
+        if (registerRequest.getEmail().trim().equals("") || registerRequest.getPassword().trim().equals("") ||
+                registerRequest.getFirstName().trim().equals("") || registerRequest.getLastName().trim().equals("")) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(registerRequest));
     }
 }
