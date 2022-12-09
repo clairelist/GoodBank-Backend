@@ -1,5 +1,6 @@
 package com.revature.controllers;
 
+import com.revature.annotations.Secured;
 import com.revature.dtos.ResetRequest;
 import com.revature.dtos.UpdateRequest;
 import com.revature.dtos.UserDTO;
@@ -38,6 +39,7 @@ public class UserController {
     }
 
 
+    @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
     @PatchMapping("/profile")
     public ResponseEntity<UserDTO> update(@RequestBody UpdateRequest updateRequest) {
         UserDTO updatedProfile = us.updateProfile(updateRequest);
