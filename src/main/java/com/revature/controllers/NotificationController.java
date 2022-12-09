@@ -27,19 +27,19 @@ public class NotificationController {
         return ResponseEntity.ok(savedNotification);
     }
     @GetMapping("/{user_id}")
-    public ResponseEntity<List<Notification>> getUserNotifications(@PathVariable("user_id") String userId){
-        List<Notification> notifs = ns.getUserNotifications(Integer.parseInt(userId));
+    public ResponseEntity<List<Notification>> getUserNotifications(@PathVariable("user_id") int userId){
+        List<Notification> notifs = ns.getUserNotifications(userId);
 
         return ResponseEntity.ok(notifs);
     }
 
     @PatchMapping("/dismiss/{user_id}/{notification_id}")
     public ResponseEntity<List<Notification>> dismissUserNotification(
-        @PathVariable("user_id") String userId,
+        @PathVariable("user_id") int userId,
         @PathVariable("notification_id") String notificationId
     ){
         if (ns.markAsDismissed(notificationId) != null){
-            List<Notification> notifs = ns.getUserNotifications(Integer.parseInt(userId));
+            List<Notification> notifs = ns.getUserNotifications(userId);
 
             return ResponseEntity.ok(notifs);
         }
