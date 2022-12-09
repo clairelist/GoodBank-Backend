@@ -55,7 +55,7 @@ public class UserService {
         userByEmail = userRepository.findByEmail(update.getEmail());
         if (!userByEmail.isPresent()) {
             updatedPass = null;
-            
+
         } else {
             try {
                 //User userById = userRepository.findById(userByEmail.get().getId()).orElseThrow(EntityNotFoundException::new);

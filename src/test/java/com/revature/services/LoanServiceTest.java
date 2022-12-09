@@ -117,48 +117,4 @@ public class LoanServiceTest {
     }
 
 
-//    @Test
-//    public void updateStatus() {
-//        Date now = new Date();
-//        User user = new User();
-//        user.setId(1);
-//
-//        UserDTO userDTO = new UserDTO();
-//        userDTO.setId(2);
-//        userDTO.setType(ADMIN);
-//
-//
-//        Loan loan = new Loan();
-//        loan.setId(1);
-//        loan.setReason("Testing Update Status");
-//        loan.setInitialAmount(4500);
-//        loan.setUser(user);
-//
-//        LoanDetails loanDetails = new LoanDetails();
-//        loanDetails.getLoanID();
-//        loanDetails.setCreationDate(now);
-//        loanDetails.setStatus(String.valueOf(PENDING));
-//        loanDetails.getUserId();
-//        loanDetails.setBalance(4500);
-//        loanDetails.setReason("Testing Update Status");
-//        loanDetails.setInitialAmount(4500);
-//
-//        LoanDetails updatedLoan = new LoanDetails();
-//        updatedLoan.getLoanID();
-//        updatedLoan.setCreationDate(now);
-//        updatedLoan.setStatus(String.valueOf(APPROVED));
-//        updatedLoan.getUserId();
-//        updatedLoan.setBalance(4500);
-//        updatedLoan.setReason("Testing Update Status");
-//        updatedLoan.setInitialAmount(4500);
-//
-//        Mockito.when(mockTs.extractTokenDetails(String.valueOf(ADMIN))).thenReturn(userDTO);
-//        Mockito.when(mockRepository.getById(1)).thenReturn(loan);
-//        LoanDetails actual = sut.updateLoanStatus(String.valueOf(ADMIN), loanDetails);
-//        assertEquals(updatedLoan, actual);
-//        System.out.println("Expected: " + updatedLoan);
-//        System.out.println("Actual: " + actual);
-//    }
-
-
 }
