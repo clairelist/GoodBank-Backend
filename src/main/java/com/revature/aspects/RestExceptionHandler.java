@@ -43,6 +43,14 @@ public class RestExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }
 
+    @ExceptionHandler(InvalidAccountException.class)
+    public ResponseEntity<Object> handleInvalidAccount(HttpServletRequest request, DuplicateEmailFoundException message) {
+
+        String errorMessage = "Unable to transfer to this account!";
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
     @ExceptionHandler(CheckRegisterFieldsException.class)
     public ResponseEntity<Object> handleRegisterFields(HttpServletRequest request, DuplicateEmailFoundException message) {
 
