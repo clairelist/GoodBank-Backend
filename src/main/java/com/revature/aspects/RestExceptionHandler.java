@@ -74,4 +74,28 @@ public class RestExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }
+
+    @ExceptionHandler(AppliedLoanException.class)
+    public ResponseEntity<Object> handleAppliedLoanException(HttpServletRequest request, AppliedLoanException message){
+        String errorMessage = "Please enter a valid input for all fields";
+        return ResponseEntity.badRequest().body(errorMessage);
+    }
+
+    @ExceptionHandler(InvalidInputException.class)
+    public ResponseEntity<Object> handleInvalidInputException(HttpServletRequest request, InvalidInputException message){
+        String errorMessage = "Must input a valid number for transferring money.";
+        return ResponseEntity.badRequest().body(errorMessage);
+    }
+
+    @ExceptionHandler(LoansNotFoundException.class)
+    public ResponseEntity<Object> handleLoansNotFoundException(HttpServletRequest request, LoansNotFoundException message){
+        String errorMessage = "No pending loans exist for this user.";
+        return ResponseEntity.ok().body(errorMessage);
+    }
+
+    @ExceptionHandler(UserNotAllowedException.class)
+    public ResponseEntity<Object> handleUserNotAllowedException(HttpServletRequest request, UserNotAllowedException message){
+        String errorMessage = "Updating loan status is not permitted for this role.";
+        return ResponseEntity.ok().body(errorMessage);
+    }
 }

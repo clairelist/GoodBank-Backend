@@ -6,6 +6,7 @@ import com.revature.dtos.TransferDTO;
 import com.revature.dtos.UserDTO;
 import com.revature.exceptions.InsufficientFundsException;
 import com.revature.exceptions.InvalidAccountException;
+import com.revature.exceptions.InvalidInputException;
 import com.revature.models.*;
 import com.revature.repositories.AccountRepository;
 import com.revature.repositories.TransactionRepository;
@@ -109,7 +110,7 @@ public class AccountService {
         } else if (transactionToTransferDTO.getToAccountId().toString().trim().equals("")) {
             throw new InvalidAccountException();
         } else if (transactionToTransferDTO.getAmount() <= 0) {
-            throw new InvalidAmountException();
+            throw new InvalidInputException();
         } else {
 
                 if (transactionToTransfer.getType() == TransactionType.TRANSFER) {
@@ -134,7 +135,6 @@ public class AccountService {
                 secondTransaction.setAccount(toAccount);
                 secondTransaction.setCreationDate(Date.from(Instant.now()));
                 transactionRepository.save(secondTransaction);
-            }
         }
 
 
