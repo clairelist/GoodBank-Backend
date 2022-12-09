@@ -42,7 +42,9 @@ public class AccountService {
         Account accountToUpsert = new Account(accountToUpsertDTO);
         UserDTO currentUser = tokenService.extractTokenDetails(userId);
         User user = userService.findById(currentUser.getId());
-
+        if (accountToUpsertDTO.getBalance() <= 0 || accountToUpsertDTO.getName().equals("")) {
+            throw new InsufficientFundsException();
+        }
 
         if(accountRepository.existsById(accountToUpsert.getId())) {
             Account account = accountRepository.getById(accountToUpsert.getId());
@@ -71,7 +73,6 @@ public class AccountService {
     public List<Transaction> upsertTransaction(int accountId, TransactionDTO transactionToUpsertDTO) {
         Transaction transactionToUpsert = new Transaction(transactionToUpsertDTO);
         Account account = accountRepository.getById(accountId);
-
         if(transactionToUpsert.getType() == TransactionType.EXPENSE) {
             account.setBalance(account.getBalance() - transactionToUpsert.getAmount());
         } else if (transactionToUpsert.getType() == TransactionType.INCOME) {
