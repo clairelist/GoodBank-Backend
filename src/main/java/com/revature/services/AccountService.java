@@ -5,6 +5,7 @@ import com.revature.dtos.TransactionDTO;
 import com.revature.dtos.TransferDTO;
 import com.revature.dtos.UserDTO;
 import com.revature.exceptions.InsufficientFundsException;
+import com.revature.exceptions.InvalidInputException;
 import com.revature.models.*;
 import com.revature.repositories.AccountRepository;
 import com.revature.repositories.TransactionRepository;
@@ -97,6 +98,10 @@ public class AccountService {
         Account toAccount = accountRepository.getById(transactionToTransfer.getToAccountId());
         //setup blank transaction to be filled in for receiver transaction to persist
         Transaction secondTransaction = new Transaction();
+        // handle input made by the user
+        if (transactionToTransfer.getAmount() < 0){
+            throw new InvalidInputException();
+        }
         //handle first transaction from initial sender
         if (transactionToTransfer.getAmount() > account.getBalance()) {
             throw new InsufficientFundsException();

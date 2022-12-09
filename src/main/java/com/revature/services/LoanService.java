@@ -48,13 +48,18 @@ public class LoanService {
     public LoanDetails createLoan(LoanDTO appliedLoan, int userId) {
         Loan newLoan = new Loan();
         User user = ur.getById(userId);
-        newLoan.setInitialAmount(appliedLoan.getInitialAmount());
-        newLoan.setReason(appliedLoan.getReason());
-        newLoan.setCreationDate(Date.from(Instant.now()));
-        newLoan.setBalance(appliedLoan.getInitialAmount());
-        newLoan.setUser(user);
-        newLoan.setStatus(Status.PENDING);
-        Loan savedLoan = lr.save(newLoan);
+        
+        if (appliedLoan.getInitialAmount() < 0 || appliedLoan.getReason().equals("")){
+            throw new AppliedLoanException();
+        } else {
+            newLoan.setInitialAmount(appliedLoan.getInitialAmount());
+            newLoan.setReason(appliedLoan.getReason());
+            newLoan.setCreationDate(Date.from(Instant.now()));
+            newLoan.setBalance(appliedLoan.getInitialAmount());
+            newLoan.setUser(user);
+            newLoan.setStatus(Status.PENDING);
+            lr.save(newLoan);
+        }
 
         // TODO make sure to create corresponding transaction on account?
 
@@ -87,7 +92,11 @@ public class LoanService {
         if(Objects.equals(realType, ADMIN.toString())){
             return lr.findByStatus(Status.PENDING).stream().map(x -> new LoanDetails(x)).collect(Collectors.toList());
         }
-        return results;
+        if (results.isEmpty()){
+            throw new LoansNotFoundException();
+        }else {
+            return results;
+        }
     }
 
     public LoanDetails updateLoanStatus(String userType, LoanDetails updateLoan) {
@@ -95,7 +104,7 @@ public class LoanService {
         String realType = currentUser.getType().toString();
         Loan loan = lr.getById(updateLoan.getLoanID());
         if (!Objects.equals(realType, ADMIN.toString())){
-            return null;
+            throw new UserNotAllowedException();
         } else {
             loan.setStatus(Status.valueOf(updateLoan.getStatus()));
             Loan savedLoan = lr.save(loan);
