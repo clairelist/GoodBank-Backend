@@ -3,7 +3,7 @@ package com.revature.services;
 import com.revature.dtos.LoanDTO;
 import com.revature.dtos.LoanDetails;
 import com.revature.dtos.UserDTO;
-import com.revature.exceptions.AppliedLoanException;
+import com.revature.exceptions.*;
 import com.revature.models.Loan;
 import com.revature.models.Status;
 import com.revature.models.User;
@@ -75,7 +75,11 @@ public class LoanService {
         if(Objects.equals(realType, ADMIN.toString())){
             return lr.findByStatus(Status.PENDING).stream().map(x -> new LoanDetails(x)).collect(Collectors.toList());
         }
-        return results;
+        if (results.isEmpty()){
+            throw new LoansNotFoundException();
+        }else {
+            return results;
+        }
     }
 
     public LoanDetails updateLoanStatus(String userType, LoanDetails updateLoan) {
@@ -83,7 +87,7 @@ public class LoanService {
         String realType = currentUser.getType().toString();
         Loan loan = lr.getById(updateLoan.getLoanID());
         if (!Objects.equals(realType, ADMIN.toString())){
-            return null;
+            throw new UserNotAllowedException();
         } else {
             loan.setStatus(Status.valueOf(updateLoan.getStatus()));
             lr.save(loan);
