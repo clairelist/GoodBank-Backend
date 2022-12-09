@@ -3,6 +3,7 @@ package com.revature.services;
 import com.revature.BankingApplication;
 import com.revature.dtos.LoanDTO;
 import com.revature.dtos.LoanDetails;
+import com.revature.dtos.UserDTO;
 import com.revature.models.Loan;
 import com.revature.models.Status;
 import com.revature.models.User;
@@ -20,6 +21,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.util.Date;
 import java.util.Optional;
 
+import static com.revature.models.Status.APPROVED;
+import static com.revature.models.Status.PENDING;
+import static com.revature.models.UserType.ADMIN;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -38,6 +42,9 @@ public class LoanServiceTest {
     private User mockUser;
 
     private LoanDTO stubLoan;
+
+    @Autowired
+    private TokenService mockTs;
 
 //    @BeforeAll
 //    void setUpTestSuite() {
@@ -108,6 +115,50 @@ public class LoanServiceTest {
         System.out.println("ACTUAL: " + actual);
 
     }
+
+
+//    @Test
+//    public void updateStatus() {
+//        Date now = new Date();
+//        User user = new User();
+//        user.setId(1);
+//
+//        UserDTO userDTO = new UserDTO();
+//        userDTO.setId(2);
+//        userDTO.setType(ADMIN);
+//
+//
+//        Loan loan = new Loan();
+//        loan.setId(1);
+//        loan.setReason("Testing Update Status");
+//        loan.setInitialAmount(4500);
+//        loan.setUser(user);
+//
+//        LoanDetails loanDetails = new LoanDetails();
+//        loanDetails.getLoanID();
+//        loanDetails.setCreationDate(now);
+//        loanDetails.setStatus(String.valueOf(PENDING));
+//        loanDetails.getUserId();
+//        loanDetails.setBalance(4500);
+//        loanDetails.setReason("Testing Update Status");
+//        loanDetails.setInitialAmount(4500);
+//
+//        LoanDetails updatedLoan = new LoanDetails();
+//        updatedLoan.getLoanID();
+//        updatedLoan.setCreationDate(now);
+//        updatedLoan.setStatus(String.valueOf(APPROVED));
+//        updatedLoan.getUserId();
+//        updatedLoan.setBalance(4500);
+//        updatedLoan.setReason("Testing Update Status");
+//        updatedLoan.setInitialAmount(4500);
+//
+//        Mockito.when(mockTs.extractTokenDetails(String.valueOf(ADMIN))).thenReturn(userDTO);
+//        Mockito.when(mockRepository.getById(1)).thenReturn(loan);
+//        LoanDetails actual = sut.updateLoanStatus(String.valueOf(ADMIN), loanDetails);
+//        assertEquals(updatedLoan, actual);
+//        System.out.println("Expected: " + updatedLoan);
+//        System.out.println("Actual: " + actual);
+//    }
 
 
 }
