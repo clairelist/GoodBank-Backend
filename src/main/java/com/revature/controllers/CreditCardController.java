@@ -1,5 +1,6 @@
 package com.revature.controllers;
 
+import com.revature.annotations.Secured;
 import com.revature.dtos.CreditCardTransactionDTO;
 import com.revature.models.CreditCard;
 import com.revature.models.CreditCardTransaction;
@@ -19,12 +20,14 @@ public class CreditCardController {
     @Autowired
     private CreditCardService creditCardService;
 
+    @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
     @GetMapping("/{id}")
     public ResponseEntity<List<CreditCard>> getCreditCards(@PathVariable("id") int userId) {
         List<CreditCard> optional = creditCardService.findByUserId(userId);
         return ResponseEntity.ok(optional);
     }
 
+    @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
     @PostMapping("/{id}/payment")
     public ResponseEntity<List<CreditCardTransaction>> makeCreditCardPayment(@PathVariable("id") int userId, @RequestBody CreditCardTransactionDTO creditCardTransactionDTO) {
         List<CreditCardTransaction> ccTransactions = creditCardService.makeCreditCardPayment(userId, creditCardTransactionDTO);

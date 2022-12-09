@@ -1,5 +1,6 @@
 package com.revature.controllers;
 
+import com.revature.annotations.Secured;
 import com.revature.dtos.LoginRequest;
 import com.revature.dtos.RegisterRequest;
 import com.revature.dtos.UserDTO;
@@ -31,10 +32,6 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<UserDTO> login(@RequestBody LoginRequest loginRequest) {
         UserDTO userDetails = authService.loginCreds(loginRequest.getEmail(), loginRequest.getPassword());
-
-        if (userDetails == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
         String token = tokenService.generateToken(userDetails);
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", token);
@@ -42,6 +39,7 @@ public class AuthController {
         return new ResponseEntity<>(userDetails, headers, HttpStatus.OK);
     }
 
+    @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpSession session) {
         session.removeAttribute("user");
