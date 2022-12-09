@@ -1,6 +1,8 @@
 package com.revature.services;
 
 import com.revature.dtos.CreditCardTransactionDTO;
+import com.revature.dtos.NotificationCreationRequest;
+import com.revature.models.NotificationType;
 import com.revature.exceptions.NotLoggedInException;
 import com.revature.models.*;
 import com.revature.repositories.*;
@@ -10,6 +12,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class CreditCardService {
@@ -20,6 +23,7 @@ public class CreditCardService {
     private TransactionRepository transactionRepository;
     private CreditCardTransactionRepository creditCardTransactionRepository;
     private UserRepository userRepository;
+    private NotificationService ns;
 
     @Autowired
     public CreditCardService(
@@ -89,5 +93,25 @@ public class CreditCardService {
 
         return creditCardTransactionRepository.findAllByCreditCardOrderByCreationDateDesc(creditCard);
 
+    }
+
+    public CreditCard createCCApplication(int userId, int totalLimit) {
+        CreditCard newCC = new CreditCard();
+        User user = userRepository.getById(userId);
+        newCC.setTotalLimit(totalLimit);
+        newCC.setUser(user);
+        newCC.setAvailableBalance(totalLimit);
+        newCC.setCardNumber(ThreadLocalRandom.current().nextLong(1000000000000000L, 9999999999999999L ));
+        newCC.setCcv(ThreadLocalRandom.current().nextInt(101, 999));
+        newCC.setStatus(Status.PENDING);
+        creditCardRepository.save(newCC);
+
+        NotificationCreationRequest notif = new NotificationCreationRequest();
+        notif.setUser(user);
+        notif.setType(NotificationType.INFORMATION);
+        notif.setBody("Thanks for applying for a credit card with us! We've got some Good news, you're credit card application is being processed!");
+        ns.create(notif);
+
+        return newCC;
     }
 }
