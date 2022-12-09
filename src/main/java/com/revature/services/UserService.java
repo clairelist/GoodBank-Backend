@@ -55,16 +55,16 @@ public class UserService {
         userByEmail = userRepository.findByEmail(update.getEmail());
         if (!userByEmail.isPresent()) {
             updatedPass = null;
-            System.out.println("In if");
+            
         } else {
             try {
-                User userById = userRepository.findById(userByEmail.get().getId()).orElseThrow(EntityNotFoundException::new);
-                userByEmail.get().setPassword(update.getPassword());
-                System.out.println(userById);
-                updatedPass = userRepository.save(userById);
-                System.out.println(updatedPass);
+                //User userById = userRepository.findById(userByEmail.get().getId()).orElseThrow(EntityNotFoundException::new);
+                User updatedUser = userByEmail.get();
+                updatedUser.setPassword(update.getPassword());
+                //userById.setPassword(update.getPassword());
+                updatedPass = userRepository.save(updatedUser);
             } catch (EntityNotFoundException e) {
-                System.out.println("In catch, returned null");
+
                 return null;
             }
 

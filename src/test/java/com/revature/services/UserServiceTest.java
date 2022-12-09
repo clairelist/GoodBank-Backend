@@ -34,7 +34,7 @@ public class UserServiceTest {
         reset.setPassword("newpass");
 
         User newPass = new User();
-        user.setId(1);
+        newPass.setId(1);
         newPass.setEmail("test@test.org");
         newPass.setPassword("newpass");
 
