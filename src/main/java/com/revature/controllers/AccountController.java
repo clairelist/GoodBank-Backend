@@ -66,7 +66,7 @@ public class AccountController {
 
     @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
     @PostMapping(value = "/{id}/transaction", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Transaction> addTransaction(@PathVariable("id") int accountId, @RequestBody TransactionDTO transaction) {
+    public ResponseEntity<List<Transaction>> addTransaction(@PathVariable("id") int accountId, @RequestBody TransactionDTO transaction) {
         return new ResponseEntity<>(accountService.upsertTransaction(accountId, transaction), HttpStatus.CREATED);
     }
 

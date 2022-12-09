@@ -5,10 +5,7 @@ import com.revature.dtos.TransactionDTO;
 import com.revature.dtos.TransferDTO;
 import com.revature.dtos.UserDTO;
 import com.revature.exceptions.InsufficientFundsException;
-import com.revature.models.Account;
-import com.revature.models.Transaction;
-import com.revature.models.TransactionType;
-import com.revature.models.User;
+import com.revature.models.*;
 import com.revature.repositories.AccountRepository;
 import com.revature.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +13,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AccountService {
@@ -60,7 +55,7 @@ public class AccountService {
         }
     }
 
-    public Transaction upsertTransaction(int accountId, TransactionDTO transactionToUpsertDTO) {
+    public List<Transaction> upsertTransaction(int accountId, TransactionDTO transactionToUpsertDTO) {
         Transaction transactionToUpsert = new Transaction(transactionToUpsertDTO);
         Account account = accountRepository.getById(accountId);
 
@@ -72,12 +67,17 @@ public class AccountService {
         accountRepository.saveAndFlush(account);
         transactionToUpsert.setAccount(account);
         transactionToUpsert.setCreationDate(Date.from(Instant.now()));
-        return transactionRepository.save(transactionToUpsert);
+        transactionRepository.save(transactionToUpsert);
+        return transactionRepository.findAllByAccountOrderByCreationDateDesc(account);
     }
 
     @Transactional
     public List<Transaction> transferTransaction(int accountId, TransferDTO transactionToTransferDTO) {
-        Transaction transactionToTransfer = new Transaction(transactionToTransferDTO);
+        Transaction transactionToTransfer = new Transaction();
+        transactionToTransfer.setAmount(transactionToTransferDTO.getAmount());
+        transactionToTransfer.setAccount(transactionToTransferDTO.getAccount());
+        transactionToTransfer.setType(transactionToTransferDTO.getType());
+        transactionToTransfer.setToAccountId(transactionToTransferDTO.getToAccountId());
         //grab both user accounts from initial request
         Account account = accountRepository.getById(accountId);
         Account toAccount = accountRepository.getById(transactionToTransfer.getToAccountId());
@@ -111,11 +111,7 @@ public class AccountService {
         secondTransaction.setCreationDate(Date.from(Instant.now()));
         transactionRepository.save(secondTransaction);
 
-        //create a list to return the transfers adding both initial request and second request.
-        List<Transaction> transfers = new ArrayList<>();
-        transfers.add(transactionToTransfer);
-        transfers.add(secondTransaction);
 
-        return transfers;
+        return transactionRepository.findAllByAccountOrderByCreationDateDesc(account);
     }
 }

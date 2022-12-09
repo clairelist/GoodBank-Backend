@@ -23,7 +23,7 @@ public class NotificationController {
 
     @PostMapping
     public ResponseEntity<Notification> createNotification(@RequestBody NotificationCreationRequest request){
-        Notification savedNotification = ns.save(request);
+        Notification savedNotification = ns.create(request);
         return ResponseEntity.ok(savedNotification);
     }
     @GetMapping("/{user_id}")

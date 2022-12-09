@@ -1,6 +1,7 @@
 package com.revature.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.revature.models.Account;
 import com.revature.models.AccountType;
 import com.revature.models.User;
 import lombok.AllArgsConstructor;
@@ -27,4 +28,7 @@ public class AccountDTO {
     @JoinColumn(referencedColumnName = "id")
     @JsonIgnore
     private User user;
+
+    public AccountDTO(Account stubAccount) {
+    }
 }

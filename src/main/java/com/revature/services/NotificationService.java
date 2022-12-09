@@ -23,13 +23,9 @@ public class NotificationService {
         this.us = us;
     }
 
-    public Notification save(NotificationCreationRequest request) {
+    public Notification create(NotificationCreationRequest request) {
         // utilize request based constructor to create notification
         Notification newNotification = new Notification(request);
-
-        // use UserService to retrieve user based on supplied userId
-        User foundUser = us.findById(request.getUserId());
-        newNotification.setUser(foundUser);
 
         return nr.save(newNotification);
     }

@@ -2,6 +2,7 @@ package com.revature.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.revature.dtos.NotificationCreationRequest;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import java.util.UUID;
 
 @Data
 @Entity
+@AllArgsConstructor
 @Table(name = "notifications")
 public class Notification {
     @Id
@@ -48,7 +50,7 @@ public class Notification {
 
     public Notification(NotificationCreationRequest request){
         this.id = String.valueOf(UUID.randomUUID());
-        this.user = null;
+        this.user = request.getUser();
         this.type = request.getType();
         this.referencesId = request.getReferencesId();
         this.body = request.getBody();

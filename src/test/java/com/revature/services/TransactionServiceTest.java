@@ -1,9 +1,12 @@
 package com.revature.services;
 
 import com.revature.BankingApplication;
+import com.revature.dtos.TransactionDTO;
 import com.revature.models.*;
 import com.revature.repositories.TransactionRepository;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -20,6 +23,7 @@ import static org.mockito.Mockito.doReturn;
 class TransactionServiceTest {
     @MockBean
     private TransactionRepository mockRepository;
+
 
     @Test
     void getTransactionCountgetsCorrectNumber() {
@@ -40,4 +44,5 @@ class TransactionServiceTest {
 
         assertEquals(expected, actual);
     }
+
 }

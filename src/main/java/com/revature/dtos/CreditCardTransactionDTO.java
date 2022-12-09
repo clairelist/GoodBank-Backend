@@ -13,7 +13,7 @@ public class CreditCardTransactionDTO {
 
     private Integer id;
     private double amount;
-    private Date creationDate;
+    private String description;
     private Integer creditCardId;
     private Integer accountId;
 
