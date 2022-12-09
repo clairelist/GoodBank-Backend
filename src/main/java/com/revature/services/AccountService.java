@@ -43,15 +43,28 @@ public class AccountService {
         UserDTO currentUser = tokenService.extractTokenDetails(userId);
         User user = userService.findById(currentUser.getId());
 
+
         if(accountRepository.existsById(accountToUpsert.getId())) {
             Account account = accountRepository.getById(accountToUpsert.getId());
             account.setBalance(accountToUpsert.getBalance());
             account.setName(accountToUpsert.getName());
             return accountRepository.saveAndFlush(account);
         } else {
-            accountToUpsert.setUser(user);
-            accountToUpsert.setCreationDate(Date.from(Instant.now()));
-            return accountRepository.save(accountToUpsert);
+            Account newAccount = new Account();
+            newAccount.setBalance(accountToUpsertDTO.getBalance());
+            newAccount.setAccountType(accountToUpsertDTO.getAccountType());
+            newAccount.setUser(user);
+            newAccount.setName(accountToUpsertDTO.getName());
+            newAccount.setCreationDate(Date.from(Instant.now()));
+            accountRepository.save(newAccount);
+            Transaction initialDeposit = new Transaction();
+            initialDeposit.setAmount(newAccount.getBalance());
+            initialDeposit.setDescription("Initial Deposit");
+            initialDeposit.setType(TransactionType.INCOME);
+            initialDeposit.setAccount(newAccount);
+            initialDeposit.setCreationDate(Date.from(Instant.now()));
+            transactionRepository.save(initialDeposit);
+            return newAccount;
         }
     }
 
