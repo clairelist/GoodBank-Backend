@@ -17,7 +17,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(classes= BankingApplication.class)
-public class UserServiceTest {
+class UserServiceTest {
     @MockBean
     private UserRepository mockRepository;
 
@@ -26,7 +26,7 @@ public class UserServiceTest {
 
 
     @Test
-    public void successLogin(){
+    void successLogin(){
         LoginRequest creds = new LoginRequest();
 
         creds.setEmail("test@email.com");
