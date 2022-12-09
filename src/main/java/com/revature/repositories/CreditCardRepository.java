@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface CreditCardRepository extends JpaRepository<CreditCard, Integer> {
-    Optional<List<CreditCard>> findByUser(User user);
+    List<CreditCard> findByUser(User user);
 }

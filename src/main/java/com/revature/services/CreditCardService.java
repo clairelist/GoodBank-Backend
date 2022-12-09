@@ -37,7 +37,7 @@ public class CreditCardService {
         this.userRepository = userRepository;
     }
 
-    public Optional<List<CreditCard>> findByUserId(int id) {
+    public List<CreditCard> findByUserId(int id) {
         User user = userService.findById(id);
         return creditCardRepository.findByUser(user);
     }

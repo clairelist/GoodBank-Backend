@@ -21,11 +21,8 @@ public class CreditCardController {
 
     @GetMapping("/{id}")
     public ResponseEntity<List<CreditCard>> getCreditCards(@PathVariable("id") int userId) {
-        Optional<List<CreditCard>> optional = creditCardService.findByUserId(userId);
-        if(!optional.isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(optional.get());
+        List<CreditCard> optional = creditCardService.findByUserId(userId);
+        return ResponseEntity.ok(optional);
     }
 
     @PostMapping("/{id}/payment")
