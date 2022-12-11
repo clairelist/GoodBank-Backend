@@ -2,6 +2,7 @@ package com.revature.services;
 
 import com.revature.dtos.CreditCardTransactionDTO;
 import com.revature.dtos.NotificationCreationRequest;
+import com.revature.dtos.UserDTO;
 import com.revature.models.NotificationType;
 import com.revature.exceptions.NotLoggedInException;
 import com.revature.models.*;
@@ -24,6 +25,7 @@ public class CreditCardService {
     private CreditCardTransactionRepository creditCardTransactionRepository;
     private UserRepository userRepository;
     private NotificationService ns;
+    private TokenService tokenService;
 
     @Autowired
     public CreditCardService(
@@ -32,13 +34,17 @@ public class CreditCardService {
             AccountRepository accountRepository,
             TransactionRepository transactionRepository,
             CreditCardTransactionRepository creditCardTransactionRepository,
-            UserRepository userRepository) {
+            UserRepository userRepository,
+            TokenService tokenService,
+            NotificationService ns) {
         this.userService = userService;
         this.creditCardRepository = creditCardRepository;
         this.accountRepository = accountRepository;
         this.transactionRepository = transactionRepository;
         this.creditCardTransactionRepository = creditCardTransactionRepository;
         this.userRepository = userRepository;
+        this.tokenService = tokenService;
+        this.ns = ns;
     }
 
     public Optional<List<CreditCard>> findByUserId(int id) {
@@ -95,9 +101,10 @@ public class CreditCardService {
 
     }
 
-    public CreditCard createCCApplication(int userId, int totalLimit) {
+    public CreditCard createCCApplication(String userId, double totalLimit) {
         CreditCard newCC = new CreditCard();
-        User user = userRepository.getById(userId);
+        UserDTO currentUser = tokenService.extractTokenDetails(userId);
+        User user = userRepository.getById(currentUser.getId());
         newCC.setTotalLimit(totalLimit);
         newCC.setUser(user);
         newCC.setAvailableBalance(totalLimit);

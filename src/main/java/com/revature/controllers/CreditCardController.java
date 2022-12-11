@@ -1,6 +1,7 @@
 package com.revature.controllers;
 
 import com.revature.annotations.Secured;
+import com.revature.dtos.CreditCardApplicationDTO;
 import com.revature.dtos.CreditCardTransactionDTO;
 import com.revature.models.CreditCard;
 import com.revature.models.CreditCardTransaction;
@@ -43,10 +44,8 @@ public class CreditCardController {
 
     @Secured(rolesAllowed = {"ADMIN", "CLIENT"})
     @PostMapping("/credit-card-application")
-    public ResponseEntity<CreditCard> appliedCreditCard( @RequestBody int userId, int totalLimit) {
-        System.out.println(userId);
-        System.out.println(totalLimit);
-        CreditCard newCreditCard = creditCardService.createCCApplication( userId, totalLimit);
+    public ResponseEntity<CreditCard> appliedCreditCard(@RequestBody CreditCardApplicationDTO totalLimit, @RequestHeader("Authorization") String userId) {
+        CreditCard newCreditCard = creditCardService.createCCApplication(userId, totalLimit.getInitialAmount());
         return new ResponseEntity<>(newCreditCard, HttpStatus.CREATED);
     }
 }
