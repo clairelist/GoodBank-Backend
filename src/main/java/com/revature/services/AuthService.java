@@ -12,6 +12,8 @@ import com.revature.models.NotificationType;
 import com.revature.models.User;
 import com.revature.models.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -23,19 +25,21 @@ public class AuthService {
 
     private final UserService userService;
     private final NotificationService notificationService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public AuthService(UserService userService, NotificationService notificationService) {
 
         this.userService = userService;
         this.notificationService = notificationService;
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     public UserDTO loginCreds(String email, String password) {
         if (email.trim().equals("") || password.trim().equals("")) {
             throw new InvalidLoginException();
         }
-        return userService.loginCreds(email, password);
+        return userService.loginCreds(email, this.passwordEncoder.encode((password)));
     }
 
     public User register(RegisterRequest register) {

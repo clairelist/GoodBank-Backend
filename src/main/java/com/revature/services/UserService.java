@@ -10,6 +10,8 @@ import com.revature.models.User;
 import com.revature.repositories.NotificationRepository;
 import com.revature.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -20,11 +22,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final NotificationRepository notificationRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserService(UserRepository userRepository, NotificationRepository notificationRepository) {
         this.userRepository = userRepository;
         this.notificationRepository = notificationRepository;
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     public User findById(int id) {
@@ -33,10 +37,10 @@ public class UserService {
 
     public UserDTO loginCreds(String email, String password) {
         //email below will return all lowercase even if added as caps
-        if(userRepository.findByEmailAndPassword(email.toLowerCase(), password) == null) {
+        if(userRepository.findByEmailAndPassword(email.toLowerCase(), this.passwordEncoder.encode(password)) == null) {
             throw new InvalidLoginException();
         }
-        return userRepository.findByEmailAndPassword(email.toLowerCase(), password);
+        return userRepository.findByEmailAndPassword(email.toLowerCase(), this.passwordEncoder.encode(password));
     }
 
     public Optional<User> findByEmail(String email) {
@@ -58,7 +62,7 @@ public class UserService {
         } else {
             try {
                 User userById = findById(userByEmail.get().getId());
-                userByEmail.get().setPassword(update.getPassword());
+                userByEmail.get().setPassword(this.passwordEncoder.encode(update.getPassword()));
                 updatedPass = userRepository.save(userById);
             } catch (EntityNotFoundException e) {
                 return null;
