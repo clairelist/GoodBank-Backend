@@ -40,15 +40,14 @@ public class UserController {
 
         Optional<User> found = us.findByEmail(user_email.getEmail());
         String response = null;
-        ResponseEntity<String> entity = null; //gee I sure am glad to use a strongly typed language! =_=
+        ResponseEntity<String> entity = null;
 
         if (found.isPresent()){
             response = found.get().getSecurityQuestion();
-            entity = ResponseEntity.ok(response); //test if I actually return the security question string!
+            entity = ResponseEntity.ok(response);
         } else {
             entity = ResponseEntity.badRequest().build();
         }
-        //TODO: THE CLIENT SENDS THE ANSWER TO THE ABOVE ^^^PATCH REQUEST^^^
         return entity;
     }
 }
