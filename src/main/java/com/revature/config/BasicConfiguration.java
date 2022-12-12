@@ -36,8 +36,10 @@ public class BasicConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/h2-console/**").permitAll()
+                .antMatchers("/**").permitAll()
                 .and().csrf().ignoringAntMatchers("/h2-console/**")
-                .and().headers().frameOptions().sameOrigin();
+                .and().headers().frameOptions().sameOrigin()
+                .and().csrf().disable();
         return http.build();
     }
 

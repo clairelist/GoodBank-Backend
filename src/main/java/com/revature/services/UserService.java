@@ -37,10 +37,26 @@ public class UserService {
 
     public UserDTO loginCreds(String email, String password) {
         //email below will return all lowercase even if added as caps
-        if(userRepository.findByEmailAndPassword(email.toLowerCase(), this.passwordEncoder.encode(password)) == null) {
+        Optional<User> fullUser = userRepository.findByEmail(email);
+        if (fullUser.isPresent()) {
+            if (!this.passwordEncoder.matches(password, fullUser.get().getPassword()))
+                throw new InvalidLoginException();
+        }
+        else {
             throw new InvalidLoginException();
         }
-        return userRepository.findByEmailAndPassword(email.toLowerCase(), this.passwordEncoder.encode(password));
+
+        return new UserDTO(
+                fullUser.get().getId(),
+                fullUser.get().getEmail(),
+                fullUser.get().getFirstName(),
+                fullUser.get().getLastName(),
+                fullUser.get().getAddress(),
+                fullUser.get().getState(),
+                fullUser.get().getCity(),
+                fullUser.get().getZip(),
+                fullUser.get().getUserType()
+        );
     }
 
     public Optional<User> findByEmail(String email) {

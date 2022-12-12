@@ -39,7 +39,7 @@ public class AuthService {
         if (email.trim().equals("") || password.trim().equals("")) {
             throw new InvalidLoginException();
         }
-        return userService.loginCreds(email, this.passwordEncoder.encode((password)));
+        return userService.loginCreds(email, password);
     }
 
     public User register(RegisterRequest register) {
@@ -52,6 +52,7 @@ public class AuthService {
             throw new CheckRegisterFieldsException();
         } else {
             User user = new User(register);
+            user.setPassword(this.passwordEncoder.encode(register.getPassword().trim()));
             user.setUserType(UserType.CLIENT);
             user.setCreationDate(Date.from(Instant.now()));
             userService.save(user);
