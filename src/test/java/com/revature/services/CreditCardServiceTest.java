@@ -71,7 +71,8 @@ class CreditCardServiceTest {
                 222,
                 new Date(System.currentTimeMillis()),
                 10000,
-                5000
+                5000,
+                Status.PENDING
         );
 
         stubAccount = new Account(
@@ -96,7 +97,8 @@ class CreditCardServiceTest {
                 387,
                 new Date(System.currentTimeMillis()),
                 5000,
-                4000
+                4000,
+                Status.PENDING
         );
 
         List<CreditCard> actual = new ArrayList<>();
