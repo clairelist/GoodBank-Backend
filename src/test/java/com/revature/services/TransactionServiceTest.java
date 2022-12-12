@@ -3,6 +3,7 @@ package com.revature.services;
 import com.revature.BankingApplication;
 import com.revature.dtos.TransactionDTO;
 import com.revature.models.*;
+import com.revature.repositories.AccountRepository;
 import com.revature.repositories.TransactionRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,10 @@ import static org.mockito.Mockito.doReturn;
 class TransactionServiceTest {
     @MockBean
     private TransactionRepository mockRepository;
+    @MockBean
+    private AccountRepository mockAr;
+    @Autowired
+    private TransactionService sut;
 
 
     @Test
@@ -38,10 +43,11 @@ class TransactionServiceTest {
         transList.add(new Transaction(3, 50.00, "Gas", TransactionType.EXPENSE, date, account, null));
         transList.add(new Transaction(4, 2500.00, "Payroll Direct Deposit", TransactionType.INCOME, date, account, null));
 
-        doReturn(transList).when(mockRepository).findAllByAccountOrderByCreationDateDesc(account.getId());
+        Mockito.when(mockAr.getById(1)).thenReturn(account);
+        doReturn(transList).when(mockRepository).findAllByAccountOrderByCreationDateDesc(account);
 
-        int expected = transList.size();
-        int actual = mockRepository.findAllByAccountOrderByCreationDateDesc(account.getId()).size();
+        Object expected = transList.size();
+        Object actual = sut.getTransactionCount(1);
 
         assertEquals(expected, actual);
     }

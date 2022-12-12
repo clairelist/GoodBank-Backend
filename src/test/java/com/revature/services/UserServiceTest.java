@@ -2,9 +2,11 @@ package com.revature.services;
 import com.revature.BankingApplication;
 import com.revature.dtos.ResetRequest;
 import com.revature.dtos.LoginRequest;
+import com.revature.dtos.UpdateRequest;
 import com.revature.dtos.UserDTO;
 import com.revature.models.User;
 import com.revature.repositories.UserRepository;
+import org.hibernate.sql.Update;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +70,30 @@ class UserServiceTest {
 
         System.out.println(expected);
         System.out.println(actual);
+    }
+
+    @Test
+    void UpdateProfileSuccessful(){
+        User stubUser = new User();
+        stubUser.setId(1);
+        stubUser.setEmail("test@test.org");
+        stubUser.setPassword("originalPass");
+        stubUser.setSecurityQuestion("How is a raven like a writing desk?");
+        stubUser.setSecurityAnswer("Both produce sour notes");
+        stubUser.setFirstName("Dave");
+        UserDTO expected = new UserDTO(stubUser);
+        UpdateRequest req = new UpdateRequest();
+        req.setId(stubUser.getId());
+        req.setEmail("test@test.org");
+        req.setFirstName("Dave");
+
+        Mockito.when(sut.findById(1)).thenReturn(stubUser);
+        Mockito.when(mockRepository.save(stubUser)).thenReturn(stubUser);
+
+        UserDTO actual = sut.updateProfile(req);
+
+        assertEquals(expected, actual);
+
     }
 }
 

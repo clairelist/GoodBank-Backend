@@ -1,6 +1,5 @@
 package com.revature.services;
 
-import com.revature.BankingAppTest;
 import com.revature.BankingApplication;
 import com.revature.dtos.CreditCardTransactionDTO;
 import com.revature.models.*;
@@ -8,7 +7,6 @@ import com.revature.repositories.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +15,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -70,7 +67,7 @@ class CreditCardServiceTest {
                 new Date(System.currentTimeMillis()),
                 10000,
                 5000,
-                Status.APPROVED
+                Status.PENDING
         );
 
         stubAccount = new Account(
@@ -92,7 +89,7 @@ class CreditCardServiceTest {
                 new Date(System.currentTimeMillis()),
                 5000,
                 4000,
-                Status.APPROVED
+                Status.PENDING
         );
 
         List<CreditCard> actual = new ArrayList<>();
