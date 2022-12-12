@@ -13,7 +13,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
 
 @Service
 public class CreditCardService {
@@ -103,20 +103,21 @@ public class CreditCardService {
 
     public CreditCard createCCApplication(String userId, double totalLimit) {
         CreditCard newCC = new CreditCard();
+        Random rand = new Random();
         UserDTO currentUser = tokenService.extractTokenDetails(userId);
         User user = userRepository.getById(currentUser.getId());
         newCC.setTotalLimit(totalLimit);
         newCC.setUser(user);
         newCC.setAvailableBalance(totalLimit);
-        newCC.setCardNumber(ThreadLocalRandom.current().nextLong(1000000000000000L, 9999999999999999L ));
-        newCC.setCcv(ThreadLocalRandom.current().nextInt(101, 999));
+        newCC.setCardNumber((long) (rand.nextDouble() * 1000000000000000L));
+        newCC.setCcv(rand.nextInt((9999 - 100) + 1) + 10);
         newCC.setStatus(Status.PENDING);
         creditCardRepository.save(newCC);
 
         NotificationCreationRequest notif = new NotificationCreationRequest();
         notif.setUser(user);
         notif.setType(NotificationType.INFORMATION);
-        notif.setBody("Thanks for applying for a credit card with us! We've got some Good news, you're credit card application is being processed!");
+        notif.setBody("Thanks for applying for a credit card with us! We've got some Good™ news, you're credit card application is being processed!");
         ns.create(notif);
 
         return newCC;
