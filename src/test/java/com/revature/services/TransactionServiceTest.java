@@ -24,7 +24,8 @@ class TransactionServiceTest {
     @Test
     void getTransactionCountgetsCorrectNumber() {
         Date date = Date.from(Instant.now());
-        User user = new User(1, "testuser@gmail.com", "pass", "Bryan", "Serfozo", "1234 Tampa Ave", "Florida", "Tampa", 57624, UserType.CLIENT, date);
+        User user = new User(1, "testuser@gmail.com", "pass", "Bryan", "Serfozo", "1234 Tampa Ave", "Florida", "Tampa", 57624, UserType.CLIENT, date, "What is your favorite ANIME?",
+                "Something cool");
         Account account = new Account(1, "Primary Checking", 10000.00, date, AccountType.CHECKING, user);
 
         List<Transaction> transList = new ArrayList<>();

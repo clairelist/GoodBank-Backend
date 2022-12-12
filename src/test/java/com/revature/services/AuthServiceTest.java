@@ -62,6 +62,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
         register.setState("NC");
         register.setCity("WS");
         register.setZip(30547);
+        register.setSecurityQuestion("What flavor of GUNDAM do you fly?");
+        register.setSecurityAnswer("Akai the colour of the sky");
         User registered = new User(register);
         mockRepository.save(registered);
         User newUser = new User(register);
@@ -82,6 +84,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
         registerreq.setState("NC");
         registerreq.setCity("WS");
         registerreq.setZip(30547);
+        registerreq.setSecurityQuestion("What flavor of GUNDAM do you fly?");
+        registerreq.setSecurityAnswer("Akai the colour of the sky");
 
 
         Mockito.when(mockRepository.findByEmail(registerreq.getEmail())).thenReturn(Optional.empty());
