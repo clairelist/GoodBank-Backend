@@ -1,6 +1,5 @@
 package com.revature.services;
 
-import com.revature.BankingAppTest;
 import com.revature.BankingApplication;
 import com.revature.dtos.CreditCardTransactionDTO;
 import com.revature.models.*;
@@ -8,7 +7,6 @@ import com.revature.repositories.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +15,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -43,8 +40,6 @@ class CreditCardServiceTest {
     private CreditCardTransaction stubCCTransaction;
     private CreditCardTransactionDTO stubCCTransactionDTO;
     private Account stubAccount;
-
-
 
     @BeforeAll
     void setupTestSuit() {
@@ -86,10 +81,6 @@ class CreditCardServiceTest {
     }
     @Test
     void findByUserIdExists() {
-        //copy/create stub user
-        //mock userservice find by id
-
-        //mock credit card for user
         stubCC = new CreditCard(
                 1,
                 stubUser,
@@ -103,10 +94,8 @@ class CreditCardServiceTest {
 
         List<CreditCard> actual = new ArrayList<>();
         actual.add(stubCC);
-
         Mockito.when(mockUs.findById(1)).thenReturn(stubUser);
         Mockito.when(mockRepository.findByUser(Mockito.any(User.class))).thenReturn(actual);
-
         List<CreditCard> expected = sut.findByUserId(1);
 
         assertEquals(expected, actual);
@@ -114,22 +103,17 @@ class CreditCardServiceTest {
 
     @Test
     void makeCreditCardPaymentWorks() {
-        //make cctransactionDTO, aka what gets passed in
         stubCCTransactionDTO = new CreditCardTransactionDTO(
-           10,
-           500,
-           "payment",
-           5,
-           3
+            10,
+            500,
+            "payment",
+            5,
+            3
         );
-        //make cc transaction, do i need this? probably to confirm its whats returned
-        // at some point
-        //is this actual?
         stubCCTransaction = new CreditCardTransaction(
                 10,
                 500,
                 "Payment from Account " + stubAccount.getName(),
-                //might need to use date type from ccservice method
                 new Date(System.currentTimeMillis()),
                 CreditCardTransactionType.PAYMENT,
                 stubCC,
@@ -138,15 +122,12 @@ class CreditCardServiceTest {
 
         List<CreditCardTransaction> actual = new ArrayList<>();
         actual.add(stubCCTransaction);
-        //lets make our mockitos for first 3
         Mockito.when(mockRepository.getById(stubCCTransactionDTO.getCreditCardId())).thenReturn(stubCC);
         Mockito.when(mockAccountRepository.getById(stubCCTransactionDTO.getAccountId())).thenReturn(stubAccount);
         Mockito.when(mockUserRepository.getById(1)).thenReturn(stubUser);
-        //mock the save
         Mockito.when(mockCreditCardTransactionRepository.findAllByCreditCardOrderByCreationDateDesc(stubCC)).thenReturn(actual);
+        Double expected = sut.makeCreditCardPayment(1, stubCCTransactionDTO);
 
-        List<CreditCardTransaction> expected = sut.makeCreditCardPayment(1, stubCCTransactionDTO);
-
-        assertEquals(expected, actual);
+        assertEquals(expected, stubAccount.getBalance());
     }
 }
