@@ -9,7 +9,12 @@ import com.revature.models.*;
 import com.revature.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +31,7 @@ public class CreditCardService {
     private UserRepository userRepository;
     private NotificationService ns;
     private TokenService tokenService;
+    private Random rand;
 
     @Autowired
     public CreditCardService(
@@ -88,7 +94,7 @@ public class CreditCardService {
         //toAccountId not required
         transactionRepository.save(transaction);
 
-        //gerenerate payment to cctransaction and save/persist
+        //generate payment to cctransaction and save/persist
         CreditCardTransaction creditCardTransaction = new CreditCardTransaction(creditCardTransactionDTO);
         creditCardTransaction.setDescription("Payment from Account " + account.getName());
         creditCardTransaction.setType(CreditCardTransactionType.PAYMENT);
@@ -103,7 +109,11 @@ public class CreditCardService {
 
     public CreditCard createCCApplication(String userId, double totalLimit) {
         CreditCard newCC = new CreditCard();
-        Random rand = new Random();
+        try {
+            rand = SecureRandom.getInstanceStrong();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
         UserDTO currentUser = tokenService.extractTokenDetails(userId);
         User user = userRepository.getById(currentUser.getId());
         newCC.setTotalLimit(totalLimit);
@@ -112,6 +122,9 @@ public class CreditCardService {
         newCC.setCardNumber((long) (rand.nextDouble() * 1000000000000000L));
         newCC.setCcv(rand.nextInt((9999 - 100) + 1) + 10);
         newCC.setStatus(Status.PENDING);
+        Instant date = Instant.now();
+        Instant expiration = date.plus(740, ChronoUnit.DAYS);
+        newCC.setExpirationDate(Date.from(expiration));
         creditCardRepository.save(newCC);
 
         NotificationCreationRequest notif = new NotificationCreationRequest();
