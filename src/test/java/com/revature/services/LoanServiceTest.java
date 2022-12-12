@@ -39,7 +39,7 @@ class LoanServiceTest {
 
     @Autowired
     private TokenService mockTs;
-    
+
     @Test
     void createLoan() {
         Date now = new Date();
