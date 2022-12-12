@@ -51,8 +51,6 @@ class TransactionServiceTest {
         assertEquals(expected, actual);
     }
 
-    //getAllTransactions & MAYBE findFiveByAccountId
-
     @Test
     void getAllTransactionsExists() {
         Date date = Date.from(Instant.now());
