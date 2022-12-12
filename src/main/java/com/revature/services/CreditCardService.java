@@ -3,10 +3,8 @@ package com.revature.services;
 import com.revature.dtos.CreditCardTransactionDTO;
 import com.revature.dtos.NotificationCreationRequest;
 import com.revature.dtos.UserDTO;
-import com.revature.exceptions.AppliedLoanException;
-import com.revature.exceptions.NoAlgException;
+import com.revature.exceptions.*;
 import com.revature.models.NotificationType;
-import com.revature.exceptions.NotLoggedInException;
 import com.revature.models.*;
 import com.revature.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,17 +65,16 @@ public class CreditCardService {
         //make sure both account and credit card belong to same user, and credit card belongs to logged in user
         if ((!creditCard.getUser().equals(account.getUser())) || (!creditCard.getUser().equals(user))) {
             //wrong exception
-            throw new NotLoggedInException();
+            throw new InvalidUserException();
         }
         //Make sure account has available balance to make the payment
         if (account.getBalance() < creditCardTransactionDTO.getAmount()) {
-           //use new exception that hasn't been pushed as of writing this code
-            throw new NotLoggedInException();
+            throw new InsufficientFundsException();
         }
         //make sure CC availableBalance does not exceed totallimit after payment
         if (creditCard.getTotalLimit() < (creditCard.getAvailableBalance() + creditCardTransactionDTO.getAmount())) {
             //wrong exception
-            throw new NotLoggedInException();
+            throw new ExceedsTotalLimitException();
         }
 
         //now that we have passed all checks, we need to apply/persist the payment to both accounts
@@ -115,6 +112,9 @@ public class CreditCardService {
             rand = SecureRandom.getInstanceStrong();
         } catch (NoSuchAlgorithmException e) {
             throw new NoAlgException();
+        }
+        if(totalLimit <= 0){
+            throw new InvalidAmountException();
         }
         UserDTO currentUser = tokenService.extractTokenDetails(userId);
         User user = userRepository.getById(currentUser.getId());
