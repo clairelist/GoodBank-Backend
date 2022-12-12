@@ -56,7 +56,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
     void registerUserThrowsError(){
         RegisterRequest register = new RegisterRequest();
         register.setEmail("test@gmail.com");
-        register.setPassword("test");
+        register.setPassword("tests");
         register.setFirstName("reg");
         register.setLastName("reg");
         register.setAddress("123 A St");
@@ -69,7 +69,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
         mockRepository.save(registered);
         User newUser = new User(register);
 
-        Mockito.when(mockRepository.findByEmail(registered.getEmail())).thenReturn(Optional.of(newUser));
+        Mockito.when(us.findByEmail(newUser.getEmail())).thenReturn(Optional.of(newUser));
 
         assertThrows(DuplicateEmailFoundException.class, () -> sut.register(register));
     }
@@ -89,7 +89,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
         registerreq.setSecurityAnswer("Akai the colour of the sky");
 
 
-        Mockito.when(mockRepository.findByEmail(registerreq.getEmail())).thenReturn(Optional.empty());
+        Mockito.when(us.findByEmail(registerreq.getEmail())).thenReturn(Optional.empty());
         Mockito.when(monkNs.create(Mockito.any(NotificationCreationRequest.class))).thenReturn(null);
 
         User actual = sut.register(registerreq);

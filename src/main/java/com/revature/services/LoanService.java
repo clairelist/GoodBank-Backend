@@ -52,7 +52,7 @@ public class LoanService {
     public LoanDetails createLoan(LoanDTO appliedLoan, int userId) {
         Loan newLoan = new Loan();
         User user = ur.getById(userId);
-        
+
         if (appliedLoan.getInitialAmount() < 0 || appliedLoan.getReason().equals("")){
             throw new AppliedLoanException();
         }
@@ -65,19 +65,19 @@ public class LoanService {
         newLoan.setBalance(appliedLoan.getInitialAmount());
         newLoan.setUser(user);
         newLoan.setStatus(Status.PENDING);
-        Loan savedLoan = lr.save(newLoan);
+        lr.save(newLoan);
 
         // TODO make sure to create corresponding transaction on account?
 
         NotificationCreationRequest notif = new NotificationCreationRequest();
         notif.setUser(user);
         notif.setType(NotificationType.LOAN);
-        notif.setReferencesId(savedLoan.getId());
+        notif.setReferencesId(newLoan.getId());
         DateFormat formatter = new SimpleDateFormat("E, dd MMMM yyyy h:mm:ss aa");
-        String strDate = formatter.format(savedLoan.getCreationDate());
+        String strDate = formatter.format(newLoan.getCreationDate());
         DecimalFormat format2 = new DecimalFormat("#,###.##");
 
-        notif.setBody("A loan application for $" + format2.format(savedLoan.getInitialAmount()) + " was successfully created on " + strDate + ". Keep an eye out for the result!");
+        notif.setBody("A loan application for $" + format2.format(newLoan.getInitialAmount()) + " was successfully created on " + strDate + ". Keep an eye out for the result!");
         ns.create(notif);
 
 
