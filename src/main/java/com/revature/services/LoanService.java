@@ -4,6 +4,9 @@ import com.revature.dtos.LoanDTO;
 import com.revature.dtos.LoanDetails;
 import com.revature.dtos.NotificationCreationRequest;
 import com.revature.dtos.UserDTO;
+import com.revature.exceptions.AppliedLoanException;
+import com.revature.exceptions.LoansNotFoundException;
+import com.revature.exceptions.UserNotAllowedException;
 import com.revature.models.*;
 import com.revature.repositories.LoanRepository;
 import com.revature.repositories.UserRepository;
@@ -66,12 +69,12 @@ public class LoanService {
         NotificationCreationRequest notif = new NotificationCreationRequest();
         notif.setUser(user);
         notif.setType(NotificationType.LOAN);
-        notif.setReferencesId(savedLoan.getId());
+        notif.setReferencesId(newLoan.getId());
         DateFormat formatter = new SimpleDateFormat("E, dd MMMM yyyy h:mm:ss aa");
-        String strDate = formatter.format(savedLoan.getCreationDate());
+        String strDate = formatter.format(newLoan.getCreationDate());
         DecimalFormat format2 = new DecimalFormat("#,###.##");
 
-        notif.setBody("A loan application for $" + format2.format(savedLoan.getInitialAmount()) + " was successfully created on " + strDate + ". Keep an eye out for the result!");
+        notif.setBody("A loan application for $" + format2.format(newLoan.getInitialAmount()) + " was successfully created on " + strDate + ". Keep an eye out for the result!");
         ns.create(notif);
 
 

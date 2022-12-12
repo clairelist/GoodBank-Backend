@@ -4,7 +4,9 @@ import com.revature.dtos.NotificationCreationRequest;
 import com.revature.dtos.ResetRequest;
 import com.revature.dtos.UserDTO;
 import com.revature.dtos.UpdateRequest;
+import com.revature.exceptions.CheckRegisterFieldsException;
 import com.revature.exceptions.InvalidLoginException;
+import com.revature.exceptions.PasswordUnderAmountException;
 import com.revature.models.Notification;
 import com.revature.models.User;
 import com.revature.repositories.NotificationRepository;
@@ -46,24 +48,22 @@ public class UserService {
     public User save(User user) { return userRepository.save(user); }
 
 
-    public User updatePassword(ResetRequest update) throws EntityNotFoundException {
-
-        Optional<User> userByEmail;
-        //Used to check if a user exists
+    public User updatePassword(ResetRequest update) {
+        Optional<User> userEmail;
         User updatedPass;
-        //used to actually save the user and spit back out.
-        userByEmail = findByEmail(update.getEmail());
-        if (!userByEmail.isPresent()) {
-            updatedPass = null;
+        if (update.getPassword().length() <= 3) {
+            throw new PasswordUnderAmountException();
+        } else if ((update.getEmail().trim().equals("") || update.getPassword().trim().equals(""))) {
+            throw new CheckRegisterFieldsException();
         } else {
-            try {
-                User userById = findById(userByEmail.get().getId());
-                userByEmail.get().setPassword(update.getPassword());
+            userEmail = findByEmail(update.getEmail());
+            if (!userEmail.isPresent()) {
+                updatedPass = null;
+            } else {
+                User userById = findById(userEmail.get().getId());
+                userEmail.get().setPassword(update.getPassword());
                 updatedPass = userRepository.save(userById);
-            } catch (EntityNotFoundException e) {
-                return null;
             }
-
         }
         return updatedPass;
     }
