@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
 
 @SpringBootTest(classes= BankingApplication.class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AccountServiceTest {
     @MockBean
     private AccountRepository mockRepository;
