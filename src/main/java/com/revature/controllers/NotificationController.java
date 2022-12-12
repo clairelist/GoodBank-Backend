@@ -1,5 +1,6 @@
 package com.revature.controllers;
 
+import com.revature.annotations.Secured;
 import com.revature.dtos.NotificationCreationRequest;
 import com.revature.models.Notification;
 import com.revature.services.NotificationService;
@@ -21,25 +22,29 @@ public class NotificationController {
         this.ns = ns;
     }
 
+    @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
     @PostMapping
     public ResponseEntity<Notification> createNotification(@RequestBody NotificationCreationRequest request){
         Notification savedNotification = ns.create(request);
         return ResponseEntity.ok(savedNotification);
     }
+
+    @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
     @GetMapping("/{user_id}")
-    public ResponseEntity<List<Notification>> getUserNotifications(@PathVariable("user_id") String userId){
-        List<Notification> notifs = ns.getUserNotifications(Integer.parseInt(userId));
+    public ResponseEntity<List<Notification>> getUserNotifications(@PathVariable("user_id") int userId){
+        List<Notification> notifs = ns.getUserNotifications(userId);
 
         return ResponseEntity.ok(notifs);
     }
 
+    @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
     @PatchMapping("/dismiss/{user_id}/{notification_id}")
     public ResponseEntity<List<Notification>> dismissUserNotification(
-        @PathVariable("user_id") String userId,
+        @PathVariable("user_id") int userId,
         @PathVariable("notification_id") String notificationId
     ){
         if (ns.markAsDismissed(notificationId) != null){
-            List<Notification> notifs = ns.getUserNotifications(Integer.parseInt(userId));
+            List<Notification> notifs = ns.getUserNotifications(userId);
 
             return ResponseEntity.ok(notifs);
         }
@@ -47,6 +52,7 @@ public class NotificationController {
         return ResponseEntity.notFound().build();
     }
 
+    @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
     @PatchMapping("/seen")
     public ResponseEntity<List<Notification>> setNotificationsSeen(@RequestBody String[] ids){
         List<Notification> updated = ns.markListAsSeen(ids);

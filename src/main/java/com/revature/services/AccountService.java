@@ -5,10 +5,9 @@ import com.revature.dtos.TransactionDTO;
 import com.revature.dtos.TransferDTO;
 import com.revature.dtos.UserDTO;
 import com.revature.exceptions.InsufficientFundsException;
-import com.revature.models.Account;
-import com.revature.models.Transaction;
-import com.revature.models.TransactionType;
-import com.revature.models.User;
+import com.revature.exceptions.InvalidAccountException;
+import com.revature.exceptions.InvalidInputException;
+import com.revature.models.*;
 import com.revature.repositories.AccountRepository;
 import com.revature.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +15,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AccountService {
@@ -47,6 +44,9 @@ public class AccountService {
         Account accountToUpsert = new Account(accountToUpsertDTO);
         UserDTO currentUser = tokenService.extractTokenDetails(userId);
         User user = userService.findById(currentUser.getId());
+        if (accountToUpsertDTO.getBalance() <= 0 || accountToUpsertDTO.getName().equals("")) {
+            throw new InsufficientFundsException();
+        }
 
         if(accountRepository.existsById(accountToUpsert.getId())) {
             Account account = accountRepository.getById(accountToUpsert.getId());
@@ -54,15 +54,29 @@ public class AccountService {
             account.setName(accountToUpsert.getName());
             return accountRepository.saveAndFlush(account);
         } else {
-            accountToUpsert.setUser(user);
-            accountToUpsert.setCreationDate(Date.from(Instant.now()));
-            return accountRepository.save(accountToUpsert);
+            Account newAccount = new Account();
+            newAccount.setBalance(accountToUpsertDTO.getBalance());
+            newAccount.setAccountType(accountToUpsertDTO.getAccountType());
+            newAccount.setUser(user);
+            newAccount.setName(accountToUpsertDTO.getName());
+            newAccount.setCreationDate(Date.from(Instant.now()));
+            accountRepository.save(newAccount);
+            Transaction initialDeposit = new Transaction();
+            initialDeposit.setAmount(newAccount.getBalance());
+            initialDeposit.setDescription("Initial Deposit");
+            initialDeposit.setType(TransactionType.INCOME);
+            initialDeposit.setAccount(newAccount);
+            initialDeposit.setCreationDate(Date.from(Instant.now()));
+            transactionRepository.save(initialDeposit);
+            return newAccount;
         }
     }
 
     public List<Transaction> upsertTransaction(int accountId, TransactionDTO transactionToUpsertDTO) {
         Transaction transactionToUpsert = new Transaction(transactionToUpsertDTO);
         Account account = accountRepository.getById(accountId);
+
+
 
         if(transactionToUpsert.getType() == TransactionType.EXPENSE) {
             account.setBalance(account.getBalance() - transactionToUpsert.getAmount());
@@ -91,30 +105,37 @@ public class AccountService {
         //handle first transaction from initial sender
         if (transactionToTransfer.getAmount() > account.getBalance()) {
             throw new InsufficientFundsException();
-        }
+        } else if (transactionToTransferDTO.getAccount().getId() == transactionToTransferDTO.getToAccountId()) {
+            throw new InvalidAccountException();
+        } else if (transactionToTransferDTO.getToAccountId().toString().trim().equals("")) {
+            throw new InvalidAccountException();
+        } else if (transactionToTransferDTO.getAmount() <= 0) {
+            throw new InvalidInputException();
+        } else {
 
-        if(transactionToTransfer.getType() == TransactionType.TRANSFER) {
-            //set balance to amount minus the amount your sending and change to expense type.
-            account.setBalance(account.getBalance() - transactionToTransfer.getAmount());
-            transactionToTransfer.setType(TransactionType.EXPENSE);
-            //set balance of receiver account to add amount you are sending and change to income type.
-            toAccount.setBalance(toAccount.getBalance() + transactionToTransfer.getAmount());
-            secondTransaction.setType(TransactionType.INCOME);
-        }
-        ////////////////////accountRepository.saveAndFlush(account); //What does this do???
-        //set remaining fields so that they are abstracted away from user
-        transactionToTransfer.setAccount(account);
-        transactionToTransfer.setToAccountId(toAccount.getId());
-        transactionToTransfer.setDescription("Money sent to acct: " + toAccount.getId());
-        transactionToTransfer.setCreationDate(Date.from(Instant.now()));
-        transactionRepository.save(transactionToTransfer);
+                if (transactionToTransfer.getType() == TransactionType.TRANSFER) {
+                    //set balance to amount minus the amount your sending and change to expense type.
+                    account.setBalance(account.getBalance() - transactionToTransfer.getAmount());
+                    transactionToTransfer.setType(TransactionType.EXPENSE);
+                    //set balance of receiver account to add amount you are sending and change to income type.
+                    toAccount.setBalance(toAccount.getBalance() + transactionToTransfer.getAmount());
+                    secondTransaction.setType(TransactionType.INCOME);
+                }
+                ////////////////////accountRepository.saveAndFlush(account); //What does this do???
+                //set remaining fields so that they are abstracted away from user
+                transactionToTransfer.setAccount(account);
+                transactionToTransfer.setToAccountId(toAccount.getId());
+                transactionToTransfer.setDescription("Money sent to acct: " + toAccount.getId());
+                transactionToTransfer.setCreationDate(Date.from(Instant.now()));
+                transactionRepository.save(transactionToTransfer);
 
-        //set fields for second transaction based off of what user submitted as long as validation allows.
-        secondTransaction.setAmount(transactionToTransfer.getAmount());
-        secondTransaction.setDescription("Money received from acct: " + account.getId());
-        secondTransaction.setAccount(toAccount);
-        secondTransaction.setCreationDate(Date.from(Instant.now()));
-        transactionRepository.save(secondTransaction);
+                //set fields for second transaction based off of what user submitted as long as validation allows.
+                secondTransaction.setAmount(transactionToTransfer.getAmount());
+                secondTransaction.setDescription("Money received from acct: " + account.getId());
+                secondTransaction.setAccount(toAccount);
+                secondTransaction.setCreationDate(Date.from(Instant.now()));
+                transactionRepository.save(secondTransaction);
+        }
 
 
         return transactionRepository.findAllByAccountOrderByCreationDateDesc(account);
