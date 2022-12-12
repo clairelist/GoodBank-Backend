@@ -16,4 +16,6 @@ public class RegisterRequest {
     private String state;
     private String city;
     private int zip;
+    private String securityQuestion;
+    private String securityAnswer;
 }
