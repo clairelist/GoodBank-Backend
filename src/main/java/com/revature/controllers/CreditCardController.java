@@ -10,9 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/credit-card")
@@ -25,11 +24,8 @@ public class CreditCardController {
     @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
     @GetMapping("/{id}")
     public ResponseEntity<List<CreditCard>> getCreditCards(@PathVariable("id") int userId) {
-        Optional<List<CreditCard>> optional = creditCardService.findByUserId(userId);
-        if(!optional.isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(optional.get());
+        List<CreditCard> optional = creditCardService.findByUserId(userId);
+        return ResponseEntity.ok(optional);
     }
 
     @Secured(rolesAllowed = { "ADMIN", "CLIENT" })

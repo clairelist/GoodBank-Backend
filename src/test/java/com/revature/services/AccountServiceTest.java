@@ -23,7 +23,7 @@ import static org.mockito.Mockito.doReturn;
 
 @SpringBootTest(classes= BankingApplication.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class AccountServiceTest {
+class AccountServiceTest {
     @MockBean
     private AccountRepository mockRepository;
 
@@ -76,7 +76,7 @@ public class AccountServiceTest {
     }
 
     @Test
-    public void findByIdSendsBackUser() {
+    void findByIdSendsBackUser() {
         //Arrange
         List<Account> actual = new ArrayList<>();
         Account newAccount = new Account(null, null, null, stubUser);
