@@ -80,6 +80,11 @@ public class RestExceptionHandler {
         String errorMessage = "Please enter a valid input for all fields";
         return ResponseEntity.badRequest().body(errorMessage);
     }
+    @ExceptionHandler(AppliedLoanPasswordException.class)
+    public ResponseEntity<Object> handleAppliedLoanPasswordException(HttpServletRequest request, AppliedLoanPasswordException message){
+        String errorMessage = "Passwords don't match! Enter your password into the 'password' field.";
+        return ResponseEntity.badRequest().body(errorMessage);
+    }
 
     @ExceptionHandler(InvalidInputException.class)
     public ResponseEntity<Object> handleInvalidInputException(HttpServletRequest request, InvalidInputException message){
@@ -97,5 +102,13 @@ public class RestExceptionHandler {
     public ResponseEntity<Object> handleUserNotAllowedException(HttpServletRequest request, UserNotAllowedException message){
         String errorMessage = "Updating loan status is not permitted for this role.";
         return ResponseEntity.ok().body(errorMessage);
+    }
+
+    @ExceptionHandler(NoAlgException.class)
+    public ResponseEntity<Object> handleNoAlgException(HttpServletRequest request, NoAlgException message) {
+
+        String errorMessage = "No algorithm could be made";
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }
 }

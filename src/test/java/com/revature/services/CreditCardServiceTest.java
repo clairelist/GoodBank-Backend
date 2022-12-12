@@ -59,7 +59,9 @@ class CreditCardServiceTest {
                 "Ohio",
                 44102,
                 UserType.CLIENT,
-                new Date(System.currentTimeMillis())
+                new Date(System.currentTimeMillis()),
+                "test",
+                "test"
         );
 
         stubCC = new CreditCard(
