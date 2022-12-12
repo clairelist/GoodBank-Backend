@@ -100,14 +100,14 @@ public class RestExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }
 
-    @ExceptionHandler(InvalidAmountException.class)
+    @ExceptionHandler(InvalidUserException.class)
     public ResponseEntity<Object> handleInvalidUserException(HttpServletRequest request, InvalidUserException message) {
         String errorMessage = "Cannot make payments from another user's accounts.";
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }
 
     @ExceptionHandler(ExceedsTotalLimitException.class)
-    public ResponseEntity<Object> handleInvalidUserException(HttpServletRequest request, ExceedsTotalLimitException message) {
+    public ResponseEntity<Object> handleExceedsTotalLimitException(HttpServletRequest request, ExceedsTotalLimitException message) {
         String errorMessage = "Payment amount exceeds total limit.";
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }
