@@ -25,10 +25,13 @@ class UserServiceTest {
         user.setId(1);
         user.setEmail("test@test.org");
         user.setPassword("originalPass");
+        user.setSecurityQuestion("How is a raven like a writing desk?");
+        user.setSecurityAnswer("Both produce sour notes");
 
         ResetRequest reset = new ResetRequest();
         reset.setEmail("test@test.org");
         reset.setPassword("newpass");
+        reset.setSecurityAnswer("Both produce sour notes");
 
         User newPass = new User();
         newPass.setId(1);

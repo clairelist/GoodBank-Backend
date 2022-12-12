@@ -31,4 +31,7 @@ public class CreditCard {
     private double totalLimit;
     private double availableBalance;
 
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
 }

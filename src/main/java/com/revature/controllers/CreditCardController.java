@@ -1,11 +1,13 @@
 package com.revature.controllers;
 
 import com.revature.annotations.Secured;
+import com.revature.dtos.CreditCardApplicationDTO;
 import com.revature.dtos.CreditCardTransactionDTO;
 import com.revature.models.CreditCard;
 import com.revature.models.CreditCardTransaction;
 import com.revature.services.CreditCardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -28,12 +30,18 @@ public class CreditCardController {
 
     @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
     @PostMapping("/{id}/payment")
-    public ResponseEntity<List<CreditCardTransaction>> makeCreditCardPayment(@PathVariable("id") int userId, @RequestBody CreditCardTransactionDTO creditCardTransactionDTO) {
-        List<CreditCardTransaction> ccTransactions = creditCardService.makeCreditCardPayment(userId, creditCardTransactionDTO);
-        if(ccTransactions.isEmpty()) {
+    public ResponseEntity<Double> makeCreditCardPayment(@PathVariable("id") int userId, @RequestBody CreditCardTransactionDTO creditCardTransactionDTO) {
+        Double accountBalance = creditCardService.makeCreditCardPayment(userId, creditCardTransactionDTO);
+        if(accountBalance == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(ccTransactions);
+        return ResponseEntity.ok(accountBalance);
     }
 
+    @Secured(rolesAllowed = {"ADMIN", "CLIENT"})
+    @PostMapping("/credit-card-application")
+    public ResponseEntity<CreditCard> appliedCreditCard(@RequestBody CreditCardApplicationDTO totalLimit, @RequestHeader("Authorization") String userId) {
+        CreditCard newCreditCard = creditCardService.createCCApplication(userId, totalLimit.getInitialAmount());
+        return new ResponseEntity<>(newCreditCard, HttpStatus.CREATED);
+    }
 }
