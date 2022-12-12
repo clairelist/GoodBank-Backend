@@ -13,4 +13,5 @@ public class LoanDTO {
     private User userId;
     private String reason;
     private int initialAmount;
+    private String password;
 }

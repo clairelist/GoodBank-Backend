@@ -80,6 +80,11 @@ public class RestExceptionHandler {
         String errorMessage = "Please enter a valid input for all fields";
         return ResponseEntity.badRequest().body(errorMessage);
     }
+    @ExceptionHandler(AppliedLoanPasswordException.class)
+    public ResponseEntity<Object> handleAppliedLoanPasswordException(HttpServletRequest request, AppliedLoanPasswordException message){
+        String errorMessage = "Passwords don't match! Enter your password into the 'password' field.";
+        return ResponseEntity.badRequest().body(errorMessage);
+    }
 
     @ExceptionHandler(InvalidInputException.class)
     public ResponseEntity<Object> handleInvalidInputException(HttpServletRequest request, InvalidInputException message){
