@@ -52,7 +52,7 @@ public class UserService {
         //Used to check if a user exists, AND that the security answer matches database
         User updatedPass;
         //used to actually save the user and spit back out.
-        userByEmail = findByEmail(update.getEmail());
+        userByEmail = userRepository.findByEmail(update.getEmail());
         if (!userByEmail.isPresent()) {
             updatedPass = null;
         } else if (!userByEmail.get().getSecurityAnswer().equals(update.getSecurityAnswer()) ){
@@ -60,10 +60,11 @@ public class UserService {
             updatedPass = null;
         } else {
             try {
-                User userById = findById(userByEmail.get().getId());
-                userByEmail.get().setPassword(update.getPassword());
-                updatedPass = userRepository.save(userById);
+                User updatedUser = userByEmail.get();
+                updatedUser.setPassword(update.getPassword());
+                updatedPass = userRepository.save(updatedUser);
             } catch (EntityNotFoundException e) {
+
                 return null;
             }
         }

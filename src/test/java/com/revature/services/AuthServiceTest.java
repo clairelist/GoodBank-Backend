@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
     @MockBean
     private NotificationService monkNs;
 
-    @Autowired
+    @MockBean
     private UserService us;
 
     @Autowired
@@ -45,6 +45,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
         UserDTO expected = us.loginCreds(creds.getEmail(), creds.getPassword());
 
         Mockito.when(mockRepository.findByEmailAndPassword(creds.getEmail(), creds.getPassword())).thenReturn(expected);
+        Mockito.when(us.loginCreds(creds.getEmail(), creds.getPassword())).thenReturn(expected);
         //Act
         UserDTO actual = sut.loginCreds(creds.getEmail(), creds.getPassword());
         //Assert

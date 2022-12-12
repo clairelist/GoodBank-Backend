@@ -1,33 +1,26 @@
 package com.revature.services;
-
 import com.revature.BankingApplication;
 import com.revature.dtos.LoanDTO;
 import com.revature.dtos.LoanDetails;
 import com.revature.models.Loan;
 import com.revature.models.Status;
 import com.revature.models.User;
-import com.revature.models.UserType;
 import com.revature.repositories.LoanRepository;
 import com.revature.repositories.UserRepository;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(classes = BankingApplication.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class LoanServiceTest {
+class LoanServiceTest {
     @MockBean
     private LoanRepository mockRepository;
 
@@ -43,10 +36,12 @@ public class LoanServiceTest {
     private User mockUser;
 
     private LoanDTO stubLoan;
-    
+
+    @Autowired
+    private TokenService mockTs;
 
     @Test
-    public void createLoan() {
+    void createLoan() {
         Date now = new Date();
         User stubUser = new User();
         stubUser.setId(1);
@@ -86,7 +81,7 @@ public class LoanServiceTest {
     }
 
     @Test
-    public void getUserLoans(){
+    void getUserLoans(){
         Date now = new Date();
         User stubUser = new User();
         stubUser.setId(1);
@@ -138,6 +133,4 @@ public class LoanServiceTest {
         System.out.println("ACTUAL: " + actual);
 
     }
-
-
 }
