@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(classes = BankingApplication.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class LoanServiceTest {
+class LoanServiceTest {
     @MockBean
     private LoanRepository mockRepository;
 
@@ -39,32 +39,9 @@ public class LoanServiceTest {
 
     @Autowired
     private TokenService mockTs;
-
-//    @BeforeAll
-//    void setUpTestSuite() {
-//        mockUser = new User(
-//                1,
-//                "lilmissgogetta@revature.com",
-//                "pass",
-//                "Lesly",
-//                "Gonzalez",
-//                "1234 Revature Lane",
-//                "Cleveland",
-//                "Ohio",
-//                44102,
-//                UserType.CLIENT,
-//                new Date(System.currentTimeMillis())
-//        );
-//
-//        stubLoan = new LoanDTO(
-//                mockUser,
-//                "testing loans",
-//                250
-//        );
-//    }
-
+    
     @Test
-    public void createLoan() {
+    void createLoan() {
         Date now = new Date();
         User stubUser = new User();
         stubUser.setId(1);
@@ -104,7 +81,7 @@ public class LoanServiceTest {
     }
 
     @Test
-    public void getUserLoans(){
+    void getUserLoans(){
         Date now = new Date();
         User stubUser = new User();
         stubUser.setId(1);

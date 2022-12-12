@@ -58,10 +58,8 @@ public class UserService {
 
         } else {
             try {
-                //User userById = userRepository.findById(userByEmail.get().getId()).orElseThrow(EntityNotFoundException::new);
                 User updatedUser = userByEmail.get();
                 updatedUser.setPassword(update.getPassword());
-                //userById.setPassword(update.getPassword());
                 updatedPass = userRepository.save(updatedUser);
             } catch (EntityNotFoundException e) {
 

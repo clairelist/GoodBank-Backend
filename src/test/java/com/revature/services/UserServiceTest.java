@@ -20,7 +20,7 @@ class UserServiceTest {
     @Autowired
     private UserService sut;
     @Test
-    public void updatePassword() {
+    void updatePassword() {
         User user = new User();
         user.setId(1);
         user.setEmail("test@test.org");

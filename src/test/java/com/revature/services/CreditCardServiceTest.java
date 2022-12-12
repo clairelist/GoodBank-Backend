@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(classes= BankingApplication.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CreditCardServiceTest {
+class CreditCardServiceTest {
     @MockBean
     private CreditCardRepository mockRepository;
     @MockBean
@@ -82,7 +82,7 @@ public class CreditCardServiceTest {
         );
     }
     @Test
-    public void findByUserIdExists() {
+    void findByUserIdExists() {
         //copy/create stub user
         //mock userservice find by id
 
@@ -109,7 +109,7 @@ public class CreditCardServiceTest {
     }
 
     @Test
-    public void makeCreditCardPaymentWorks() {
+    void makeCreditCardPaymentWorks() {
         //make cctransactionDTO, aka what gets passed in
         stubCCTransactionDTO = new CreditCardTransactionDTO(
            10,
