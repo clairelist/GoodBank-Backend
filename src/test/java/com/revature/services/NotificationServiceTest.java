@@ -47,7 +47,6 @@ class NotificationServiceTest {
                 "Cleveland",
                 "Ohio",
                 44102,
-
                 UserType.CLIENT,
                 new Date(System.currentTimeMillis()),
                 "What is your favorite ANIME?",

@@ -1,11 +1,9 @@
 package com.revature.services;
 
 import com.revature.BankingApplication;
-import com.revature.dtos.TransactionDTO;
 import com.revature.models.*;
 import com.revature.repositories.AccountRepository;
 import com.revature.repositories.TransactionRepository;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +23,7 @@ class TransactionServiceTest {
     @MockBean
     private TransactionRepository mockRepository;
     @MockBean
-    private AccountRepository mockAccountRepository;
+    private AccountRepository mockAr;
     @Autowired
     private TransactionService sut;
 
@@ -43,10 +41,11 @@ class TransactionServiceTest {
         transList.add(new Transaction(3, 50.00, "Gas", TransactionType.EXPENSE, date, account, null));
         transList.add(new Transaction(4, 2500.00, "Payroll Direct Deposit", TransactionType.INCOME, date, account, null));
 
-        doReturn(transList).when(mockRepository).findAllByAccountOrderByCreationDateDesc(account.getId());
+        Mockito.when(mockAr.getById(1)).thenReturn(account);
+        doReturn(transList).when(mockRepository).findAllByAccountOrderByCreationDateDesc(account);
 
-        int expected = transList.size();
-        int actual = mockRepository.findAllByAccountOrderByCreationDateDesc(account.getId()).size();
+        Object expected = transList.size();
+        Object actual = sut.getTransactionCount(1);
 
         assertEquals(expected, actual);
     }
@@ -61,7 +60,7 @@ class TransactionServiceTest {
         List<Transaction> expected = new ArrayList<>();
         expected.add(new Transaction(1, 2500.00, "Payroll Direct Deposit", TransactionType.INCOME, date, account, null));
 
-        Mockito.when(mockAccountRepository.getById(1)).thenReturn(account);
+        Mockito.when(mockAr.getById(1)).thenReturn(account);
         Mockito.when(mockRepository.findAllByAccountOrderByCreationDateDesc(account)).thenReturn(expected);
 
         List<Transaction> actual = sut.getAllTransactions(1);
