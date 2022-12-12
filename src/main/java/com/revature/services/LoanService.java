@@ -52,7 +52,7 @@ public class LoanService {
     public LoanDetails createLoan(LoanDTO appliedLoan, int userId) {
         Loan newLoan = new Loan();
         User user = ur.getById(userId);
-        
+
         if (appliedLoan.getInitialAmount() < 0 || appliedLoan.getReason().equals("")){
             throw new AppliedLoanException();
         }
