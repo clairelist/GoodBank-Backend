@@ -70,9 +70,4 @@ public class AuthService {
         }
     }
 
-    public User update(UpdateRequest update) {
-        User user = new User(update);
-        userService.save(user);
-        return user;
-    }
 }
