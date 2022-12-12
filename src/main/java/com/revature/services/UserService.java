@@ -5,6 +5,7 @@ import com.revature.dtos.ResetRequest;
 import com.revature.dtos.UserDTO;
 import com.revature.dtos.UpdateRequest;
 import com.revature.exceptions.CheckRegisterFieldsException;
+import com.revature.exceptions.InvalidInputException;
 import com.revature.exceptions.InvalidLoginException;
 import com.revature.exceptions.PasswordUnderAmountException;
 import com.revature.models.Notification;
@@ -50,11 +51,15 @@ public class UserService {
 
     public User updatePassword(ResetRequest update) {
         Optional<User> userEmail;
+        //Used to check if a user exists
         User updatedPass;
-        if (update.getPassword().length() <= 3) {
+        //used to actually save the user and spit back out.
+        if ((update.getEmail().trim().equals("") || update.getPassword().trim().equals("") || update.getConfirmPassword().trim().equals(""))) {
+            throw new CheckRegisterFieldsException(); // checks for missing/empty fields
+        } else if (update.getPassword().length() <= 3 && update.getConfirmPassword().length() <= 3) { // creates min length requirement
             throw new PasswordUnderAmountException();
-        } else if ((update.getEmail().trim().equals("") || update.getPassword().trim().equals(""))) {
-            throw new CheckRegisterFieldsException();
+        } else if(!update.getPassword().equals(update.getConfirmPassword())) {
+            throw new InvalidInputException();
         } else {
             userEmail = findByEmail(update.getEmail());
             if (!userEmail.isPresent()) {
