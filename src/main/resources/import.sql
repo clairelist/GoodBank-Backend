@@ -1,5 +1,6 @@
---INSERT INTO users (id, email, password, first_name, last_name, address, state, city, zip, user_type, creation_date) VALUES (1,'testuser@gmail.com','pass', 'Bryan', 'Serfozo', '1234 Tampa Ave', 'Florida', 'Tampa', 57624, 'CLIENT', '2022-08-25T20:32:26.568Z');
-INSERT INTO users (id, email, password, first_name, last_name, address, state, city, zip, user_type, creation_date) VALUES (1,'test','pass', 'Bryan', 'Serfozo', '1234 Tampa Ave', 'Florida', 'Tampa', 57624, 'CLIENT', '2022-08-25T20:32:26.568Z');
+
+INSERT INTO users (id, email, password, first_name, last_name, address, state, city, zip, user_type, creation_date, security_question, security_answer) VALUES (1,'testuser@gmail.com','pass', 'Bryan', 'Serfozo', '1234 Tampa Ave', 'Florida', 'Tampa', 57624, 'CLIENT', '2022-08-25T20:32:26.568Z', 'What is your favorite collectible?', 'Sting');
+--INSERT INTO users (id, email, password, first_name, last_name, address, state, city, zip, user_type, creation_date) VALUES (1,'test','pass', 'Bryan', 'Serfozo', '1234 Tampa Ave', 'Florida', 'Tampa', 57624, 'CLIENT', '2022-08-25T20:32:26.568Z');
 INSERT INTO users (id, email, password, first_name, last_name, address, state, city, zip, user_type, creation_date) VALUES (2,'test@gmail.com','pass', 'C', 'W', '1234 A Ave', 'Florida', 'Tampa', 57624, 'CLIENT', '2022-08-25T20:32:26.568Z');
 INSERT INTO users (id, email, password, first_name, last_name, address, state, city, zip, user_type, creation_date) VALUES (3,'admin@gmail.com','pass', 'admin', 'admin', '1234 A Ave', 'Florida', 'Tampa', 57624, 'ADMIN', '2022-08-25T20:32:26.568Z');
 

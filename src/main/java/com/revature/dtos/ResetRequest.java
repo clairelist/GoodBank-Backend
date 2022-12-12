@@ -1,18 +1,18 @@
 package com.revature.dtos;
 
-public class ResetRequest { //TODO: ADD SECURITY ANSWER --> when making a request, check that passed in sec answer = sec answer
-                            //when clicking reset pass, should perform a GET request that gets the user's sec question
-                            //and then FINALLY when click 'confirm', the sec question is passed and if it matches, we allow
-                            //password reset.
+public class ResetRequest {
     private String email;
     private String password;
+    private String confirmPassword;
+
     private String securityAnswer;
 
     public ResetRequest(){}
 
-    public ResetRequest(String email, String password, String securityAnswer){
+    public ResetRequest(String email, String password, String confirmPassword, String securityAnswer){
         this.email = email;
         this.password = password;
+        this.confirmPassword = confirmPassword;
         this.securityAnswer = securityAnswer;
     }
 
@@ -38,5 +38,13 @@ public class ResetRequest { //TODO: ADD SECURITY ANSWER --> when making a reques
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 }

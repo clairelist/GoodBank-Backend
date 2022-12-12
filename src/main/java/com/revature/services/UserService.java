@@ -4,7 +4,10 @@ import com.revature.dtos.NotificationCreationRequest;
 import com.revature.dtos.ResetRequest;
 import com.revature.dtos.UserDTO;
 import com.revature.dtos.UpdateRequest;
+import com.revature.exceptions.CheckRegisterFieldsException;
+import com.revature.exceptions.InvalidInputException;
 import com.revature.exceptions.InvalidLoginException;
+import com.revature.exceptions.PasswordUnderAmountException;
 import com.revature.models.Notification;
 import com.revature.models.User;
 import com.revature.repositories.NotificationRepository;
@@ -66,26 +69,28 @@ public class UserService {
     public User save(User user) { return userRepository.save(user); }
 
 
-    public User updatePassword(ResetRequest update) throws EntityNotFoundException {
-
-        Optional<User> userByEmail;
-        //Used to check if a user exists, AND that the security answer matches database
+    public User updatePassword(ResetRequest update) {
+        Optional<User> userEmail;
+        //Used to check if a user exists
         User updatedPass;
         //used to actually save the user and spit back out.
-        userByEmail = userRepository.findByEmail(update.getEmail());
-        if (!userByEmail.isPresent()) {
-            updatedPass = null;
-        } else if (!userByEmail.get().getSecurityAnswer().equals(update.getSecurityAnswer()) ){
-            //ie, if passed in sec answer is NOT equal to the security answer existing,
-            updatedPass = null;
+        if ((update.getEmail().trim().equals("") || update.getPassword().trim().equals("") || update.getConfirmPassword().trim().equals("") || update.getSecurityAnswer().trim().equals(""))) {
+            throw new CheckRegisterFieldsException(); // checks for missing/empty fields
+        } else if (update.getPassword().length() <= 3 && update.getConfirmPassword().length() <= 3) { // creates min length requirement
+            throw new PasswordUnderAmountException();
+        } else if(!update.getPassword().equals(update.getConfirmPassword())) {
+            throw new InvalidInputException();
         } else {
-            try {
-                User updatedUser = userByEmail.get();
+            userEmail = findByEmail(update.getEmail());
+            if (!userEmail.isPresent()) {
+                updatedPass = null;
+            } else if (!userEmail.get().getSecurityAnswer().equals(update.getSecurityAnswer()) ){
+                updatedPass = null;
+            } else {
+                User updatedUser = userEmail.get();
+                updatedUser.setPassword(update.getPassword());
                 updatedUser.setPassword(this.passwordEncoder.encode(update.getPassword()));
                 updatedPass = userRepository.save(updatedUser);
-            } catch (EntityNotFoundException e) {
-
-                return null;
             }
         }
         return updatedPass;
