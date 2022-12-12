@@ -4,6 +4,9 @@ import com.revature.dtos.LoanDTO;
 import com.revature.dtos.LoanDetails;
 import com.revature.dtos.NotificationCreationRequest;
 import com.revature.dtos.UserDTO;
+import com.revature.exceptions.AppliedLoanException;
+import com.revature.exceptions.LoansNotFoundException;
+import com.revature.exceptions.UserNotAllowedException;
 import com.revature.models.*;
 import com.revature.repositories.LoanRepository;
 import com.revature.repositories.UserRepository;
@@ -51,15 +54,14 @@ public class LoanService {
         
         if (appliedLoan.getInitialAmount() < 0 || appliedLoan.getReason().equals("")){
             throw new AppliedLoanException();
-        } else {
-            newLoan.setInitialAmount(appliedLoan.getInitialAmount());
-            newLoan.setReason(appliedLoan.getReason());
-            newLoan.setCreationDate(Date.from(Instant.now()));
-            newLoan.setBalance(appliedLoan.getInitialAmount());
-            newLoan.setUser(user);
-            newLoan.setStatus(Status.PENDING);
-            lr.save(newLoan);
         }
+        newLoan.setInitialAmount(appliedLoan.getInitialAmount());
+        newLoan.setReason(appliedLoan.getReason());
+        newLoan.setCreationDate(Date.from(Instant.now()));
+        newLoan.setBalance(appliedLoan.getInitialAmount());
+        newLoan.setUser(user);
+        newLoan.setStatus(Status.PENDING);
+        Loan savedLoan = lr.save(newLoan);
 
         // TODO make sure to create corresponding transaction on account?
 
