@@ -54,7 +54,7 @@ public class UserService {
         //Used to check if a user exists
         User updatedPass;
         //used to actually save the user and spit back out.
-        if ((update.getEmail().trim().equals("") || update.getPassword().trim().equals("") || update.getConfirmPassword().trim().equals(""))) {
+        if ((update.getEmail().trim().equals("") || update.getPassword().trim().equals("") || update.getConfirmPassword().trim().equals("") || update.getSecurityAnswer().trim().equals(""))) {
             throw new CheckRegisterFieldsException(); // checks for missing/empty fields
         } else if (update.getPassword().length() <= 3 && update.getConfirmPassword().length() <= 3) { // creates min length requirement
             throw new PasswordUnderAmountException();
@@ -64,10 +64,12 @@ public class UserService {
             userEmail = findByEmail(update.getEmail());
             if (!userEmail.isPresent()) {
                 updatedPass = null;
+            } else if (!userEmail.get().getSecurityAnswer().equals(update.getSecurityAnswer()) ){
+                updatedPass = null;
             } else {
-                User userById = findById(userEmail.get().getId());
-                userEmail.get().setPassword(update.getPassword());
-                updatedPass = userRepository.save(userById);
+                User updatedUser = userEmail.get();
+                updatedUser.setPassword(update.getPassword());
+                updatedPass = userRepository.save(updatedUser);
             }
         }
         return updatedPass;

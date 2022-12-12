@@ -5,12 +5,23 @@ public class ResetRequest {
     private String password;
     private String confirmPassword;
 
+    private String securityAnswer;
+
     public ResetRequest(){}
 
-    public ResetRequest(String email, String password, String confirmPassword){
+    public ResetRequest(String email, String password, String confirmPassword, String securityAnswer){
         this.email = email;
         this.password = password;
         this.confirmPassword = confirmPassword;
+        this.securityAnswer = securityAnswer;
+    }
+
+    public String getSecurityAnswer() {
+        return securityAnswer;
+    }
+
+    public void setSecurityAnswer(String securityAnswer) {
+        this.securityAnswer = securityAnswer;
     }
 
     public String getEmail() {

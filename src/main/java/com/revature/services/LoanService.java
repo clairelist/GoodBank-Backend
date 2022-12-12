@@ -51,7 +51,7 @@ public class LoanService {
     public LoanDetails createLoan(LoanDTO appliedLoan, int userId) {
         Loan newLoan = new Loan();
         User user = ur.getById(userId);
-        
+
         if (appliedLoan.getInitialAmount() < 0 || appliedLoan.getReason().equals("")){
             throw new AppliedLoanException();
         }
@@ -68,12 +68,12 @@ public class LoanService {
         NotificationCreationRequest notif = new NotificationCreationRequest();
         notif.setUser(user);
         notif.setType(NotificationType.LOAN);
-        notif.setReferencesId(newLoan.getId());
+        notif.setReferencesId(savedLoan.getId());
         DateFormat formatter = new SimpleDateFormat("E, dd MMMM yyyy h:mm:ss aa");
-        String strDate = formatter.format(newLoan.getCreationDate());
+        String strDate = formatter.format(savedLoan.getCreationDate());
         DecimalFormat format2 = new DecimalFormat("#,###.##");
 
-        notif.setBody("A loan application for $" + format2.format(newLoan.getInitialAmount()) + " was successfully created on " + strDate + ". Keep an eye out for the result!");
+        notif.setBody("A loan application for $" + format2.format(savedLoan.getInitialAmount()) + " was successfully created on " + strDate + ". Keep an eye out for the result!");
         ns.create(notif);
 
 
