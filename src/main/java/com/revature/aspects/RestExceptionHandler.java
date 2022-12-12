@@ -98,4 +98,12 @@ public class RestExceptionHandler {
         String errorMessage = "Updating loan status is not permitted for this role.";
         return ResponseEntity.ok().body(errorMessage);
     }
+
+    @ExceptionHandler(NoAlgException.class)
+    public ResponseEntity<Object> handleNoAlgException(HttpServletRequest request, NoAlgException message) {
+
+        String errorMessage = "No algorithm could be made";
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
 }

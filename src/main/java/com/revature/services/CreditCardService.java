@@ -3,6 +3,8 @@ package com.revature.services;
 import com.revature.dtos.CreditCardTransactionDTO;
 import com.revature.dtos.NotificationCreationRequest;
 import com.revature.dtos.UserDTO;
+import com.revature.exceptions.AppliedLoanException;
+import com.revature.exceptions.NoAlgException;
 import com.revature.models.NotificationType;
 import com.revature.exceptions.NotLoggedInException;
 import com.revature.models.*;
@@ -112,7 +114,7 @@ public class CreditCardService {
         try {
             rand = SecureRandom.getInstanceStrong();
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            throw new NoAlgException();
         }
         UserDTO currentUser = tokenService.extractTokenDetails(userId);
         User user = userRepository.getById(currentUser.getId());
