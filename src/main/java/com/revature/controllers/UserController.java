@@ -9,6 +9,8 @@ import com.revature.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/user")
@@ -22,7 +24,7 @@ public class UserController {
 
     @PatchMapping("/reset-password")
     public ResponseEntity<User> resetPass(@RequestBody ResetRequest update) {
-        // User res; USED FOR TESTING ONLY!
+
         ResponseEntity<User> response = null;
         try {
             if (us.updatePassword(update) == null) {
@@ -30,14 +32,27 @@ public class UserController {
             } else {
                 response = ResponseEntity.ok().build();
             }
-
         } catch (Exception e) {
             response = ResponseEntity.badRequest().build();
         }
         return response;
-
     }
 
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> getSecurityQuestion(@RequestBody ResetRequest user_email){
+
+        Optional<User> found = us.findByEmail(user_email.getEmail());
+        String response = null;
+        ResponseEntity<String> entity = null;
+
+        if (found.isPresent()){
+            response = found.get().getSecurityQuestion();
+            entity = ResponseEntity.ok(response);
+        } else {
+            entity = ResponseEntity.badRequest().build();
+        }
+        return entity;
+}
 
     @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
     @PatchMapping("/profile")

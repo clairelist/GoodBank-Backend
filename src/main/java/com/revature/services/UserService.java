@@ -49,11 +49,14 @@ public class UserService {
     public User updatePassword(ResetRequest update) throws EntityNotFoundException {
 
         Optional<User> userByEmail;
-        //Used to check if a user exists
+        //Used to check if a user exists, AND that the security answer matches database
         User updatedPass;
         //used to actually save the user and spit back out.
         userByEmail = findByEmail(update.getEmail());
         if (!userByEmail.isPresent()) {
+            updatedPass = null;
+        } else if (!userByEmail.get().getSecurityAnswer().equals(update.getSecurityAnswer()) ){
+            //ie, if passed in sec answer is NOT equal to the security answer existing,
             updatedPass = null;
         } else {
             try {
@@ -63,7 +66,6 @@ public class UserService {
             } catch (EntityNotFoundException e) {
                 return null;
             }
-
         }
         return updatedPass;
     }
