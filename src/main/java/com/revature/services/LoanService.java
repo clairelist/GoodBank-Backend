@@ -54,15 +54,14 @@ public class LoanService {
         
         if (appliedLoan.getInitialAmount() < 0 || appliedLoan.getReason().equals("")){
             throw new AppliedLoanException();
-        } else {
-            newLoan.setInitialAmount(appliedLoan.getInitialAmount());
-            newLoan.setReason(appliedLoan.getReason());
-            newLoan.setCreationDate(Date.from(Instant.now()));
-            newLoan.setBalance(appliedLoan.getInitialAmount());
-            newLoan.setUser(user);
-            newLoan.setStatus(Status.PENDING);
-            lr.save(newLoan);
         }
+        newLoan.setInitialAmount(appliedLoan.getInitialAmount());
+        newLoan.setReason(appliedLoan.getReason());
+        newLoan.setCreationDate(Date.from(Instant.now()));
+        newLoan.setBalance(appliedLoan.getInitialAmount());
+        newLoan.setUser(user);
+        newLoan.setStatus(Status.PENDING);
+        Loan savedLoan = lr.save(newLoan);
 
         // TODO make sure to create corresponding transaction on account?
 
