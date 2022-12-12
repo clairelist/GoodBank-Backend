@@ -1,11 +1,13 @@
 package com.revature.controllers;
 
 import com.revature.annotations.Secured;
+import com.revature.dtos.CreditCardApplicationDTO;
 import com.revature.dtos.CreditCardTransactionDTO;
 import com.revature.models.CreditCard;
 import com.revature.models.CreditCardTransaction;
 import com.revature.services.CreditCardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -36,4 +38,10 @@ public class CreditCardController {
         return ResponseEntity.ok(ccTransactions);
     }
 
+    @Secured(rolesAllowed = {"ADMIN", "CLIENT"})
+    @PostMapping("/credit-card-application")
+    public ResponseEntity<CreditCard> appliedCreditCard(@RequestBody CreditCardApplicationDTO totalLimit, @RequestHeader("Authorization") String userId) {
+        CreditCard newCreditCard = creditCardService.createCCApplication(userId, totalLimit.getInitialAmount());
+        return new ResponseEntity<>(newCreditCard, HttpStatus.CREATED);
+    }
 }

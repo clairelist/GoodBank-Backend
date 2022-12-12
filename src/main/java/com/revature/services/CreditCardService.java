@@ -1,15 +1,26 @@
 package com.revature.services;
 
 import com.revature.dtos.CreditCardTransactionDTO;
+import com.revature.dtos.NotificationCreationRequest;
+import com.revature.dtos.UserDTO;
+import com.revature.exceptions.AppliedLoanException;
+import com.revature.exceptions.NoAlgException;
+import com.revature.models.NotificationType;
 import com.revature.exceptions.NotLoggedInException;
 import com.revature.models.*;
 import com.revature.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class CreditCardService {
@@ -20,6 +31,9 @@ public class CreditCardService {
     private TransactionRepository transactionRepository;
     private CreditCardTransactionRepository creditCardTransactionRepository;
     private UserRepository userRepository;
+    private NotificationService ns;
+    private TokenService tokenService;
+    private Random rand;
 
     @Autowired
     public CreditCardService(
@@ -28,13 +42,17 @@ public class CreditCardService {
             AccountRepository accountRepository,
             TransactionRepository transactionRepository,
             CreditCardTransactionRepository creditCardTransactionRepository,
-            UserRepository userRepository) {
+            UserRepository userRepository,
+            TokenService tokenService,
+            NotificationService ns) {
         this.userService = userService;
         this.creditCardRepository = creditCardRepository;
         this.accountRepository = accountRepository;
         this.transactionRepository = transactionRepository;
         this.creditCardTransactionRepository = creditCardTransactionRepository;
         this.userRepository = userRepository;
+        this.tokenService = tokenService;
+        this.ns = ns;
     }
 
     public List<CreditCard> findByUserId(int id) {
@@ -78,7 +96,7 @@ public class CreditCardService {
         //toAccountId not required
         transactionRepository.save(transaction);
 
-        //gerenerate payment to cctransaction and save/persist
+        //generate payment to cctransaction and save/persist
         CreditCardTransaction creditCardTransaction = new CreditCardTransaction(creditCardTransactionDTO);
         creditCardTransaction.setDescription("Payment from Account " + account.getName());
         creditCardTransaction.setType(CreditCardTransactionType.PAYMENT);
@@ -89,5 +107,34 @@ public class CreditCardService {
 
         return creditCardTransactionRepository.findAllByCreditCardOrderByCreationDateDesc(creditCard);
 
+    }
+
+    public CreditCard createCCApplication(String userId, double totalLimit) {
+        CreditCard newCC = new CreditCard();
+        try {
+            rand = SecureRandom.getInstanceStrong();
+        } catch (NoSuchAlgorithmException e) {
+            throw new NoAlgException();
+        }
+        UserDTO currentUser = tokenService.extractTokenDetails(userId);
+        User user = userRepository.getById(currentUser.getId());
+        newCC.setTotalLimit(totalLimit);
+        newCC.setUser(user);
+        newCC.setAvailableBalance(totalLimit);
+        newCC.setCardNumber((long) (rand.nextDouble() * 1000000000000000L));
+        newCC.setCcv(rand.nextInt((9999 - 100) + 1) + 10);
+        newCC.setStatus(Status.PENDING);
+        Instant date = Instant.now();
+        Instant expiration = date.plus(740, ChronoUnit.DAYS);
+        newCC.setExpirationDate(Date.from(expiration));
+        creditCardRepository.save(newCC);
+
+        NotificationCreationRequest notif = new NotificationCreationRequest();
+        notif.setUser(user);
+        notif.setType(NotificationType.INFORMATION);
+        notif.setBody("Thanks for applying for a credit card with us! We've got some Good™ news, you're credit card application is being processed!");
+        ns.create(notif);
+
+        return newCC;
     }
 }
