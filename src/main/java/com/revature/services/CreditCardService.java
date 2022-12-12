@@ -58,7 +58,7 @@ public class CreditCardService {
         return creditCardRepository.findByUser(user);
     }
     //set description in service
-    public List<CreditCardTransaction> makeCreditCardPayment(int userId, CreditCardTransactionDTO creditCardTransactionDTO) {
+    public Double makeCreditCardPayment(int userId, CreditCardTransactionDTO creditCardTransactionDTO) {
         CreditCard creditCard = creditCardRepository.getById(creditCardTransactionDTO.getCreditCardId());
         Account account = accountRepository.getById(creditCardTransactionDTO.getAccountId());
         User user = userRepository.getById(userId);
@@ -102,7 +102,7 @@ public class CreditCardService {
         creditCardTransaction.setAccount(account);
         creditCardTransactionRepository.save(creditCardTransaction);
 
-        return creditCardTransactionRepository.findAllByCreditCardOrderByCreationDateDesc(creditCard);
+        return account.getBalance();
 
     }
 
