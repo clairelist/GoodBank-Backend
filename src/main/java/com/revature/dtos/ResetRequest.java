@@ -13,7 +13,6 @@ public class ResetRequest {
         this.email = email;
         this.password = password;
         this.confirmPassword = confirmPassword;
-        this.securityAnswer = securityAnswer;
     }
 
     public String getSecurityAnswer() {

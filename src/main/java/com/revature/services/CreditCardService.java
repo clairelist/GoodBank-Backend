@@ -1,5 +1,6 @@
 package com.revature.services;
 
+import com.revature.dtos.CreditCardDTO;
 import com.revature.dtos.CreditCardTransactionDTO;
 import com.revature.dtos.NotificationCreationRequest;
 import com.revature.dtos.UserDTO;
@@ -136,5 +137,35 @@ public class CreditCardService {
         ns.create(notif);
 
         return newCC;
+    }
+
+    public List<CreditCardTransaction> getTransactionsByCreditCardId(int creditCardId, String userId) {
+        UserDTO currentUser = tokenService.extractTokenDetails(userId);
+        User user = userRepository.getById(currentUser.getId());
+        CreditCard creditCard = creditCardRepository.getById(creditCardId);
+        if(!creditCard.getUser().equals(user)) {
+            throw new AuthorizationException();
+        }
+        return creditCardTransactionRepository.findAllByCreditCardOrderByCreationDateDesc(creditCard);
+    }
+
+    public List<CreditCard> getPendingCreditCards(String userId) {
+        UserDTO currentUser = tokenService.extractTokenDetails(userId);
+        User user = userRepository.getById(currentUser.getId());
+        if(!user.getUserType().equals(UserType.ADMIN)) {
+            throw new AuthorizationException();
+        }
+        return creditCardRepository.findByStatus(Status.PENDING);
+    }
+
+    public CreditCard updateCreditCardStatus(String userId, CreditCardDTO creditCard) {
+        UserDTO currentUser = tokenService.extractTokenDetails(userId);
+        User user = userRepository.getById(currentUser.getId());
+        if(!user.getUserType().equals(UserType.ADMIN)) {
+            throw new AuthorizationException();
+        }
+        CreditCard updatedCreditCard = creditCardRepository.getById(creditCard.getId());
+        updatedCreditCard.setStatus(creditCard.getStatus());
+        return creditCardRepository.save(updatedCreditCard);
     }
 }
