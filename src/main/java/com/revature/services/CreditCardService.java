@@ -166,6 +166,10 @@ public class CreditCardService {
         }
         CreditCard updatedCreditCard = creditCardRepository.getById(creditCard.getId());
         updatedCreditCard.setStatus(creditCard.getStatus());
+        if (creditCard.getStatus().equals(Status.DENIED)) {
+            creditCardRepository.delete(updatedCreditCard);
+            return null;
+        }
         return creditCardRepository.save(updatedCreditCard);
     }
 }
