@@ -12,6 +12,8 @@ import com.revature.models.NotificationType;
 import com.revature.models.User;
 import com.revature.models.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -23,12 +25,14 @@ public class AuthService {
 
     private final UserService userService;
     private final NotificationService notificationService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public AuthService(UserService userService, NotificationService notificationService) {
 
         this.userService = userService;
         this.notificationService = notificationService;
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     public UserDTO loginCreds(String email, String password) {
@@ -48,6 +52,7 @@ public class AuthService {
             throw new CheckRegisterFieldsException();
         } else {
             User user = new User(register);
+            user.setPassword(this.passwordEncoder.encode(register.getPassword().trim()));
             user.setUserType(UserType.CLIENT);
             user.setCreationDate(Date.from(Instant.now()));
             userService.save(user);
