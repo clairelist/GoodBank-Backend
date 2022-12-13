@@ -84,7 +84,6 @@ public class AuthService {
     public UserDTO tokenLogin(String token) {
         UserDTO currentUser = tokenService.extractTokenDetails(token);
         User user = userRepository.getById(currentUser.getId());
-
         return new UserDTO(user);
     }
 }

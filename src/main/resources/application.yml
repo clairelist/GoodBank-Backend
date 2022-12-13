@@ -12,8 +12,6 @@ management:
 server:
   error:
     include-stacktrace: never
-jwt:
-  secret: jn4398gun49853gnm43958gn43958gnm943ui5mgvmkjgnn45tn84n325g80425
 
 security:
   basic:
