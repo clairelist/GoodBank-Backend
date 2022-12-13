@@ -11,6 +11,7 @@ import com.revature.exceptions.PasswordUnderAmountException;
 import com.revature.models.NotificationType;
 import com.revature.models.User;
 import com.revature.models.UserType;
+import com.revature.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,13 +26,18 @@ public class AuthService {
 
     private final UserService userService;
     private final NotificationService notificationService;
+
+    private final UserRepository userRepository;
+    private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AuthService(UserService userService, NotificationService notificationService) {
+    public AuthService(UserService userService, UserRepository userRepository, NotificationService notificationService, TokenService tokenService) {
 
         this.userService = userService;
+        this.userRepository = userRepository;
         this.notificationService = notificationService;
+        this.tokenService = tokenService;
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
@@ -75,4 +81,10 @@ public class AuthService {
         }
     }
 
+    public UserDTO tokenLogin(String token) {
+        UserDTO currentUser = tokenService.extractTokenDetails(token);
+        User user = userRepository.getById(currentUser.getId());
+
+        return new UserDTO(user);
+    }
 }
