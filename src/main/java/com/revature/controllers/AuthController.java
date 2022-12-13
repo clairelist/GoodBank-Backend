@@ -39,6 +39,12 @@ public class AuthController {
         return new ResponseEntity<>(userDetails, headers, HttpStatus.OK);
     }
 
+    @PostMapping("/token-login")
+    public ResponseEntity<UserDTO> tokenLogin(@RequestHeader("Authorization") String token) {
+        UserDTO user = authService.tokenLogin(token);
+        return ResponseEntity.ok(user);
+    }
+
     @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpSession session) {

@@ -103,7 +103,7 @@ public class CreditCardService {
         creditCardTransaction.setAccount(account);
         creditCardTransactionRepository.save(creditCardTransaction);
 
-        return account.getBalance();
+        return creditCard.getAvailableBalance();
 
     }
 
