@@ -4,8 +4,10 @@ import com.revature.annotations.Secured;
 import com.revature.dtos.ResetRequest;
 import com.revature.dtos.UpdateRequest;
 import com.revature.dtos.UserDTO;
+import com.revature.exceptions.InvalidUserException;
 import com.revature.models.User;
 import com.revature.services.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,17 +27,16 @@ public class UserController {
     @PatchMapping("/reset-password")
     public ResponseEntity<User> resetPass(@RequestBody ResetRequest update) {
 
-        ResponseEntity<User> response = null;
+        User user = us.updatePassword(update);
         try {
-            if (us.updatePassword(update) == null) {
-                response = ResponseEntity.badRequest().build();
+            if (user == null) {
+                return ResponseEntity.badRequest().build();
             } else {
-                response = ResponseEntity.ok().build();
+                return ResponseEntity.ok(user);
             }
         } catch (Exception e) {
-            response = ResponseEntity.badRequest().build();
+            throw new InvalidUserException();
         }
-        return response;
     }
 
     @PostMapping("/reset-password")

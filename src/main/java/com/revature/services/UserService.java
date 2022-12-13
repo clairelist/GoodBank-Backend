@@ -42,24 +42,24 @@ public class UserService {
         //email below will return all lowercase even if added as caps
         Optional<User> fullUser = userRepository.findByEmail(email);
         if (fullUser.isPresent()) {
-            if (!this.passwordEncoder.matches(password, fullUser.get().getPassword()))
+            if (!this.passwordEncoder.matches(password, fullUser.get().getPassword())){
                 throw new InvalidLoginException();
+            }
+            return new UserDTO(
+                    fullUser.get().getId(),
+                    fullUser.get().getEmail(),
+                    fullUser.get().getFirstName(),
+                    fullUser.get().getLastName(),
+                    fullUser.get().getAddress(),
+                    fullUser.get().getState(),
+                    fullUser.get().getCity(),
+                    fullUser.get().getZip(),
+                    fullUser.get().getUserType()
+            );
         }
         else {
             throw new InvalidLoginException();
         }
-
-        return new UserDTO(
-                fullUser.get().getId(),
-                fullUser.get().getEmail(),
-                fullUser.get().getFirstName(),
-                fullUser.get().getLastName(),
-                fullUser.get().getAddress(),
-                fullUser.get().getState(),
-                fullUser.get().getCity(),
-                fullUser.get().getZip(),
-                fullUser.get().getUserType()
-        );
     }
 
     public Optional<User> findByEmail(String email) {
@@ -70,30 +70,32 @@ public class UserService {
 
 
     public User updatePassword(ResetRequest update) {
-        Optional<User> userEmail;
+
         //Used to check if a user exists
-        User updatedPass;
+        Optional<User> user = userRepository.findByEmail(update.getEmail());
+
         //used to actually save the user and spit back out.
-        if ((update.getEmail().trim().equals("") || update.getPassword().trim().equals("") || update.getConfirmPassword().trim().equals("") || update.getSecurityAnswer().trim().equals(""))) {
+        if ((update.getEmail().trim().equals("")
+                || update.getPassword().trim().equals("")
+                || update.getConfirmPassword().trim().equals(""))) {
+//            || update.getSecurityAnswer().trim().equals("")
             throw new CheckRegisterFieldsException(); // checks for missing/empty fields
         } else if (update.getPassword().length() <= 3 && update.getConfirmPassword().length() <= 3) { // creates min length requirement
             throw new PasswordUnderAmountException();
         } else if(!update.getPassword().equals(update.getConfirmPassword())) {
             throw new InvalidInputException();
         } else {
-            userEmail = findByEmail(update.getEmail());
-            if (!userEmail.isPresent()) {
-                updatedPass = null;
-            } else if (!userEmail.get().getSecurityAnswer().equals(update.getSecurityAnswer()) ){
-                updatedPass = null;
+
+            if (!user.isPresent()) {
+                return null;
+//            } else if (!userEmail.get().getSecurityAnswer().equals(update.getSecurityAnswer()) ){
+//                updatedPass = null;
             } else {
-                User updatedUser = userEmail.get();
-                updatedUser.setPassword(update.getPassword());
-                updatedUser.setPassword(this.passwordEncoder.encode(update.getPassword()));
-                updatedPass = userRepository.save(updatedUser);
+                User currentUser = user.get();
+                currentUser.setPassword(this.passwordEncoder.encode(update.getPassword()).trim());
+                return userRepository.save(currentUser);
             }
         }
-        return updatedPass;
     }
 
     public UserDTO updateProfile(UpdateRequest updateRequest) throws EntityNotFoundException {
