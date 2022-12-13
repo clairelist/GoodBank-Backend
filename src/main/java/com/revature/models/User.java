@@ -60,9 +60,6 @@ public class User {
         this.zip = update.getZip();
     }
 
-    public User(int i, String s, String pass, String lesly, String gonzalez, String s1, String cleveland, String ohio, int i1, UserType client, Date date) {
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

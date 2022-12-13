@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(classes= BankingApplication.class)
 @AutoConfigureMockMvc
-public class TokenServiceTest {
+class TokenServiceTest {
 
     @Autowired
     private MockMvc mvc;
@@ -25,7 +25,7 @@ public class TokenServiceTest {
     private TokenService ts;
 
     @Test
-    public void shouldGenerateAuthToken() {
+    void shouldGenerateAuthToken() {
         User stubUser = new User(
                 1,
                 "lilmissgogetta@revature.com",
@@ -48,7 +48,7 @@ public class TokenServiceTest {
     }
 
     @Test
-    public void shouldExtractAuthToken() {
+    void shouldExtractAuthToken() {
         User stubUser = new User(
                 1,
                 "lilmissgogetta@revature.com",
