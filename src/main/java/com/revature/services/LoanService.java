@@ -12,6 +12,7 @@ import com.revature.models.*;
 import com.revature.repositories.LoanRepository;
 import com.revature.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
@@ -39,24 +40,30 @@ public class LoanService {
     private LoanRepository lr;
     private TokenService ts;
 
+    private final PasswordEncoder pe;
+
     private final NotificationService ns;
     @Autowired
-    public LoanService(UserRepository ur, UserService us, LoanRepository lr, TokenService ts, NotificationService ns) {
+    public LoanService(UserRepository ur, UserService us, LoanRepository lr, TokenService ts, NotificationService ns, PasswordEncoder pe) {
         this.ur = ur;
         this.us = us;
         this.lr = lr;
         this.ts = ts;
         this.ns = ns;
+        this.pe = pe;
     }
 
     public LoanDetails createLoan(LoanDTO appliedLoan, int userId) {
         Loan newLoan = new Loan();
         User user = ur.getById(userId);
+        System.out.println(appliedLoan.getPassword());
+        System.out.println(user.getPassword());
 
         if (appliedLoan.getInitialAmount() < 0 || appliedLoan.getReason().equals("")){
             throw new AppliedLoanException();
         }
-        else if(!Objects.equals(appliedLoan.getPassword(), user.getPassword())){
+            else if(!this.pe.matches(appliedLoan.getPassword(), user.getPassword())){
+            System.out.println("LoanDTO password: " + appliedLoan.getPassword() + "\n" + "User password in DB: " + user.getPassword());
             throw new AppliedLoanPasswordException();
         }
         newLoan.setInitialAmount(appliedLoan.getInitialAmount());
