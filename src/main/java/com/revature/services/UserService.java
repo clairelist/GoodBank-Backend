@@ -70,15 +70,10 @@ public class UserService {
 
 
     public User updatePassword(ResetRequest update) {
-
-        //Used to check if a user exists
         Optional<User> user = userRepository.findByEmail(update.getEmail());
-
-        //used to actually save the user and spit back out.
         if ((update.getEmail().trim().equals("")
                 || update.getPassword().trim().equals("")
                 || update.getConfirmPassword().trim().equals(""))) {
-//            || update.getSecurityAnswer().trim().equals("")
             throw new CheckRegisterFieldsException(); // checks for missing/empty fields
         } else if (update.getPassword().length() <= 3 && update.getConfirmPassword().length() <= 3) { // creates min length requirement
             throw new PasswordUnderAmountException();
@@ -88,8 +83,6 @@ public class UserService {
 
             if (!user.isPresent()) {
                 return null;
-//            } else if (!userEmail.get().getSecurityAnswer().equals(update.getSecurityAnswer()) ){
-//                updatedPass = null;
             } else {
                 User currentUser = user.get();
                 currentUser.setPassword(this.passwordEncoder.encode(update.getPassword()).trim());
