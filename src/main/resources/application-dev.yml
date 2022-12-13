@@ -13,3 +13,5 @@ spring:
     password:
   h2:
     console.enabled: true
+  jwt:
+    secret: jn4398gun49853gnm43958gn43958gnm943ui5mgvmkjgnn45tn84n325g80425
