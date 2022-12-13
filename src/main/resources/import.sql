@@ -4,9 +4,9 @@ INSERT INTO users (id, email, password, first_name, last_name, address, state, c
 INSERT INTO users (id, email, password, first_name, last_name, address, state, city, zip, user_type, creation_date) VALUES (2,'test@gmail.com','$2a$10$LloAy5fEhZquxLyE9Zi/7elC/xbjmgPwJ.Hp5asPeaghNLc8q3rnq', 'C', 'W', '1234 A Ave', 'Florida', 'Tampa', 57624, 'CLIENT', '2022-08-25T20:32:26.568Z');
 INSERT INTO users (id, email, password, first_name, last_name, address, state, city, zip, user_type, creation_date) VALUES (3,'admin@gmail.com','$2a$10$LloAy5fEhZquxLyE9Zi/7elC/xbjmgPwJ.Hp5asPeaghNLc8q3rnq', 'admin', 'admin', '1234 A Ave', 'Florida', 'Tampa', 57624, 'ADMIN', '2022-08-25T20:32:26.568Z');
 
-INSERT INTO accounts (id, name, balance, creation_date, user_id, account_type) VALUES (1,'Primary Checking',0,'2022-08-25T20:32:26.568Z',1,'CHECKING');
-INSERT INTO accounts (id, name, balance, creation_date, user_id, account_type) VALUES (2,'Primary Savings',0,'2022-08-25T20:32:26.568Z',2,'SAVINGS');
-INSERT INTO accounts (id, name, balance, creation_date, user_id, account_type) VALUES (3,'Primary Savings',0,'2022-08-25T20:32:26.568Z',3,'SAVINGS');
+INSERT INTO accounts (id, name, balance, creation_date, user_id, account_type) VALUES (1,'Primary Checking',11596.12,'2022-08-25T20:32:26.568Z',1,'CHECKING');
+INSERT INTO accounts (id, name, balance, creation_date, user_id, account_type) VALUES (2,'Primary Savings',10001.00,'2022-08-25T20:32:26.568Z',2,'SAVINGS');
+INSERT INTO accounts (id, name, balance, creation_date, user_id, account_type) VALUES (3,'Primary Savings',5000.00,'2022-08-25T20:32:26.568Z',3,'SAVINGS');
 
 INSERT INTO transactions (id, amount, creation_date, description, type, account_id) VALUES (1,11596.12,'2022-12-01T20:32:26.568Z','Initial Deposit','INCOME',1);
 INSERT INTO transactions (id, amount, creation_date, description, type, account_id) VALUES (2,10001.00,'2022-08-25T20:32:26.568Z','Initial Deposit','INCOME',2);
