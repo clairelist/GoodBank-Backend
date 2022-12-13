@@ -13,6 +13,8 @@ import com.revature.models.User;
 import com.revature.repositories.NotificationRepository;
 import com.revature.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -23,11 +25,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final NotificationRepository notificationRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserService(UserRepository userRepository, NotificationRepository notificationRepository) {
         this.userRepository = userRepository;
         this.notificationRepository = notificationRepository;
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     public User findById(int id) {
@@ -36,10 +40,26 @@ public class UserService {
 
     public UserDTO loginCreds(String email, String password) {
         //email below will return all lowercase even if added as caps
-        if(userRepository.findByEmailAndPassword(email.toLowerCase(), password) == null) {
+        Optional<User> fullUser = userRepository.findByEmail(email);
+        if (fullUser.isPresent()) {
+            if (!this.passwordEncoder.matches(password, fullUser.get().getPassword()))
+                throw new InvalidLoginException();
+        }
+        else {
             throw new InvalidLoginException();
         }
-        return userRepository.findByEmailAndPassword(email.toLowerCase(), password);
+
+        return new UserDTO(
+                fullUser.get().getId(),
+                fullUser.get().getEmail(),
+                fullUser.get().getFirstName(),
+                fullUser.get().getLastName(),
+                fullUser.get().getAddress(),
+                fullUser.get().getState(),
+                fullUser.get().getCity(),
+                fullUser.get().getZip(),
+                fullUser.get().getUserType()
+        );
     }
 
     public Optional<User> findByEmail(String email) {
@@ -69,6 +89,7 @@ public class UserService {
             } else {
                 User updatedUser = userEmail.get();
                 updatedUser.setPassword(update.getPassword());
+                updatedUser.setPassword(this.passwordEncoder.encode(update.getPassword()));
                 updatedPass = userRepository.save(updatedUser);
             }
         }
