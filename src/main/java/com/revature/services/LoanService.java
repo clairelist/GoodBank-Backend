@@ -19,7 +19,6 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -56,14 +55,11 @@ public class LoanService {
     public LoanDetails createLoan(LoanDTO appliedLoan, int userId) {
         Loan newLoan = new Loan();
         User user = ur.getById(userId);
-        System.out.println(appliedLoan.getPassword());
-        System.out.println(user.getPassword());
 
         if (appliedLoan.getInitialAmount() < 0 || appliedLoan.getReason().equals("")){
             throw new AppliedLoanException();
         }
             else if(!this.pe.matches(appliedLoan.getPassword(), user.getPassword())){
-            System.out.println("LoanDTO password: " + appliedLoan.getPassword() + "\n" + "User password in DB: " + user.getPassword());
             throw new AppliedLoanPasswordException();
         }
         newLoan.setInitialAmount(appliedLoan.getInitialAmount());
