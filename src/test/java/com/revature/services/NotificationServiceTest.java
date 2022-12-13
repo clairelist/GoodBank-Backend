@@ -48,7 +48,9 @@ class NotificationServiceTest {
                 "Ohio",
                 44102,
                 UserType.CLIENT,
-                new Date(System.currentTimeMillis())
+                new Date(System.currentTimeMillis()),
+                "What is your favorite ANIME?",
+                "Something cool"
         );
 
         // create stub request to base notification creation off of

@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
     @MockBean
     private NotificationService monkNs;
 
-    @Autowired
+    @MockBean
     private UserService us;
 
     @Autowired
@@ -45,6 +45,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
         UserDTO expected = us.loginCreds(creds.getEmail(), creds.getPassword());
 
         Mockito.when(mockRepository.findByEmailAndPassword(creds.getEmail(), creds.getPassword())).thenReturn(expected);
+        Mockito.when(us.loginCreds(creds.getEmail(), creds.getPassword())).thenReturn(expected);
         //Act
         UserDTO actual = sut.loginCreds(creds.getEmail(), creds.getPassword());
         //Assert
@@ -55,18 +56,20 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
     void registerUserThrowsError(){
         RegisterRequest register = new RegisterRequest();
         register.setEmail("test@gmail.com");
-        register.setPassword("test");
+        register.setPassword("tests");
         register.setFirstName("reg");
         register.setLastName("reg");
         register.setAddress("123 A St");
         register.setState("NC");
         register.setCity("WS");
         register.setZip(30547);
+        register.setSecurityQuestion("What flavor of GUNDAM do you fly?");
+        register.setSecurityAnswer("Akai the colour of the sky");
         User registered = new User(register);
         mockRepository.save(registered);
         User newUser = new User(register);
 
-        Mockito.when(mockRepository.findByEmail(registered.getEmail())).thenReturn(Optional.of(newUser));
+        Mockito.when(us.findByEmail(newUser.getEmail())).thenReturn(Optional.of(newUser));
 
         assertThrows(DuplicateEmailFoundException.class, () -> sut.register(register));
     }
@@ -82,9 +85,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
         registerreq.setState("NC");
         registerreq.setCity("WS");
         registerreq.setZip(30547);
+        registerreq.setSecurityQuestion("What flavor of GUNDAM do you fly?");
+        registerreq.setSecurityAnswer("Akai the colour of the sky");
 
 
-        Mockito.when(mockRepository.findByEmail(registerreq.getEmail())).thenReturn(Optional.empty());
+        Mockito.when(us.findByEmail(registerreq.getEmail())).thenReturn(Optional.empty());
         Mockito.when(monkNs.create(Mockito.any(NotificationCreationRequest.class))).thenReturn(null);
 
         User actual = sut.register(registerreq);

@@ -4,11 +4,17 @@ import com.revature.dtos.NotificationCreationRequest;
 import com.revature.dtos.RegisterRequest;
 import com.revature.dtos.UserDTO;
 import com.revature.dtos.UpdateRequest;
+import com.revature.exceptions.CheckRegisterFieldsException;
 import com.revature.exceptions.DuplicateEmailFoundException;
+import com.revature.exceptions.InvalidLoginException;
+import com.revature.exceptions.PasswordUnderAmountException;
 import com.revature.models.NotificationType;
 import com.revature.models.User;
 import com.revature.models.UserType;
+import com.revature.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -21,22 +27,38 @@ public class AuthService {
     private final UserService userService;
     private final NotificationService notificationService;
 
+    private final UserRepository userRepository;
+    private final TokenService tokenService;
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    public AuthService(UserService userService, NotificationService notificationService) {
+    public AuthService(UserService userService, UserRepository userRepository, NotificationService notificationService, TokenService tokenService) {
 
         this.userService = userService;
+        this.userRepository = userRepository;
         this.notificationService = notificationService;
+        this.tokenService = tokenService;
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     public UserDTO loginCreds(String email, String password) {
+        if (email.trim().equals("") || password.trim().equals("")) {
+            throw new InvalidLoginException();
+        }
         return userService.loginCreds(email, password);
     }
 
     public User register(RegisterRequest register) {
         if(userService.findByEmail(register.getEmail().toLowerCase()).isPresent()){
-            throw new DuplicateEmailFoundException("Email already taken");
+            throw new DuplicateEmailFoundException();
+        } else if (register.getPassword().length() <= 3) {
+            throw new PasswordUnderAmountException();
+        } else if ((register.getEmail().trim().equals("") || register.getPassword().trim().equals("") ||
+                register.getFirstName().trim().equals("") || register.getLastName().trim().equals(""))) {
+            throw new CheckRegisterFieldsException();
         } else {
             User user = new User(register);
+            user.setPassword(this.passwordEncoder.encode(register.getPassword().trim()));
             user.setUserType(UserType.CLIENT);
             user.setCreationDate(Date.from(Instant.now()));
             userService.save(user);
@@ -59,9 +81,9 @@ public class AuthService {
         }
     }
 
-    public User update(UpdateRequest update) {
-        User user = new User(update);
-        userService.save(user);
-        return user;
+    public UserDTO tokenLogin(String token) {
+        UserDTO currentUser = tokenService.extractTokenDetails(token);
+        User user = userRepository.getById(currentUser.getId());
+        return new UserDTO(user);
     }
 }

@@ -1,5 +1,6 @@
 package com.revature.dtos;
 
+import com.revature.models.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,15 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreditCardTransactionDTO {
-
+public class CreditCardDTO {
     private Integer id;
-    private double amount;
-    private String description;
-    private Integer creditCardId;
-    private Integer accountId;
-
-
-
+    private Status status;
 }
-

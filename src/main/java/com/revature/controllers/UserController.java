@@ -1,12 +1,17 @@
 package com.revature.controllers;
 
+import com.revature.annotations.Secured;
 import com.revature.dtos.ResetRequest;
 import com.revature.dtos.UpdateRequest;
 import com.revature.dtos.UserDTO;
+import com.revature.exceptions.InvalidUserException;
 import com.revature.models.User;
 import com.revature.services.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 
 @RestController
@@ -21,23 +26,36 @@ public class UserController {
 
     @PatchMapping("/reset-password")
     public ResponseEntity<User> resetPass(@RequestBody ResetRequest update) {
-        // User res; USED FOR TESTING ONLY!
-        ResponseEntity<User> response = null;
+
+        User user = us.updatePassword(update);
         try {
-            if (us.updatePassword(update) == null) {
-                response = ResponseEntity.badRequest().build();
+            if (user == null) {
+                return ResponseEntity.badRequest().build();
             } else {
-                response = ResponseEntity.ok().build();
+                return ResponseEntity.ok(user);
             }
-
         } catch (Exception e) {
-            response = ResponseEntity.badRequest().build();
+            throw new InvalidUserException();
         }
-        return response;
-
     }
 
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> getSecurityQuestion(@RequestBody ResetRequest user_email){
 
+        Optional<User> found = us.findByEmail(user_email.getEmail());
+        String response = null;
+        ResponseEntity<String> entity = null;
+
+        if (found.isPresent()){
+            response = found.get().getSecurityQuestion();
+            entity = ResponseEntity.ok(response);
+        } else {
+            entity = ResponseEntity.badRequest().build();
+        }
+        return entity;
+}
+
+    @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
     @PatchMapping("/profile")
     public ResponseEntity<UserDTO> update(@RequestBody UpdateRequest updateRequest) {
         UserDTO updatedProfile = us.updateProfile(updateRequest);
