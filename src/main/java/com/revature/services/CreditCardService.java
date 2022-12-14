@@ -117,6 +117,9 @@ public class CreditCardService {
         if(totalLimit <= 0){
             throw new InvalidAmountException();
         }
+        if(String.valueOf(totalLimit).trim().equals("")) {
+            throw new InvalidInputException();
+        }
         UserDTO currentUser = tokenService.extractTokenDetails(userId);
         User user = userRepository.getById(currentUser.getId());
         newCC.setTotalLimit(totalLimit);
