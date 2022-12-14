@@ -10,7 +10,7 @@ INSERT INTO accounts (id, name, balance, creation_date, user_id, account_type) V
 
 INSERT INTO transactions (id, amount, creation_date, description, type, account_id) VALUES (1,11596.12,'2022-12-01T20:32:26.568Z','Initial Deposit','INCOME',1);
 INSERT INTO transactions (id, amount, creation_date, description, type, account_id) VALUES (2,10001.00,'2022-08-25T20:32:26.568Z','Initial Deposit','INCOME',2);
-INSERT INTO transactions (id, amount, creation_date, description, type, account_id) VALUES (3,5000.00,'2022-08-25T20:32:26.568Z','Initial Deposit','INCOME',3;
+INSERT INTO transactions (id, amount, creation_date, description, type, account_id) VALUES (3,5000.00,'2022-08-25T20:32:26.568Z','Initial Deposit','INCOME',3);
 INSERT INTO transactions (id, amount, creation_date, description, type, account_id) VALUES (4,2500.00,'2022-08-25T20:32:26.568Z','Payroll Direct Deposit','INCOME',1);
 INSERT INTO transactions (id, amount, creation_date, description, type, account_id) VALUES (5,2500.00,'2022-08-25T20:32:26.568Z','Payroll Direct Deposit','INCOME',1);
 INSERT INTO transactions (id, amount, creation_date, description, type, account_id) VALUES (6,42.00,'2022-01-01T20:32:26.568Z','Gas','EXPENSE',1);
