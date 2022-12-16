@@ -77,8 +77,11 @@ public class UserService {
             throw new CheckRegisterFieldsException(); // checks for missing/empty fields
         } else if (update.getPassword().length() <= 3 && update.getConfirmPassword().length() <= 3) { // creates min length requirement
             throw new PasswordUnderAmountException();
-        } else if(!update.getPassword().equals(update.getConfirmPassword())) {
+        } else if (!update.getPassword().equals(update.getConfirmPassword())) {
             throw new InvalidInputException();
+        } else if (!update.getSecurityAnswer().equalsIgnoreCase(user.get().getSecurityAnswer())){
+            //throw new InvalidInputException();
+            return null;
         } else {
 
             if (!user.isPresent()) {
