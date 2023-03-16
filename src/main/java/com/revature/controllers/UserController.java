@@ -26,6 +26,7 @@ public class UserController {
 
     @PatchMapping("/reset-password")
     public ResponseEntity<User> resetPass(@RequestBody ResetRequest update) {
+        //TODO: change me to a POST, set up mail server service!
 
         User user = us.updatePassword(update);
         try {
