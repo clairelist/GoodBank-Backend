@@ -72,6 +72,10 @@ public class UserService {
 
 
     public User updatePassword(ResetRequest update) {
+
+        //TODO:
+        //I NEED TO GET UNFUCKED! SEE REFACTOR NOTE IN RESETREQUEST DTO!!!!
+
         Optional<User> user = userRepository.findByEmail(update.getEmail());
         if ((update.getEmail().trim().equals("")
                 || update.getPassword().trim().equals("")

@@ -27,6 +27,7 @@ public class UserController {
 
     @PatchMapping("/reset-password")
     public ResponseEntity<User> resetPass(@RequestBody ResetRequest update) {
+        //I NEED TO REFACTOR RESETREQUEST DTO
         //TODO: I do not work this way anymore! I need to recieve the user_id, and the new password.
         //this user id is a hashed value from client application (client app gets from url param; comes from link sent to user)
         //decode the user id
@@ -69,8 +70,6 @@ public class UserController {
         ResponseEntity<String> entity = null;
 
         MailService mailer = new MailService();
-
-        //first, must unhash the id passed in!
 
         //then, check that the user exists
         //THEN, send email.
