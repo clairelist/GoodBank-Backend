@@ -27,11 +27,13 @@ public class UserService {
     private final NotificationRepository notificationRepository;
     private final PasswordEncoder passwordEncoder;
 
+
     @Autowired
     public UserService(UserRepository userRepository, NotificationRepository notificationRepository) {
         this.userRepository = userRepository;
         this.notificationRepository = notificationRepository;
         this.passwordEncoder = new BCryptPasswordEncoder();
+
     }
 
     public User findById(int id) {

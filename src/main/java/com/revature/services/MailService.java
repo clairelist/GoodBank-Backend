@@ -15,7 +15,7 @@ public class MailService {
     @Autowired
     public void sendMail(String recipient, CharSequence id){
         MailSender ms = null;
-        encoder = new BCryptPasswordEncoder();
+        encoder = new BCryptPasswordEncoder(); //PasswordEncoder is an abstract class, must be instantiated as BCryptPasswordEncoder, because java is of the devil.
         String sender = "donotreply@goodbank.com";
 
         String uid = encoder.encode(id);
