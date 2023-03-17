@@ -6,6 +6,7 @@ import com.revature.dtos.UpdateRequest;
 import com.revature.dtos.UserDTO;
 import com.revature.exceptions.InvalidUserException;
 import com.revature.models.User;
+import com.revature.services.MailService;
 import com.revature.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +27,11 @@ public class UserController {
 
     @PatchMapping("/reset-password")
     public ResponseEntity<User> resetPass(@RequestBody ResetRequest update) {
-        //TODO: change me to a POST, set up mail server service!
-        //REFACTOR THIS WHOLEEEEEE THING!
+        //TODO: I do not work this way anymore! I need to recieve the user_id, and the new password.
+        //this user id is a hashed value from client application (client app gets from url param; comes from link sent to user)
+        //decode the user id
+        //check that that user exists
+        //update password.
 
         User user = us.updatePassword(update);
         try {
@@ -56,6 +60,26 @@ public class UserController {
         }
         return entity;
 }
+
+    @PostMapping("/request-reset")
+    public ResponseEntity<String> requestPasswordReset(@RequestParam CharSequence id, @RequestBody String email){ //reset-request?id=xyz
+        //I call mail service, send email.
+        //Optional<User> found = us.findByEmail(user_email.getEmail());
+        String response = "You sucessfully submitted a request to reset your password. \n If an account exists for the email address you submitted, you will recieve an email with a link to reset your password shortly.";
+        ResponseEntity<String> entity = null;
+
+        MailService mailer = new MailService();
+
+        //first, must unhash the id passed in!
+
+        //then, check that the user exists
+        //THEN, send email.
+        mailer.sendMail(email, id);
+
+        entity = ResponseEntity.ok(response);
+        return entity;
+    }
+
 
     @Secured(rolesAllowed = { "ADMIN", "CLIENT" })
     @PatchMapping("/profile")
