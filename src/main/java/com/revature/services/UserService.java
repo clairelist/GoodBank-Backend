@@ -75,9 +75,17 @@ public class UserService {
 
         //TODO:
         //I NEED TO GET UNFUCKED! SEE REFACTOR NOTE IN RESETREQUEST DTO!!!!
+        //TODO: DECODE USER ID!
+
+
 
         Optional<User> user = userRepository.findByEmail(update.getEmail());
-        if ((update.getEmail().trim().equals("")
+        boolean decoded = passwordEncoder.matches(update.getUid(), user.get().getId().toString());
+        //if TRUE, we have decoded the userid sucessfully. Proceed!
+
+        if (!decoded){
+            return null;
+        } else if ((update.getEmail().trim().equals("")
                 || update.getPassword().trim().equals("")
                 || update.getConfirmPassword().trim().equals(""))) {
             throw new CheckRegisterFieldsException(); // checks for missing/empty fields
