@@ -1,11 +1,14 @@
 package com.revature.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.mail.MailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder; //below passwordEncoder is ABSTRACT, need THIS to instantiate
 import org.springframework.security.crypto.password.PasswordEncoder;
+import java.lang.String;
 
 @Service
 public class MailService {
@@ -13,14 +16,16 @@ public class MailService {
     private PasswordEncoder encoder;
 
     @Autowired
+    public MailService(){} //DO NOT FORGET YOU NEED A CONSTRUCTOR, OR SPRING WILL BITCH AT YOU!
+
     public void sendMail(String recipient, CharSequence id){
-        MailSender ms = null;
+        MailSender ms = new JavaMailSenderImpl();
         encoder = new BCryptPasswordEncoder(); //PasswordEncoder is an abstract class, must be instantiated as BCryptPasswordEncoder, because java is of the devil.
         String sender = "donotreply@goodbank.com";
 
         String uid = encoder.encode(id);
 
-        String body = "You recently requested a password reset. Please click on this link (or copy and paste into your web browser) to reset your password. \n https://url-to-client-app/" + uid;
+        String body = "You recently requested a password reset. Please click on this link (or copy and paste into your web browser) to reset your password. https://url-to-client-app/" + uid;
 
         SimpleMailMessage simp = new SimpleMailMessage();
         simp.setTo(recipient);
