@@ -1,6 +1,13 @@
 package com.revature.dtos;
 
 public class ResetRequest {
+
+    //TODO:
+    //I NEED TO GET UNFUCKED!
+    //ADD A USER ID, THAT IS THEN USED TO CONFIRM USER INSTEAD OF THE PASSWORD FIELD HERE!
+    //THIS USER ID IS _NOT_ AN INT, BUT A CHARSEQUENCE, SO IT PLAYS NICE WITH OUR DECODER!
+
+    private CharSequence uid;
     private String email;
     private String password;
     private String confirmPassword;
@@ -9,10 +16,19 @@ public class ResetRequest {
 
     public ResetRequest(){}
 
-    public ResetRequest(String email, String password, String confirmPassword, String securityAnswer){
+    public ResetRequest(String email, String password, String confirmPassword, String securityAnswer, CharSequence uid){
         this.email = email;
         this.password = password;
         this.confirmPassword = confirmPassword;
+        this.uid = uid;
+    }
+
+    public CharSequence getUid() {
+        return uid;
+    }
+
+    public void setUid(CharSequence uid) {
+        this.uid = uid;
     }
 
     public String getSecurityAnswer() {
